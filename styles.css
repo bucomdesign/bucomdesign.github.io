@@ -31,21 +31,7 @@ nav a:hover {
   color: #CC0000;
 }
 
-/* Default active underline */
-nav a.active::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  background-color: #111;
-  border-radius: 2px;
-  transform: translateX(-50%);
-  transition: all 0.3s ease;
-}
-
-/* Hover underline */
+/* Hover underline for all nav links */
 nav a::after {
   content: "";
   position: absolute;
@@ -56,16 +42,32 @@ nav a::after {
   background-color: #CC0000;
   border-radius: 2px;
   transform: translateX(-50%);
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, background-color 0.3s ease;
 }
 
+/* Expand underline on hover */
 nav a:hover::after {
   width: 100%;
 }
 
-/* Hide active underline when hovering on ANY nav link */
-nav:hover a.active::after {
-  width: 0;
+/* Default underline for active nav link */
+nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #111; /* default active underline */
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: background-color 0.3s ease;
+}
+
+/* Active nav link hover effect */
+nav a.active:hover::after {
+  background-color: #CC0000;
+  width: 100%;
 }
 
 /* Main Content */
@@ -128,6 +130,34 @@ a:hover {
   margin-bottom: 3rem;
 }
 
+/* Resource Links with bullet separators */
+.resource-links {
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.resource-links a {
+  text-decoration: none; /* no underline */
+  color: #111;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0 0.5rem; /* space for bullets */
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.resource-links a:hover {
+  color: #CC0000; /* just text color change */
+}
+
+/* Add bullet separator after each link except the last one */
+.resource-links a:not(:last-child)::after {
+  content: "•";
+  color: #111;
+  position: absolute;
+  right: -0.5rem; /* adjust spacing between bullet and next link */
+}
+
 /* Footer */
 footer {
   text-align: left;
@@ -151,7 +181,8 @@ hr {
     font-size: 15px;
   }
 
-  nav a {
+  nav a,
+  .resource-links a {
     display: block;
     margin: 0 0 1rem;
     font-size: 1rem;
@@ -167,5 +198,12 @@ hr {
 
   p {
     margin: 0.75rem 0;
+  }
+
+  /* Remove bullets for stacked mobile links */
+  .resource-links a:not(:last-child)::after {
+    content: "";
+    position: static;
+    right: auto;
   }
 }
