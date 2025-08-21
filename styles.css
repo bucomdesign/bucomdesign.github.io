@@ -38,7 +38,7 @@ nav a.active::after {
   left: 0;
   bottom: 0;
   height: 2px;
-  width: 108%;
+  width: 100%;
   background-color: #111; /* indicator color */
   border-radius: 2px;
 }
