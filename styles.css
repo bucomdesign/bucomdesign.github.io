@@ -180,6 +180,87 @@ hr {
   margin: 3rem 0;
 }
 
+/* Week List Styles */
+.week-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 2rem;
+}
+
+.week-list li {
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1.5rem; /* space for arrow */
+}
+
+.week-list li.active::before {
+  content: "↓"; /* down arrow for active */
+  position: absolute;
+  left: 0;
+  color: #111;
+  transition: color 0.2s ease;
+}
+
+.week-list li.active a:hover::before,
+.week-list li.active:hover::before {
+  color: #CC0000; /* arrow changes color on hover */
+}
+
+.week-list li.disabled {
+  color: #999;
+  pointer-events: none;
+  opacity: 60%;
+}
+
+.week-list li.disabled a {
+  color: #999;
+}
+
+.section-subtitle.disabled {
+  color: #999;
+  opacity: 60%;
+}
+/* Tooltip container for disabled weeks */
+.week-list li.disabled {
+  color: #999;
+  cursor: not-allowed;
+  opacity: 60%;
+  /* Remove pointer-events none so tooltip can work */
+  pointer-events: auto; 
+}
+
+/* Tooltip text */
+.week-list li.disabled::after {
+  content: "⏳ Not yet, champ!";
+  position: absolute;
+  left: 0; /* align to left of the li */
+  top: 45%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  color: #111;
+  padding: 1.2rem 22rem 1rem 1rem;
+  font-size: 0.95rem;
+  text-align: left;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  margin-left: 0.5rem;
+  z-index: 10;
+}
+
+/* Show tooltip on hover */
+.week-list li.disabled:hover::after {
+  opacity: 1;
+}
+
+
+/* Align week content under active week text */
+.news-item {
+  padding-left: 1.5rem; /* same as arrow space */
+}
+
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
   body {
@@ -212,4 +293,5 @@ hr {
     position: static;
     right: auto;
   }
+  
 }
