@@ -1,6 +1,4 @@
-/* ------------------------
-   Base Styling
-------------------------- */
+/* Base Styling */
 body {
   font-family: 'Manrope', sans-serif;
   font-size: 15px;
@@ -12,22 +10,20 @@ body {
   max-width: 1120px;
 }
 
-/* ------------------------
-   Navigation
-------------------------- */
+/* Navigation */
 nav {
-  display: flex;
-  gap: 1.5rem;
+  text-align: left;
   margin-bottom: 3rem;
   position: relative;
 }
 
 nav a {
-  position: relative;
+  margin-right: 1.5rem;
   text-decoration: none;
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
+  position: relative;
   padding-bottom: 4px;
   transition: color 0.2s ease;
 }
@@ -36,7 +32,21 @@ nav a:hover {
   color: #CC0000;
 }
 
-/* Active/hover underline indicator */
+/* Default active underline */
+nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #111;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+
+/* Hover underline */
 nav a::after {
   content: "";
   position: absolute;
@@ -44,20 +54,22 @@ nav a::after {
   bottom: 0;
   height: 2px;
   width: 0;
-  background-color: #111;
+  background-color: #CC0000;
   border-radius: 2px;
-  transition: all 0.3s ease;
   transform: translateX(-50%);
+  transition: width 0.3s ease;
 }
 
-nav a:hover::after,
-nav a.active::after {
+nav a:hover::after {
   width: 100%;
 }
 
-/* ------------------------
-   Main Content
-------------------------- */
+/* Hide active underline when hovering on ANY nav link */
+nav:hover a.active::after {
+  width: 0;
+}
+
+/* Main Content */
 main section {
   margin-bottom: 3rem;
 }
@@ -76,7 +88,6 @@ h3 {
 
 h3 a {
   text-decoration: none;
-  transition: color 0.2s ease;
 }
 
 h3 a:hover {
@@ -97,12 +108,10 @@ img.responsive-gif {
   margin: 20px 0;
 }
 
-/* Global link style */
 a {
   color: #000;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s ease;
 }
 
 a:hover {
@@ -113,9 +122,7 @@ a:hover {
   margin-bottom: 2rem;
 }
 
-/* ------------------------
-   Footer
-------------------------- */
+/* Footer */
 footer {
   text-align: left;
   margin-top: 4rem;
@@ -130,21 +137,16 @@ hr {
   margin: 40px 0;
 }
 
-/* ------------------------
-   Mobile Optimization
-------------------------- */
+/* Mobile Optimization */
 @media screen and (max-width: 600px) {
   body {
     padding: 1rem;
     font-size: 14px;
   }
 
-  nav {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
   nav a {
+    display: block;
+    margin-bottom: 0.75rem;
     font-size: 1rem;
   }
 
