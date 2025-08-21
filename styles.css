@@ -1,10 +1,10 @@
 /* Base Styling */
 body {
   font-family: 'Manrope', sans-serif;
-  font-size: 15px;
-  line-height: 1.8;
-  margin: 0;
-  padding: 2rem;
+  font-size: 16px;
+  line-height: 1.85;
+  margin: 0 auto;
+  padding: 2.5rem;
   background: #fff;
   color: #111;
   max-width: 1120px;
@@ -13,18 +13,17 @@ body {
 /* Navigation */
 nav {
   text-align: left;
-  margin-bottom: 3rem;
-  position: relative;
+  margin-bottom: 4rem;
 }
 
 nav a {
-  margin-right: 1.5rem;
+  margin-right: 2rem;
   text-decoration: none;
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
   position: relative;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
   transition: color 0.2s ease;
 }
 
@@ -70,20 +69,26 @@ nav:hover a.active::after {
 }
 
 /* Main Content */
+main {
+  margin-top: 2rem;
+}
+
 main section {
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
 }
 
 h2 {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.02em;
+  margin-bottom: 1.5rem;
 }
 
 h3 {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 400;
   letter-spacing: 0.01em;
+  margin: 1.5rem 0 0.75rem;
 }
 
 h3 a {
@@ -95,9 +100,10 @@ h3 a:hover {
 }
 
 p {
-  margin: 0.5rem 0;
+  margin: 1rem 0;
   font-weight: 400;
   letter-spacing: 0.01em;
+  line-height: 1.9;
 }
 
 img.responsive-gif {
@@ -105,7 +111,7 @@ img.responsive-gif {
   max-width: 720px;
   height: auto;
   display: block;
-  margin: 20px 0;
+  margin: 2.5rem 0;
 }
 
 a {
@@ -119,42 +125,47 @@ a:hover {
 }
 
 .intro-item {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 /* Footer */
 footer {
   text-align: left;
-  margin-top: 4rem;
-  font-size: 0.9rem;
+  margin-top: 5rem;
+  font-size: 0.95rem;
   color: #555;
+  line-height: 1.6;
 }
 
 hr {
   border: none;
   height: 1px;
   background-color: #ccc;
-  margin: 40px 0;
+  margin: 3rem 0;
 }
 
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
   body {
-    padding: 1rem;
-    font-size: 14px;
+    padding: 1.5rem;
+    font-size: 15px;
   }
 
   nav a {
     display: block;
-    margin-bottom: 0.75rem;
+    margin: 0 0 1rem;
     font-size: 1rem;
   }
 
   h2 {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
   }
 
   h3 {
-    font-size: 1rem;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 0.75rem 0;
   }
 }
