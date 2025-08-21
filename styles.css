@@ -18,15 +18,29 @@ nav {
 
 nav a {
   margin-right: 1.5rem;
-  text-decoration: none;
+  text-decoration: none; /* remove underline */
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
   transition: color 0.2s ease;
+  position: relative; /* for underline indicator */
+  padding-bottom: 4px; 
 }
 
 nav a:hover {
   color: #CC0000;
+}
+
+/* underline indicator only on active/current page */
+nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #CC0000; /* indicator color */
+  border-radius: 2px;
 }
 
 /* Main Content */
@@ -41,7 +55,6 @@ h2 {
   letter-spacing: 0.02em;
 }
 
-
 h3 {
   font-size: 1.05rem;
   margin-top: 1.5rem;
@@ -49,11 +62,12 @@ h3 {
   letter-spacing: 0.01em;
 }
 
-h3 a{
+h3 a {
   font-size: 1.05rem;
   margin-top: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.01em;
+  text-decoration: none; /* no underline */
 }
 
 h3 a:hover {
@@ -64,21 +78,24 @@ p {
   margin: 0.5rem 0;
   font-weight: 400;
   letter-spacing: 0.01em;
-
 }
 
 img.responsive-gif {
-      width: 100%;
-      max-width: 720px;
-      height: auto;
-      display: block;
-      margin: 20px 0; /* top and bottom margin, no auto-centering */
-    }
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  display: block;
+  margin: 20px 0;
+}
 
 a {
   color: #000;
-  text-decoration: underline;
+  text-decoration: none; /* remove underline globally */
   font-weight: 500;
+}
+
+a:hover {
+  color: #CC0000;
 }
 
 .intro-item {
@@ -100,7 +117,6 @@ hr {
   margin: 40px 0;
 }
 
-
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
   body {
@@ -121,5 +137,4 @@ hr {
   h3 {
     font-size: 1rem;
   }
-
 }
