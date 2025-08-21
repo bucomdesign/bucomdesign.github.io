@@ -26,7 +26,7 @@ nav a {
 }
 
 nav a:hover {
-  color: #555;
+  color: #CC0000;
 }
 
 /* Main Content */
@@ -57,7 +57,7 @@ h3 a{
 }
 
 h3 a:hover {
-  color: #555;
+  color: #CC0000;
 }
 
 p {
