@@ -38,8 +38,8 @@ nav a.active::after {
   left: 0;
   bottom: 0;
   height: 2px;
-  width: 100%;
-  background-color: #CC0000; /* indicator color */
+  width: 108%;
+  background-color: #111; /* indicator color */
   border-radius: 2px;
 }
 
@@ -57,16 +57,11 @@ h2 {
 
 h3 {
   font-size: 1.05rem;
-  margin-top: 1.5rem;
   font-weight: 400;
   letter-spacing: 0.01em;
 }
 
 h3 a {
-  font-size: 1.05rem;
-  margin-top: 1.5rem;
-  font-weight: 400;
-  letter-spacing: 0.01em;
   text-decoration: none; /* no underline */
 }
 
