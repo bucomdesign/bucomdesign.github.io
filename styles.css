@@ -132,7 +132,7 @@ a:hover {
 
 /* Resource Links with bullet separators */
 .resource-links {
-  margin: 2rem 0;
+  margin: 2rem -.8rem;
   text-align: left;
 }
 
@@ -141,7 +141,7 @@ a:hover {
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
-  padding: 0 0.5rem; /* space for bullets */
+  padding: 0 0.8rem; /* space for bullets */
   transition: color 0.2s ease;
   position: relative;
 }
