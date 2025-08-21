@@ -1,2 +1,2 @@
-# cm501
-Course site for CM 501 @ Boston University College of Communication
+BU COM Design
+Course site for Design Classes @ Boston University College of Communication
