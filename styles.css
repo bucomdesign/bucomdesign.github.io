@@ -1,4 +1,6 @@
-/* Base Styling */
+/* ------------------------
+   Base Styling
+------------------------- */
 body {
   font-family: 'Manrope', sans-serif;
   font-size: 15px;
@@ -10,40 +12,52 @@ body {
   max-width: 1120px;
 }
 
-/* Navigation */
+/* ------------------------
+   Navigation
+------------------------- */
 nav {
-  text-align: left;
+  display: flex;
+  gap: 1.5rem;
   margin-bottom: 3rem;
+  position: relative;
 }
 
 nav a {
-  margin-right: 1.5rem;
-  text-decoration: none; /* remove underline */
+  position: relative;
+  text-decoration: none;
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
+  padding-bottom: 4px;
   transition: color 0.2s ease;
-  position: relative; /* for underline indicator */
-  padding-bottom: 4px; 
 }
 
 nav a:hover {
   color: #CC0000;
 }
 
-/* underline indicator only on active/current page */
-nav a.active::after {
+/* Active/hover underline indicator */
+nav a::after {
   content: "";
   position: absolute;
-  left: 0;
+  left: 50%;
   bottom: 0;
   height: 2px;
-  width: 100%;
-  background-color: #111; /* indicator color */
+  width: 0;
+  background-color: #111;
   border-radius: 2px;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
 
-/* Main Content */
+nav a:hover::after,
+nav a.active::after {
+  width: 100%;
+}
+
+/* ------------------------
+   Main Content
+------------------------- */
 main section {
   margin-bottom: 3rem;
 }
@@ -61,7 +75,8 @@ h3 {
 }
 
 h3 a {
-  text-decoration: none; /* no underline */
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 h3 a:hover {
@@ -82,10 +97,12 @@ img.responsive-gif {
   margin: 20px 0;
 }
 
+/* Global link style */
 a {
   color: #000;
-  text-decoration: none; /* remove underline globally */
+  text-decoration: none;
   font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 a:hover {
@@ -96,7 +113,9 @@ a:hover {
   margin-bottom: 2rem;
 }
 
-/* Footer */
+/* ------------------------
+   Footer
+------------------------- */
 footer {
   text-align: left;
   margin-top: 4rem;
@@ -111,16 +130,21 @@ hr {
   margin: 40px 0;
 }
 
-/* Mobile Optimization */
+/* ------------------------
+   Mobile Optimization
+------------------------- */
 @media screen and (max-width: 600px) {
   body {
     padding: 1rem;
     font-size: 14px;
   }
 
+  nav {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
   nav a {
-    display: block;
-    margin-bottom: 0.75rem;
     font-size: 1rem;
   }
 
