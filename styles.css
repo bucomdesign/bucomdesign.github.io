@@ -220,20 +220,18 @@ hr {
   color: #999;
   opacity: 60%;
 }
-/* Tooltip container for disabled weeks */
+/* 
 .week-list li.disabled {
   color: #999;
   cursor: not-allowed;
   opacity: 60%;
-  /* Remove pointer-events none so tooltip can work */
   pointer-events: auto; 
 }
 
-/* Tooltip text */
 .week-list li.disabled::after {
   content: "⏳ Not yet, champ!";
   position: absolute;
-  left: 0; /* align to left of the li */
+  left: 0; 
   top: 45%;
   transform: translateY(-50%);
   background-color: #fff;
@@ -250,11 +248,11 @@ hr {
   z-index: 10;
 }
 
-/* Show tooltip on hover */
+
 .week-list li.disabled:hover::after {
   opacity: 1;
 }
-
+*/
 
 /* Align week content under active week text */
 .news-item {
