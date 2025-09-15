@@ -60,7 +60,6 @@ function resetSection() {
   title.innerText = "CM501 Class Roulette"; // restore original title
 
   const resultDiv = document.getElementById("result");
-  resultDiv.innerText = `🔄 Section ${section} reset. Ready to go again!`;
   resultDiv.classList.remove("highlight");
 }
 
