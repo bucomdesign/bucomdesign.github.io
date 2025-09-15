@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CM501 Class Projects & Roulette</title>
+  <link rel="icon" type="image/png" href="https://bucomdesign.github.io/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://bucomdesign.github.io/styles.css" />
+  <link rel="stylesheet" href="class.css" />
+</head>
+<body>
+  <!-- Main Navigation -->
+  <nav>
+    <a href="index.html">INTRO</a>
+    <a href="weeks.html">WEEKLY SCHEDULE</a>
+    
+    <div class="nav-dropdown">
+      <a href="class.html" class="active">OUR CLASS</a>
+      <div class="dropdown-content">
+        <a href="class-roulette.html">Class Roulette</a>
+        <a href="class.html">Fall 2025</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Roulette Section -->
+    <div class="roulette-container">
+      <h2>CM501 Class Roulette</h2>
+
+      <div class="controls">
+        <label for="section"><strong>Section:</strong></label>
+        <select id="section">
+          <option value="1">K1</option>
+          <option value="2">H1</option>
+          <option value="3">G1</option>
+        </select>
+        <button class="reset-btn" onclick="resetSection()">Reset</button>
+      </div>
+
+      <button class="pick-btn" onclick="startRoulette()">Start Roulette</button>
+
+      <div id="result"></div>
+    </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS | BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
+      &copy; 2025. Jen Jiun Choi. All rights reserved.
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="class.js"></script>
+</body>
+</html>
