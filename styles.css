@@ -76,28 +76,6 @@ nav:hover a:not(.active)::after ~ a.active::after {
   width: 0;
 }
 
-/* ---------- NAVIGATION DROPDOWN ---------- */
-nav {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 3rem;
-  position: relative;
-}
-
-nav a {
-  text-decoration: none;
-  color: #111;
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 6px;
-  transition: color 0.2s ease;
-}
-
-nav a:hover {
-  color: #cc0000;
-}
-
 /* Dropdown container */
 .nav-dropdown {
   position: relative;
