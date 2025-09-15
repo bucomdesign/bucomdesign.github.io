@@ -1,6 +1,4 @@
-/* =========================
-   BASE STYLING
-========================= */
+/* Base Styling */
 body {
   font-family: 'Manrope', sans-serif;
   font-size: 16px;
@@ -12,59 +10,7 @@ body {
   max-width: 1120px;
 }
 
-a {
-  color: #000;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-a:hover {
-  color: #CC0000;
-}
-
-img.responsive-gif {
-  width: 100%;
-  max-width: 720px;
-  height: auto;
-  display: block;
-  margin: 2.5rem 0;
-}
-
-/* =========================
-   TYPOGRAPHY
-========================= */
-h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  margin-bottom: 1.5rem;
-}
-
-h3 {
-  font-size: 1.15rem;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  margin: 1.5rem 0 0.75rem;
-}
-
-h3 a {
-  text-decoration: none;
-}
-
-h3 a:hover {
-  color: #CC0000;
-}
-
-p {
-  margin: 1rem 0;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  line-height: 1.9;
-}
-
-/* =========================
-   NAVIGATION
-========================= */
+/* Navigation */
 nav {
   text-align: left;
   margin-bottom: 4rem;
@@ -85,7 +31,7 @@ nav a:hover {
   color: #CC0000;
 }
 
-/* Hover underline */
+/* Hover underline for all nav links */
 nav a::after {
   content: "";
   position: absolute;
@@ -99,11 +45,12 @@ nav a::after {
   transition: width 0.3s ease, background-color 0.3s ease;
 }
 
+/* Expand underline on hover */
 nav a:hover::after {
   width: 100%;
 }
 
-/* Active link underline */
+/* Default underline for active nav link */
 nav a.active::after {
   content: "";
   position: absolute;
@@ -111,22 +58,25 @@ nav a.active::after {
   bottom: 0;
   height: 2px;
   width: 100%;
-  background-color: #111;
+  background-color: #111; /* default active underline */
   border-radius: 2px;
   transform: translateX(-50%);
   transition: background-color 0.3s ease, width 0.3s ease;
 }
 
+/* Active link hover effect */
 nav a.active:hover::after {
   background-color: #CC0000;
+  width: 100%;
 }
 
+/* Hide active underline when hovering over other nav items */
 nav:hover a:not(.active):hover ~ a.active::after,
 nav:hover a:not(.active)::after ~ a.active::after {
   width: 0;
 }
 
-/* Dropdown */
+/* Dropdown container */
 .nav-dropdown {
   position: relative;
   display: inline-block;
@@ -137,6 +87,7 @@ nav:hover a:not(.active)::after ~ a.active::after {
   margin-left: 4px;
 }
 
+/* Dropdown content */
 .nav-dropdown .dropdown-content {
   display: none;
   position: absolute;
@@ -168,49 +119,95 @@ nav:hover a:not(.active)::after ~ a.active::after {
   display: block;
 }
 
-/* =========================
-   MAIN CONTENT
-========================= */
+/* Main Content */
 main {
   margin-top: 2rem;
 }
 
 main section {
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
 }
 
-/* =========================
-   RESOURCE LINKS
-========================= */
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  margin: 1.5rem 0 0.75rem;
+}
+
+h3 a {
+  text-decoration: none;
+}
+
+h3 a:hover {
+  color: #CC0000;
+}
+
+p {
+  margin: 1rem 0;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.9;
+}
+
+img.responsive-gif {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  display: block;
+  margin: 2.5rem 0;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  color: #CC0000;
+}
+
+.intro-item {
+  margin-bottom: 3rem;
+}
+
+/* Resource Links with bullet separators */
 .resource-links {
-  margin: 2rem -0.8rem;
+  margin: 2rem -.8rem;
   text-align: left;
 }
 
 .resource-links a {
-  text-decoration: none;
+  text-decoration: none; /* no underline */
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
-  padding: 0 0.8rem;
-  position: relative;
+  padding: 0 0.8rem; /* space for bullets */
   transition: color 0.2s ease;
+  position: relative;
 }
 
 .resource-links a:hover {
-  color: #CC0000;
+  color: #CC0000; /* just text color change */
 }
 
+/* Add bullet separator after each link except the last one */
 .resource-links a:not(:last-child)::after {
   content: "•";
   color: #111;
   position: absolute;
-  right: -0.5rem;
+  right: -0.5rem; /* adjust spacing between bullet and next link */
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* Footer */
 footer {
   text-align: left;
   margin-top: 5rem;
@@ -226,9 +223,7 @@ hr {
   margin: 3rem 0;
 }
 
-/* =========================
-   WEEK LIST
-========================= */
+/* Week List Styles */
 .week-list {
   list-style: none;
   padding-left: 0;
@@ -238,11 +233,11 @@ hr {
 .week-list li {
   margin-bottom: 1rem;
   position: relative;
-  padding-left: 1.5rem;
+  padding-left: 1.5rem; /* space for arrow */
 }
 
 .week-list li.active::before {
-  content: "↓";
+  content: "↓"; /* down arrow for active */
   position: absolute;
   left: 0;
   color: #111;
@@ -251,43 +246,76 @@ hr {
 
 .week-list li.active a:hover::before,
 .week-list li.active:hover::before {
-  color: #CC0000;
+  color: #CC0000; /* arrow changes color on hover */
 }
 
 .week-list li.disabled {
   color: #999;
   pointer-events: none;
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 60%;
+}
+
+.week-list li.disabled a {
+  color: #999;
 }
 
 .section-subtitle.disabled {
   color: #999;
-  opacity: 0.6;
+  opacity: 60%;
 }
 
-/* =========================
-   NEWS ITEM
-========================= */
+.week-list li.disabled {
+  color: #999;
+  cursor: not-allowed;
+  opacity: 60%;
+  pointer-events: auto; 
+}
+/* 
+.week-list li.disabled::after {
+  content: "⏳ Not yet, champ!";
+  position: absolute;
+  left: 0; 
+  top: 45%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  color: #111;
+  padding: 1.2rem 16rem 1rem 1rem;
+  font-size: 0.95rem;
+  text-align: left;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  margin-left: 0.5rem;
+  z-index: 10;
+}
+
+
+.week-list li.disabled:hover::after {
+  opacity: 1;
+}
+*/
+
+/* Align week content under active week text */
 .news-item {
-  padding-left: 1.5rem;
+  padding-left: 1.5rem; /* same as arrow space */
 }
 
-/* =========================
-   ROULETTE
-========================= */
+/* ---------- ROULETTE (Refined & Designer-Approved) ---------- */
 .roulette-container {
   background: #fff;
   padding: 4rem 3rem;
   border-radius: 24px;
   margin: 6rem auto;
   text-align: center;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.06);  /* softer shadow */
   max-width: 960px;
   width: 92%;
   font-family: 'Manrope', sans-serif;
 }
 
+/* Headline — bold but elegant */
 .roulette-container h2 {
   font-size: 2.75rem;
   margin-bottom: 2rem;
@@ -297,6 +325,7 @@ hr {
   line-height: 1.2;
 }
 
+/* Controls layout */
 .controls {
   display: flex;
   justify-content: center;
@@ -306,6 +335,7 @@ hr {
   align-items: center;
 }
 
+/* Label — subtle but clear */
 .controls label {
   font-size: 1.5rem;
   font-weight: 400;
@@ -313,6 +343,7 @@ hr {
   margin-right: 0.25rem;
 }
 
+/* Dropdown */
 select {
   padding: 1rem 1.5rem;
   font-size: 1.25rem;
@@ -324,13 +355,13 @@ select {
   transition: all 0.25s ease;
   min-width: 180px;
 }
-
 select:hover {
   border-color: #bbb;
   background: #fff;
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
+/* Buttons */
 .reset-btn, .pick-btn {
   padding: 1rem 2.25rem;
   font-size: 1.25rem;
@@ -341,28 +372,29 @@ select:hover {
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
+/* Reset button — soft neutral */
 .reset-btn {
   background: #f1f3f5;
   color: #444;
 }
-
 .reset-btn:hover {
   background: #e2e6ea;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
+/* Pick button — strong primary */
 .pick-btn {
   background: #111;
   color: #fff;
 }
-
 .pick-btn:hover {
   background: #cc0000;
   transform: translateY(-3px) scale(1.04);
   box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
+/* Result display */
 #result {
   font-size: 2.5rem;
   font-weight: 700;
@@ -373,6 +405,7 @@ select:hover {
   letter-spacing: -0.5px;
 }
 
+/* Result animation */
 .highlight {
   animation: popColor 0.6s cubic-bezier(.25,.8,.25,1) forwards;
   color: #cc0000;
@@ -383,13 +416,10 @@ select:hover {
   70% { transform: scale(1.15); opacity: 1; }
   100% { transform: scale(1); }
 }
-
-/* =========================
-   STUDENT GRID
-========================= */
+/* ---------- Student Grid: 4 rows x 5 columns ---------- */
 .student-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -410,7 +440,7 @@ select:hover {
 .student-card .placeholder {
   width: 100%;
   height: 140px;
-  background-color: #ccc;
+  background-color: #ccc; /* Gray placeholder */
   border-radius: 8px;
   margin-bottom: 0.6rem;
 }
@@ -422,30 +452,77 @@ select:hover {
   line-height: 1.2;
 }
 
+/* Hover effect */
 .student-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* Section spacing */
+section {
+  margin-bottom: 5rem;
+}
+
+/* Responsive adjustments */
 @media screen and (max-width: 1000px) {
-  .student-grid { grid-template-columns: repeat(4, 1fr); gap: 1.3rem; }
+  .student-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.3rem;
+  }
 }
 
 @media screen and (max-width: 800px) {
-  .student-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .student-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
 }
 
 @media screen and (max-width: 600px) {
-  body { padding: 1.5rem; font-size: 15px; }
-  nav a, .resource-links a { display: block; margin: 0 0 1rem; font-size: 1rem; }
-  h2 { font-size: 1.25rem; }
-  h3 { font-size: 1.05rem; }
-  p { margin: 0.75rem 0; }
-  .student-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
-  .student-card .placeholder { height: 100px; }
-  .student-card p { font-size: 0.9rem; }
-  .resource-links a:not(:last-child)::after { content: ""; position: static; right: auto; }
+  .student-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .student-card .placeholder {
+    height: 100px;
+  }
+
+  .student-card p {
+    font-size: 0.9rem;
+  }
+
+/* Mobile Optimization */
+@media screen and (max-width: 600px) {
+  body {
+    padding: 1.5rem;
+    font-size: 15px;
+  }
+
+  nav a,
+  .resource-links a {
+    display: block;
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 0.75rem 0;
+  }
+
+  /* Remove bullets for stacked mobile links */
+  .resource-links a:not(:last-child)::after {
+    content: "";
+    position: static;
+    right: auto;
+  }
+  
 }
