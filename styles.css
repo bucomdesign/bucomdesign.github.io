@@ -76,6 +76,49 @@ nav:hover a:not(.active)::after ~ a.active::after {
   width: 0;
 }
 
+/* Dropdown container */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a::after {
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
+/* Dropdown content */
+.nav-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  z-index: 100;
+  text-align: left;
+}
+
+.nav-dropdown .dropdown-content a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #111;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.nav-dropdown .dropdown-content a:hover {
+  background-color: #f2f2f2;
+  color: #cc0000;
+}
+
+.nav-dropdown:hover .dropdown-content {
+  display: block;
+}
+
 /* Main Content */
 main {
   margin-top: 2rem;
