@@ -18,16 +18,17 @@ let rouletteInterval;
 function startRoulette() {
   const section = document.getElementById("section").value;
   const available = sections[section].filter(s => !picked[section].includes(s));
+  const title = document.querySelector(".roulette-container h2");
 
   if (available.length === 0) {
-    document.getElementById("result").innerText = "✅ All students picked! Reset to start again.";
+    title.innerText = "✅ All students picked! Reset to start again.";
     return;
   }
 
   let i = 0;
   rouletteInterval = setInterval(() => {
-    document.getElementById("result").innerText = available[i % available.length];
-    document.getElementById("result").classList.remove("highlight");
+    title.innerText = available[i % available.length]; // rotate name in h2
+    title.classList.remove("highlight");
     i++;
   }, 100);
 
@@ -35,12 +36,10 @@ function startRoulette() {
     clearInterval(rouletteInterval);
     const student = available[Math.floor(Math.random() * available.length)];
     picked[section].push(student);
-
     localStorage.setItem(`picked${section}`, JSON.stringify(picked[section]));
 
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerText = `🎯 ${student}`;
-    resultDiv.classList.add("highlight");
+    title.innerText = `🎯 ${student}`; // show final picked name
+    title.classList.add("highlight");
 
     fireConfetti();
   }, 3000);
@@ -50,6 +49,10 @@ function resetSection() {
   const section = document.getElementById("section").value;
   picked[section] = [];
   localStorage.setItem(`picked${section}`, JSON.stringify([]));
+
+  const title = document.querySelector(".roulette-container h2");
+  title.innerText = "CM501 Class Roulette"; // restore original title
+
   const resultDiv = document.getElementById("result");
   resultDiv.innerText = `🔄 Section ${section} reset. Ready to go again!`;
   resultDiv.classList.remove("highlight");
