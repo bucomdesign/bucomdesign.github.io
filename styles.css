@@ -416,6 +416,89 @@ select:hover {
   70% { transform: scale(1.15); opacity: 1; }
   100% { transform: scale(1); }
 }
+/* ---------- Student Grid: 4 rows x 5 columns ---------- */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.student-card {
+  text-align: center;
+  background: #f9f9f9;
+  padding: 0.75rem;
+  border-radius: 12px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.student-card a {
+  color: #111;
+  text-decoration: none;
+}
+
+.student-card .placeholder {
+  width: 100%;
+  height: 140px;
+  background-color: #ccc; /* Gray placeholder */
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+}
+
+.student-card p {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Hover effect */
+.student-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Section spacing */
+section {
+  margin-bottom: 5rem;
+}
+
+section h3 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.02em;
+  color: #222;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 1000px) {
+  .student-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.3rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .student-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .student-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+
+  .student-card .placeholder {
+    height: 100px;
+  }
+
+  .student-card p {
+    font-size: 0.9rem;
+  }
 
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
