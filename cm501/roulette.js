@@ -13,6 +13,9 @@ const picked = {
   3: JSON.parse(localStorage.getItem('picked3')) || []
 };
 
+// emoji pool for random results
+const emojis = ["🎯", "✨", "🎉", "🔥", "🌟", "💥", "🏆", "💫", "🎶", "🥳"];
+
 let rouletteInterval;
 
 function startRoulette() {
@@ -27,7 +30,7 @@ function startRoulette() {
 
   let i = 0;
   rouletteInterval = setInterval(() => {
-    title.innerText = available[i % available.length]; // rotate name in h2
+    title.innerText = available[i % available.length]; // rotating names
     title.classList.remove("highlight");
     i++;
   }, 100);
@@ -38,7 +41,10 @@ function startRoulette() {
     picked[section].push(student);
     localStorage.setItem(`picked${section}`, JSON.stringify(picked[section]));
 
-    title.innerText = `🎯 ${student}`; // show final picked name
+    // pick random emoji for the winner
+    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+    title.innerText = `${randomEmoji} ${student}`;
     title.classList.add("highlight");
 
     fireConfetti();
