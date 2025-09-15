@@ -463,14 +463,6 @@ section {
   margin-bottom: 5rem;
 }
 
-section h3 {
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 0.02em;
-  color: #222;
-}
-
 /* Responsive adjustments */
 @media screen and (max-width: 1000px) {
   .student-grid {
