@@ -116,7 +116,7 @@ nav a:hover {
   top: 100%;
   left: 0;
   background-color: #fff;
-  min-width: 120px;
+  min-width: 180px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border-radius: 6px;
   z-index: 100;
