@@ -302,6 +302,92 @@ hr {
   padding-left: 1.5rem; /* same as arrow space */
 }
 
+/* ---------- ROULETTE (Fuller & Spacious) ---------- */
+.roulette-container {
+  background: #fff;
+  padding: 5rem 4rem;         /* much more padding */
+  border-radius: 20px;
+  margin: 5rem auto;          /* bigger top/bottom spacing */
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  max-width: 900px;           /* wider container */
+  width: 90%;                 /* responsive stretch */
+}
+
+.roulette-container h2 {
+  font-size: 3rem;            /* big headline */
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;                  /* more spacing between controls */
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+select {
+  padding: 1.25rem 2rem;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  min-width: 180px;           /* bigger dropdown */
+}
+
+.reset-btn, .pick-btn {
+  padding: 1.25rem 2.5rem;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.reset-btn {
+  background: #e9ecef;
+  color: #333;
+}
+
+.reset-btn:hover {
+  background: #d4d8dc;
+  transform: translateY(-2px);
+}
+
+.pick-btn {
+  background: #111;
+  color: #fff;
+}
+
+.pick-btn:hover {
+  background: #cc0000;
+  transform: scale(1.08);
+}
+
+#result {
+  font-size: 2.5rem;          /* much larger result */
+  font-weight: 700;
+  margin-top: 3rem;
+  min-height: 80px;           /* keeps area tall even before result shows */
+  color: #111;
+}
+
+.highlight {
+  animation: popColor 0.6s ease forwards;
+  color: #cc0000;
+}
+
+@keyframes popColor {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
   body {
