@@ -302,91 +302,120 @@ hr {
   padding-left: 1.5rem; /* same as arrow space */
 }
 
-/* ---------- ROULETTE (Fuller & Spacious) ---------- */
+/* ---------- ROULETTE (Refined & Designer-Approved) ---------- */
 .roulette-container {
   background: #fff;
-  padding: 5rem 4rem;         /* much more padding */
-  border-radius: 20px;
-  margin: 5rem auto;          /* bigger top/bottom spacing */
+  padding: 4rem 3rem;
+  border-radius: 24px;
+  margin: 6rem auto;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  max-width: 900px;           /* wider container */
-  width: 90%;                 /* responsive stretch */
+  box-shadow: 0 16px 40px rgba(0,0,0,0.06);  /* softer shadow */
+  max-width: 960px;
+  width: 92%;
+  font-family: 'Manrope', sans-serif;
 }
 
+/* Headline — bold but elegant */
 .roulette-container h2 {
-  font-size: 3rem;            /* big headline */
-  margin-bottom: 2.5rem;
+  font-size: 2.75rem;
+  margin-bottom: 2rem;
   font-weight: 700;
+  letter-spacing: -0.5px;
   color: #111;
+  line-height: 1.2;
 }
 
+/* Controls layout */
 .controls {
   display: flex;
   justify-content: center;
-  gap: 2rem;                  /* more spacing between controls */
-  margin-bottom: 3rem;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
+/* Label — subtle but clear */
+.controls label {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #444;
+  margin-right: 0.25rem;
+}
+
+/* Dropdown */
 select {
-  padding: 1.25rem 2rem;
-  font-size: 1.5rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.25rem;
   border-radius: 12px;
-  border: 1px solid #ccc;
-  background: #fff;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  color: #222;
   cursor: pointer;
-  min-width: 180px;           /* bigger dropdown */
+  transition: all 0.25s ease;
+  min-width: 180px;
+}
+select:hover {
+  border-color: #bbb;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
+/* Buttons */
 .reset-btn, .pick-btn {
-  padding: 1.25rem 2.5rem;
-  font-size: 1.5rem;
+  padding: 1rem 2.25rem;
+  font-size: 1.25rem;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   border: none;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
+/* Reset button — soft neutral */
 .reset-btn {
-  background: #e9ecef;
-  color: #333;
+  background: #f1f3f5;
+  color: #444;
 }
-
 .reset-btn:hover {
-  background: #d4d8dc;
+  background: #e2e6ea;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
+/* Pick button — strong primary */
 .pick-btn {
   background: #111;
   color: #fff;
 }
-
 .pick-btn:hover {
   background: #cc0000;
-  transform: scale(1.08);
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
+/* Result display */
 #result {
-  font-size: 2.5rem;          /* much larger result */
+  font-size: 2.5rem;
   font-weight: 700;
   margin-top: 3rem;
-  min-height: 80px;           /* keeps area tall even before result shows */
+  min-height: 90px;
   color: #111;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
 }
 
+/* Result animation */
 .highlight {
-  animation: popColor 0.6s ease forwards;
+  animation: popColor 0.6s cubic-bezier(.25,.8,.25,1) forwards;
   color: #cc0000;
 }
 
 @keyframes popColor {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1.1); opacity: 1; }
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
 }
-
 
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
