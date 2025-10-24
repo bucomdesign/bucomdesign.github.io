@@ -451,6 +451,7 @@ select:hover {
   border-radius: 8px;
   display: block;
   margin: 0 auto 0.6rem auto; 
+  background-color: #fff;
 }
 
 .student-card p {
