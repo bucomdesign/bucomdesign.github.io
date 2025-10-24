@@ -445,6 +445,14 @@ select:hover {
   margin-bottom: 0.6rem;
 }
 
+.student-card img {
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.6rem;
+  background-color: #fff; 
+}
+
 .student-card p {
   font-weight: 600;
   font-size: 1rem;
