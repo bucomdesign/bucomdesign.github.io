@@ -452,7 +452,7 @@ select:hover {
 
 /* ---------- Image container ---------- */
 .student-card .placeholder {
-  width: 220px;         /* bigger container for image */
+  width: 230px;         /* bigger container for image */
   border-radius: 8px;
   margin-bottom: 0.6rem;
   display: flex;
@@ -517,6 +517,11 @@ section {
     width: 100%;
     height: 120px;
   }
+    .placeholder img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* no stretch, keep ratio */
+}
 }
 
 /* Phones */
@@ -537,6 +542,11 @@ section {
     height: 100px;
   }
 
+  .placeholder img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* no stretch, keep ratio */
+}
   .student-card p {
     font-size: 0.9rem;
   }
