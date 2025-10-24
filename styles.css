@@ -432,7 +432,7 @@ select:hover {
   border-radius: 12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   width: 200px;      /* fixed width */
-  height: 280px;     /* fixed height */
+  height: 160px;     /* fixed height */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
