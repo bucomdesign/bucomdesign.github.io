@@ -419,41 +419,57 @@ select:hover {
 /* ---------- Student Grid: 4 rows x 5 columns ---------- */
 .student-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5 columns */
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
+/* ---------- Student Card ---------- */
 .student-card {
   text-align: center;
   background: #f9f9f9;
   padding: 0.75rem;
   border-radius: 12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  aspect-ratio: 3 / 4; /* keeps consistent rectangular shape */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* ---------- Link ---------- */
 .student-card a {
   color: #111;
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
 }
 
+/* ---------- Image container ---------- */
 .student-card .placeholder {
   width: 100%;
-  height: 140px;
-  background-color: #fff; /* Gray placeholder */
+  aspect-ratio: 4 / 3; /* 400x300-style proportion */
+  background-color: #fff;
   border-radius: 8px;
   margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* ensures clean crop */
 }
 
+/* ---------- Image ---------- */
 .placeholder img {
-  width: 50%;     
-  height: auto;     
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* no stretch, keeps ratio */
   border-radius: 8px;
-  display: block;
-  margin: 0 auto 0.6rem auto; 
   background-color: #fff;
 }
 
+/* ---------- Name text ---------- */
 .student-card p {
   font-weight: 600;
   font-size: 1rem;
@@ -461,16 +477,17 @@ select:hover {
   line-height: 1.2;
 }
 
-/* Hover effect */
+/* ---------- Hover effect ---------- */
 .student-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-/* Section spacing */
+/* ---------- Section spacing ---------- */
 section {
   margin-bottom: 5rem;
 }
+
 
 /* Responsive adjustments */
 @media screen and (max-width: 1000px) {
