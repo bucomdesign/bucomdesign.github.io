@@ -452,7 +452,7 @@ select:hover {
 
 /* ---------- Image container ---------- */
 .student-card .placeholder {
-  height: 180px;          /* bigger container for image */
+  width: 220px;         /* bigger container for image */
   border-radius: 8px;
   margin-bottom: 0.6rem;
   display: flex;
