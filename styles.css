@@ -446,7 +446,7 @@ select:hover {
 }
 
 .student img {
-  width: 90%;
+  width: 50%;
   height: 140px;
   object-fit: cover;
   border-radius: 8px;
