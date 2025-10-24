@@ -433,7 +433,7 @@ select:hover {
   border-radius: 12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   width: 240px;      /* slightly bigger */
-  height: 220px;     /* taller card */
+  height: 200px;     /* taller card */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -452,7 +452,7 @@ select:hover {
 
 /* ---------- Image container ---------- */
 .student-card .placeholder {
-  width: 220px;         /* bigger container for image */
+  width: 200px;         /* bigger container for image */
   border-radius: 8px;
   margin-bottom: 0.6rem;
   display: flex;
