@@ -416,10 +416,11 @@ select:hover {
   70% { transform: scale(1.15); opacity: 1; }
   100% { transform: scale(1); }
 }
-/* ---------- Student Grid: 4 rows x 5 columns ---------- */
+
+/* ---------- Student Grid: 5 rows x 4 columns ---------- */
 .student-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 4 columns per row */
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -431,8 +432,8 @@ select:hover {
   padding: 0.75rem;
   border-radius: 12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  width: 200px;      /* fixed width */
-  height: 180px;     /* fixed height */
+  width: 220px;      /* slightly bigger */
+  height: 220px;     /* taller card */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -452,21 +453,21 @@ select:hover {
 /* ---------- Image container ---------- */
 .student-card .placeholder {
   width: 100%;
-  height: 140px;          /* fixed image container height */
+  height: 160px;          /* bigger container for image */
   border-radius: 8px;
   margin-bottom: 0.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;       /* prevent overflow */
+  overflow: hidden;
   background-color: #fff;
 }
 
 /* ---------- Image ---------- */
 .placeholder img {
-  max-width: 100%;        /* scale down if needed */
-  max-height: 100%;       /* keep image inside container */
-  object-fit: contain;    /* no stretch, preserve ratio */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* no stretch, keep ratio */
   border-radius: 8px;
   display: block;
   margin: 0 auto;
