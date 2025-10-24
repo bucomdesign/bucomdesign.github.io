@@ -453,6 +453,7 @@ select:hover {
 /* ---------- Image container ---------- */
 .student-card .placeholder {
   width: 200px;         /* bigger container for image */
+  height: 140px; 
   border-radius: 8px;
   margin-bottom: 0.6rem;
   display: flex;
@@ -491,28 +492,49 @@ section {
   margin-bottom: 5rem;
 }
 
-/* Responsive adjustments */
-@media screen and (max-width: 1000px) {
+/* ---------- Responsive adjustments ---------- */
+
+/* Large tablets / small desktops */
+@media screen and (max-width: 1100px) {
   .student-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.3rem;
   }
 }
 
+/* Tablets */
 @media screen and (max-width: 800px) {
   .student-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-}
 
-@media screen and (max-width: 600px) {
-  .student-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
+  .student-card {
+    width: 100%;
+    height: 180px;
   }
 
   .student-card .placeholder {
+    width: 100%;
+    height: 120px;
+  }
+}
+
+/* Phones */
+@media screen and (max-width: 500px) {
+  .student-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .student-card {
+    width: 100%;
+    height: auto;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .student-card .placeholder {
+    width: 100%;
     height: 100px;
   }
 
