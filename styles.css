@@ -446,14 +446,11 @@ select:hover {
 }
 
 .student img {
-  width: 50%;          /* 50% of container width */
-  max-width: 100%;     /* prevent overflow on small screens */
-  height: auto;
+  width: 200px;       /* half of 400px */
+  height: 140px;      /* half of 280px */
   border-radius: 8px;
-  margin-bottom: 0.6rem;
   display: block;
-  margin-left: auto;
-  margin-right: auto;  /* centers image */
+  margin: 0 auto 0.6rem auto;  /* centers image and adds bottom spacing */
 }
 
 .student-card p {
