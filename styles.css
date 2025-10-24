@@ -445,8 +445,8 @@ select:hover {
   margin-bottom: 0.6rem;
 }
 
-.student-card img {
-  width: 100%;
+.student img {
+  width: 90%;
   height: 140px;
   object-fit: cover;
   border-radius: 8px;
