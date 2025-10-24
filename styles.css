@@ -445,12 +445,12 @@ select:hover {
   margin-bottom: 0.6rem;
 }
 
-.student img {
-  width: 200px;       /* half of 400px */
-  height: 140px;      /* half of 280px */
+.student-card img {
+  width: 200px;       
+  height: 140px;      
   border-radius: 8px;
   display: block;
-  margin: 0 auto 0.6rem auto;  /* centers image and adds bottom spacing */
+  margin: 0 auto 0.6rem auto; 
 }
 
 .student-card p {
