@@ -491,6 +491,22 @@ section {
   margin-bottom: 5rem;
 }
 
+/* ---------- Mobile Responsive Layout ---------- */
+@media (max-width: 480px) {
+  .student-grid {
+    grid-template-columns: 1fr; /* 1 card per row */
+    justify-items: center; /* centers each card */
+    gap: 1.5rem;
+  }
+
+  .student-card {
+    width: 240px;  /* keep same size */
+    height: 200px; /* maintain consistent card height */
+  }
+
+  .student-card .placeholder {
+    width: 240px;  /* match card width */
+  }
 /* Mobile Optimization */
 @media screen and (max-width: 600px) {
   body {
