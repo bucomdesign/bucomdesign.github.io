@@ -5,60 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Visual Telephone</title>
     
-    <!-- 1. STYLES & FONTS -->
+    <!-- 1. STYLES -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
       body { font-family: 'Manrope', sans-serif; color: #111; background: #fff; }
       
-      /* Component Styles */
-      .btn-primary { background: #111; color: #fff; transition: all 0.25s ease; }
-      .btn-primary:hover { background: #CC0000; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
-      .btn-secondary { background: #f1f3f5; color: #444; transition: all 0.25s ease; }
-      .btn-secondary:hover { background: #e2e6ea; transform: translateY(-2px); }
-      .hover-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-      .hover-card:hover { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+      /* UI Utilities */
+      .btn-primary { background: #111; color: #fff; transition: all 0.2s; }
+      .btn-primary:hover { background: #CC0000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+      .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
       
-      /* Animation Utilities */
+      .btn-secondary { background: #f1f3f5; color: #444; transition: all 0.2s; }
+      .btn-secondary:hover { background: #e2e6ea; transform: translateY(-2px); }
+      
+      .hover-card { transition: transform 0.25s, box-shadow 0.25s; }
+      .hover-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+      
+      /* Spinner */
       @keyframes spin { 100% { transform: rotate(360deg); } }
-      .animate-spin-slow { animation: spin 3s linear infinite; }
+      .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #CC0000; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+      
+      /* Debug Console (Hidden by default unless error) */
+      #debug-console { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #222; color: #ff5555; padding: 1rem; font-family: monospace; font-size: 12px; max-height: 200px; overflow: auto; z-index: 9999; }
     </style>
 
-    <!-- 2. REACT LIBRARIES (UMD - Universal Module Definition for Browser) -->
+    <!-- 2. LIBRARIES (Standard Order) -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- 3. BABEL (Compiles React in browser) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
+    
+    <!-- MOUNT POINT -->
     <div id="root">
-        <!-- Initial Loading State (Removed by React once loaded) -->
-        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white;">
-            <div style="width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top-color: #CC0000; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="margin-top: 20px; font-weight: 600; color: #333; font-family: sans-serif;">Loading AI Visual Telephone...</p>
+        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="spinner" style="width: 50px; height: 50px; border-width: 5px;"></div>
+            <p style="margin-top: 20px; font-weight: 600; color: #666;">Initializing Application...</p>
+            <p id="loading-status" style="margin-top: 10px; font-size: 12px; color: #999;">Loading scripts...</p>
         </div>
     </div>
 
-    <!-- MAIN APP LOGIC -->
+    <!-- ERROR CONSOLE -->
+    <div id="debug-console"></div>
+
+    <script>
+        // Global Error Handler
+        window.onerror = function(msg, url, line, col, error) {
+            const consoleEl = document.getElementById('debug-console');
+            if (consoleEl) {
+                consoleEl.style.display = 'block';
+                consoleEl.innerHTML += `<div><strong>Error:</strong> ${msg} <br/><span style="color:#888">${url}:${line}</span></div>`;
+            }
+            return false;
+        };
+        
+        // Log setup progress
+        setTimeout(() => {
+            const status = document.getElementById('loading-status');
+            if(status) status.innerText = "Compiling React...";
+        }, 500);
+    </script>
+
+    <!-- 3. APPLICATION CODE -->
     <script type="text/babel">
         
         // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
         //                 CONFIGURATION
         // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
         
-        // 1. Paste your key inside the quotes below.
-        // 2. Do not remove the quotes.
-        
+        // PASTE YOUR API KEY INSIDE THE QUOTES BELOW:
         const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
 
         // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect } = React;
         const { createRoot } = ReactDOM;
 
-        // --- ICONS (Inline SVGs to remove external dependencies) ---
+        // --- ICONS ---
         const Icon = ({ name, className }) => {
             const icons = {
                 Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>,
@@ -89,7 +114,6 @@
 
         // --- CONSTANTS ---
         const GROUP_ORDER = ['GROUP_1', 'GROUP_2', 'GROUP_3', 'GROUP_4', 'GROUP_5'];
-
         const INITIATOR_THEMES = {
             'GROUP_1': "What would your classroom look like if it became a magical world on the last day?",
             'GROUP_2': "Create a scene where everything goes hilariously wrong on the last day of class.",
@@ -98,7 +122,6 @@
             'GROUP_5': "Show the bittersweet feeling of walking out of the classroom for the very last time.",
             'TEACHER': ""
         };
-
         const PROMPT_RECIPE = [
             { name: "The Subject", examples: ["A chair", "A futuristic sneaker", "A perfume bottle", "A bus stop", "A tiny house", "A geometric explosion"] },
             { name: "The Style", examples: ["Art Deco", "Bauhaus", "Art Nouveau", "Cyberpunk", "Minimalist", "Memphis Design"] },
@@ -106,45 +129,25 @@
             { name: "The Vibe", examples: ["Cinematic lighting", "Golden hour", "Neon noir", "Studio softbox", "Isometric view", "Fish-eye lens"] }
         ];
 
-        const INITIAL_GAME_STATE = {
-            projects: GROUP_ORDER.map((role, index) => ({
-                id: `project-${index + 1}`,
-                initiator: role,
-                turns: [],
-                reflection: null,
-                isComplete: false
-            })),
-            reflectionPhase: false
-        };
-
-        // --- DIRECT API SERVICE (Uses fetch instead of SDK to prevent loading errors) ---
+        // --- API SERVICE ---
         const generateImage = async (prompt) => {
-            // 1. Validation
-            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR") || HARDCODED_API_KEY.length < 10) {
-                throw new Error("Invalid API Key. Please update game.html with a valid key.");
+            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
+                throw new Error("Missing API Key. Please edit the HTML file.");
             }
 
-            // 2. Prepare Endpoint (Using gemini-2.5-flash as the reliable base)
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${HARDCODED_API_KEY}`;
-            
-            // 3. Prepare Payload
-            const enhancedPrompt = `${prompt}, photorealistic, realistic photograph, 8k, highly detailed, sharp focus, cinematic lighting`;
+            // Using Imagen 3 endpoint for direct image generation
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${HARDCODED_API_KEY}`;
             
             const payload = {
-                contents: [{
-                    parts: [{ text: enhancedPrompt }]
+                instances: [{
+                    prompt: `${prompt}, photorealistic, 8k, highly detailed, sharp focus`
                 }],
-                // Request a response schema or just standard text? 
-                // For image generation via text models, we usually rely on them returning a link or inline data if they are multimodal.
-                // However, standard text models don't generate images directly in text format.
-                // If using gemini-2.5-flash-image (if accessible via public API), we follow that schema.
-                // Let's assume standard behavior: the model interprets the request. 
-                // Note: If this model endpoint does not support direct image generation in this specific way,
-                // we might get text describing an image. 
-                // BUT, assuming the user's previous SDK code worked, we mimic that structure.
+                parameters: {
+                    sampleCount: 1,
+                    aspectRatio: "1:1"
+                }
             };
 
-            // 4. Execute Fetch
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -153,33 +156,33 @@
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(`API Error: ${response.status} ${errorData.error?.message || response.statusText}`);
+                    const errorText = await response.text();
+                    console.error("API Error", errorText);
+                    throw new Error(`Google API Error: ${response.status}. See console for details.`);
                 }
 
                 const data = await response.json();
                 
-                // 5. Extract Image
-                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
-                    for (const part of data.candidates[0].content.parts) {
-                        // Check for inline image data (standard Gemini image response)
-                        if (part.inlineData && part.inlineData.data) {
-                            const mimeType = part.inlineData.mimeType || 'image/png';
-                            return `data:${mimeType};base64,${part.inlineData.data}`;
-                        }
-                    }
+                // Imagen 3 Response Format: { predictions: [ { bytesBase64Encoded: "..." } ] }
+                if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
+                    return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
                 }
                 
-                // Fallback: If no image found, throw error
-                throw new Error("The model did not return an image. It might have returned text instead.");
+                // Fallback for some endpoints
+                if (data.candidates && data.candidates[0]?.content?.parts) {
+                   // ... handle text model fallback if necessary
+                   throw new Error("Model returned text instead of image.");
+                }
+
+                throw new Error("No image data received from API.");
                 
             } catch (e) {
-                console.error("Image Gen Error:", e);
+                console.error("Gen Fail", e);
                 throw e;
             }
         };
 
-        // --- REACT COMPONENTS ---
+        // --- COMPONENTS ---
 
         const PromptGuide = () => (
             <div className="bg-white h-full overflow-y-auto border-l border-gray-100 hidden xl:block w-[400px] shrink-0">
@@ -187,16 +190,14 @@
                     <h3 className="text-xl font-bold text-[#111] mb-6 tracking-tight">Prompt Recipe Formula</h3>
                     <div className="p-5 bg-[#fafafa] border border-gray-100 rounded-xl mb-10">
                         <p className="text-sm font-bold text-[#111] mb-2">Instructions:</p>
-                        <p className="text-sm text-gray-600 leading-relaxed">Brainstorm one item from each category to build your prompt.</p>
-                        <div className="mt-4 pt-4 border-t border-gray-200 font-mono text-xs text-[#CC0000] font-bold tracking-wide">Subject + Art Style + Material + Vibe</div>
+                        <p className="text-sm text-gray-600 leading-relaxed">Brainstorm one item from each category.</p>
+                        <div className="mt-4 pt-4 border-t border-gray-200 font-mono text-xs text-[#CC0000] font-bold">Subject + Style + Material + Vibe</div>
                     </div>
-                    <div className="space-y-10">
-                        {PROMPT_RECIPE.map((category, idx) => (
-                            <div key={idx}>
-                                <h4 className="text-sm font-bold text-[#111] uppercase tracking-wider border-b border-gray-100 pb-3 mb-4 flex justify-between">
-                                    <span>{idx + 1}. {category.name}</span>
-                                </h4>
-                                <p className="text-sm text-gray-600 leading-relaxed pl-4 border-l-2 border-gray-100">{category.examples.join(', ')}, etc.</p>
+                    <div className="space-y-8">
+                        {PROMPT_RECIPE.map((c, i) => (
+                            <div key={i}>
+                                <h4 className="text-sm font-bold text-[#111] uppercase border-b pb-2 mb-3">{c.name}</h4>
+                                <p className="text-sm text-gray-600 leading-relaxed pl-3 border-l-2">{c.examples.join(', ')}</p>
                             </div>
                         ))}
                     </div>
@@ -206,87 +207,89 @@
 
         const StudentView = ({ currentGroup, roundNumber, previousTurn, projectId, onTurnComplete }) => {
             const [prompt, setPrompt] = useState('');
-            const [isGenerating, setIsGenerating] = useState(false);
-            const [generatedImage, setGeneratedImage] = useState(null);
+            const [loading, setLoading] = useState(false);
+            const [image, setImage] = useState(null);
             const [error, setError] = useState(null);
 
             const isInitiator = roundNumber === 1;
-            const referenceImage = previousTurn?.generatedImage;
 
-            const handleGenerate = async () => {
-                if (!prompt.trim()) return;
-                setIsGenerating(true);
-                setError(null);
+            const handleGen = async () => {
+                if(!prompt.trim()) return;
+                setLoading(true); setError(null);
                 try {
-                    const base64Image = await generateImage(prompt);
-                    setGeneratedImage(base64Image);
-                } catch (err) {
-                    setError(err.message);
+                    const res = await generateImage(prompt);
+                    setImage(res);
+                } catch(e) {
+                    setError(e.message);
                 } finally {
-                    setIsGenerating(false);
+                    setLoading(false);
                 }
             };
 
             return (
                 <div className="h-screen bg-white flex flex-col md:flex-row overflow-hidden">
                     <div className="flex-1 flex flex-col h-full overflow-y-auto">
-                        <div className="max-w-4xl mx-auto w-full p-8 md:p-12 space-y-10">
-                            <div className="space-y-4 border-b border-gray-200 pb-8">
-                                <div className="flex items-center gap-4">
-                                    <span className="w-12 h-12 rounded-xl bg-[#111] text-white flex items-center justify-center text-xl font-bold">{currentGroup.replace('GROUP_', '')}</span>
+                        <div className="max-w-4xl mx-auto w-full p-8 md:p-12 space-y-8">
+                            <div className="border-b pb-6">
+                                <div className="flex items-center gap-4 mb-4">
+                                    <div className="w-12 h-12 bg-[#111] text-white flex items-center justify-center rounded-xl font-bold text-xl">{currentGroup.split('_')[1]}</div>
                                     <div>
-                                        <h1 className="text-3xl font-bold tracking-tight text-[#111]">{isInitiator ? 'The Initiator' : 'The Interpreter'}</h1>
-                                        <span className="text-sm font-bold text-[#CC0000] uppercase tracking-wider">Round {roundNumber} / 5</span>
+                                        <h1 className="text-3xl font-bold text-[#111]">{isInitiator ? 'The Initiator' : 'The Interpreter'}</h1>
+                                        <span className="text-xs font-bold text-[#CC0000] uppercase tracking-wider">Round {roundNumber} / 5</span>
                                     </div>
                                 </div>
-                                <p className="text-gray-600 text-lg leading-relaxed max-w-3xl">
-                                    {isInitiator ? 'Start a new visual chain. Write a detailed prompt based on your theme.' : 'Analyze the incoming image. Recreate it by writing a new prompt.'}
+                                <p className="text-gray-600 text-lg">
+                                    {isInitiator ? 'Start the chain. Use your theme to write a prompt.' : 'Analyze the image below. Recreate it with words.'}
                                 </p>
                             </div>
+
                             {isInitiator && (
-                                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl flex items-start gap-4 animate-pulse-once">
-                                    <div className="bg-white p-2 rounded-full shadow-sm shrink-0"><Icon name="Lightbulb" className="w-6 h-6 text-amber-500" /></div>
-                                    <div>
-                                        <h3 className="font-bold text-amber-900 text-lg mb-2">Theme: "The Last Day"</h3>
-                                        <p className="text-amber-900 text-xl font-semibold font-serif italic">"{INITIATOR_THEMES[currentGroup]}"</p>
+                                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Icon name="Lightbulb" className="w-5 h-5 text-amber-600"/>
+                                        <span className="font-bold text-amber-900">Theme Assignment</span>
                                     </div>
+                                    <p className="text-amber-900 text-lg font-serif italic">"{INITIATOR_THEMES[currentGroup]}"</p>
                                 </div>
                             )}
-                            {referenceImage && (
-                                <div className="bg-[#f9f9f9] p-8 rounded-2xl border border-gray-100">
-                                    <div className="flex items-center gap-2 mb-6 text-gray-500 text-xs font-bold uppercase tracking-widest"><Icon name="Image" className="w-4 h-4" /> Incoming Transmission</div>
-                                    <div className="bg-white border p-1 rounded-lg"><img src={referenceImage} className="w-full max-h-[500px] object-contain mx-auto" /></div>
+
+                            {previousTurn && (
+                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Incoming Visual</div>
+                                    <div className="bg-white p-1 rounded-lg border shadow-sm"><img src={previousTurn.generatedImage} className="w-full max-h-[400px] object-contain mx-auto"/></div>
                                 </div>
                             )}
+
                             <div className="bg-white rounded-xl">
-                                <h2 className="text-lg font-bold text-[#111] mb-4 flex items-center gap-2"><Icon name="Edit3" className="w-5 h-5 text-[#CC0000]" /> Draft Prompt</h2>
-                                <textarea
+                                <h2 className="text-lg font-bold mb-4 flex gap-2 items-center"><Icon name="Edit3" className="w-5 h-5 text-[#CC0000]"/> Draft Prompt</h2>
+                                <textarea 
+                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[120px] text-lg transition-all"
+                                    placeholder={isInitiator ? "Describe your theme using the recipe..." : "Describe the image you see..."}
                                     value={prompt}
-                                    onChange={(e) => setPrompt(e.target.value)}
-                                    placeholder={isInitiator ? "Describe your theme (Subject + Style + Material + Vibe)..." : "Describe the image above in your own words..."}
-                                    className="w-full p-6 rounded-xl bg-[#fafafa] border border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[160px] text-lg font-medium text-[#111] transition-all"
+                                    onChange={e => setPrompt(e.target.value)}
                                 />
-                                {error && <div className="mt-4 p-4 bg-red-50 text-[#CC0000] rounded-lg text-sm font-bold flex items-center gap-2"><Icon name="AlertCircle" className="w-4 h-4"/>{error}</div>}
+                                {error && <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm font-bold border border-red-100 rounded flex items-center gap-2"><Icon name="AlertCircle" className="w-4 h-4"/>{error}</div>}
+                                
                                 <div className="mt-6">
-                                    {!generatedImage ? (
-                                        <button onClick={handleGenerate} disabled={isGenerating || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-lg disabled:opacity-50 transition-all cursor-pointer">
-                                            {isGenerating ? <Icon name="Loader2" className="animate-spin w-5 h-5" /> : <Icon name="Image" className="w-5 h-5" />}
-                                            {isGenerating ? 'GENERATING...' : 'GENERATE IMAGE'}
+                                    {!image ? (
+                                        <button onClick={handleGen} disabled={loading || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
+                                            {loading ? <div className="spinner w-5 h-5 border-white border-t-transparent"></div> : <Icon name="Image" className="w-5 h-5"/>}
+                                            {loading ? 'Generating...' : 'Generate Image'}
                                         </button>
                                     ) : (
-                                        <div className="space-y-6">
-                                            <div className="bg-[#fafafa] border border-gray-100 rounded-lg overflow-hidden p-1 shadow-sm"><img src={generatedImage} className="w-full max-h-[500px] object-contain mx-auto rounded" /></div>
+                                        <div className="space-y-4">
+                                            <div className="bg-gray-50 border rounded-lg p-1"><img src={image} className="w-full max-h-[400px] object-contain mx-auto"/></div>
                                             <div className="flex gap-4">
-                                                <button onClick={() => setGeneratedImage(null)} className="btn-secondary flex-1 py-4 rounded-xl font-bold">Discard</button>
-                                                <button onClick={() => onTurnComplete(prompt, generatedImage)} className="bg-[#111] hover:bg-[#CC0000] text-white flex-[2] py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-xl hover:-translate-y-1 transition-all">
-                                                    <Icon name="Send" className="w-5 h-5" /> TRANSMIT
+                                                <button onClick={() => setImage(null)} className="btn-secondary flex-1 py-3 rounded-xl font-bold">Try Again</button>
+                                                <button onClick={() => onTurnComplete(prompt, image)} className="flex-[2] py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
+                                                    <Icon name="Send" className="w-5 h-5"/> Transmit
                                                 </button>
                                             </div>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                            <div className="h-20"></div>
+                            <div className="h-10"></div>
                         </div>
                     </div>
                     <PromptGuide />
@@ -294,262 +297,229 @@
             );
         };
 
-        const ReflectionView = ({ project, onSubmit }) => {
-            const [reflection, setReflection] = useState('');
-            return (
-                <div className="min-h-screen bg-white text-[#111] p-8 md:p-12 overflow-y-auto">
-                    <div className="max-w-5xl mx-auto space-y-12">
-                        <header className="text-center space-y-4">
-                            <h1 className="text-4xl font-bold tracking-tight">Project Reflection</h1>
-                            <p className="text-xl text-gray-600">Review the evolution of your initiating project.</p>
-                        </header>
-                        <div className="grid md:grid-cols-2 gap-8 items-start">
-                            <div className="space-y-4">
-                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 text-center">
-                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 block">Started</span>
-                                    <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm mb-4"><img src={project.turns[0]?.generatedImage} className="w-full h-auto rounded" /></div>
-                                    <p className="text-sm font-mono text-gray-500 bg-white p-3 rounded border">"{project.turns[0]?.prompt}"</p>
-                                </div>
-                            </div>
-                            <div className="space-y-4">
-                                <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 text-center">
-                                    <span className="text-xs font-bold text-[#CC0000] uppercase tracking-widest mb-4 block">Ended</span>
-                                    <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm mb-4"><img src={project.turns[project.turns.length-1]?.generatedImage} className="w-full h-auto rounded" /></div>
-                                    <p className="text-sm font-mono text-gray-500 bg-white p-3 rounded border">"{project.turns[project.turns.length-1]?.prompt}"</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="bg-[#fcfcfc] border border-gray-100 rounded-2xl p-8 shadow-sm">
-                            <h3 className="text-xl font-bold mb-6 flex items-center gap-2"><Icon name="Users" className="w-6 h-6 text-[#CC0000]" /> Group Discussion</h3>
-                            <ul className="list-disc list-inside space-y-2 mb-6 text-gray-600 ml-4 marker:text-[#CC0000]">
-                                <li>How did the AI’s interpretation evolve?</li>
-                                <li>Did certain details survive or get lost along the way?</li>
-                                <li>How did prompt styles influence lighting or composition?</li>
-                            </ul>
-                            <textarea value={reflection} onChange={(e) => setReflection(e.target.value)} placeholder="Type your reflection here..." className="w-full p-6 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#111] min-h-[200px] text-lg transition-all outline-none"></textarea>
-                            <button onClick={() => onSubmit(reflection)} disabled={!reflection.trim()} className="btn-primary mt-6 w-full py-4 rounded-xl font-bold text-lg disabled:opacity-50">Submit Reflection</button>
-                        </div>
-                    </div>
-                </div>
-            )
-        };
-
         const TeacherDashboard = ({ gameState, onReset, onToggleReflection }) => {
-            const [expandedProject, setExpandedProject] = useState(null);
-            const [zoomedImage, setZoomedImage] = useState(null);
-
-            const progress = Math.round((gameState.projects.reduce((acc, p) => acc + p.turns.length, 0) / 25) * 100);
+            const [zoom, setZoom] = useState(null);
+            const [expand, setExpand] = useState(null);
+            
+            // Calculate total turns made vs total expected (5 groups * 5 rounds = 25)
+            const totalTurns = gameState.projects.reduce((acc, p) => acc + p.turns.length, 0);
+            const progress = Math.round((totalTurns / 25) * 100);
 
             return (
                 <div className="min-h-screen bg-white pb-20">
-                    <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
-                        <div className="max-w-[1600px] mx-auto px-8 h-20 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 bg-[#111] text-white flex items-center justify-center font-bold rounded-lg text-lg">T</div>
-                                <h1 className="font-bold text-xl tracking-tight">Instructor Dashboard</h1>
-                            </div>
-                            <div className="flex items-center gap-8">
-                                <div className="flex flex-col items-end">
-                                    <div className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Progress</div>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-40 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-[#CC0000] transition-all duration-1000" style={{ width: `${progress}%`}}></div></div>
-                                        <div className="font-bold text-[#CC0000]">{progress}%</div>
-                                    </div>
+                    <header className="sticky top-0 bg-white/95 backdrop-blur border-b z-30 px-8 h-20 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="bg-[#111] text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold">T</div>
+                            <h1 className="font-bold text-lg">Instructor Dashboard</h1>
+                        </div>
+                        <div className="flex items-center gap-6">
+                             <div className="flex flex-col items-end">
+                                <span className="text-[10px] font-bold uppercase text-gray-400">Class Progress</span>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-32 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-[#CC0000] transition-all duration-1000" style={{width: `${progress}%`}}></div></div>
+                                    <span className="text-sm font-bold text-[#CC0000]">{progress}%</span>
                                 </div>
-                                <div className="h-8 w-px bg-gray-200"></div>
-                                <button onClick={onToggleReflection} className={`flex items-center gap-2 font-bold px-4 py-2 rounded-lg transition-colors ${gameState.reflectionPhase ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
-                                    <Icon name={gameState.reflectionPhase ? "Unlock" : "Lock"} className="w-4 h-4"/> {gameState.reflectionPhase ? 'Reflection Active' : 'Unlock Reflection'}
-                                </button>
-                                <button onClick={onReset} className="p-2 text-gray-400 hover:text-[#CC0000] rounded-lg hover:bg-red-50 transition-colors"><Icon name="RefreshCw" className="w-5 h-5"/></button>
                             </div>
+                            <button onClick={onToggleReflection} className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 ${gameState.reflectionPhase ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                                <Icon name={gameState.reflectionPhase ? 'Unlock' : 'Lock'} className="w-4 h-4"/> {gameState.reflectionPhase ? 'Reflection Open' : 'Unlock Reflection'}
+                            </button>
+                            <button onClick={onReset} className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-red-600"><Icon name="RefreshCw" className="w-5 h-5"/></button>
                         </div>
                     </header>
-                    <main className="max-w-[1600px] mx-auto px-8 py-10 grid grid-cols-1 xl:grid-cols-2 gap-10">
-                        {gameState.projects.map((project, idx) => (
-                            <div key={project.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col hover:shadow-lg transition-all">
-                                <div className="px-8 py-5 border-b border-gray-100 flex justify-between items-center bg-[#fcfcfc]">
+                    <main className="p-8 grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-[1600px] mx-auto">
+                        {gameState.projects.map((p, i) => (
+                            <div key={p.id} className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition-all">
+                                <div className="flex justify-between items-center mb-6">
                                     <div className="flex items-center gap-3">
-                                        <span className="w-8 h-8 rounded-lg bg-[#111] text-white flex items-center justify-center font-bold">{idx + 1}</span>
-                                        <span className="font-bold uppercase tracking-wide text-sm">{project.initiator.replace('_', ' ')}'s Chain</span>
+                                        <span className="w-8 h-8 rounded bg-[#111] text-white flex items-center justify-center font-bold text-sm">{i+1}</span>
+                                        <span className="font-bold text-sm uppercase tracking-wide">{p.initiator.replace('_',' ')} CHAIN</span>
                                     </div>
-                                    <span className={`text-xs font-bold px-3 py-1 rounded-full border ${project.isComplete ? 'bg-green-50 text-green-700 border-green-100' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>{project.isComplete ? 'COMPLETE' : `STEP ${project.turns.length}/5`}</span>
+                                    <span className={`text-xs font-bold px-2 py-1 rounded ${p.isComplete ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>{p.isComplete ? 'COMPLETE' : `STEP ${p.turns.length}/5`}</span>
                                 </div>
-                                <div className="p-8 flex items-center gap-6 flex-1">
-                                    <div className="flex-1 text-center space-y-2">
-                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Start</span>
-                                        {project.turns[0] ? (
-                                            <div className="aspect-square rounded-xl overflow-hidden border border-gray-200 cursor-zoom-in relative group" onClick={() => setZoomedImage({src: project.turns[0].generatedImage, cap: project.turns[0].prompt})}>
-                                                <img src={project.turns[0].generatedImage} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-colors"><Icon name="ZoomIn" className="text-white opacity-0 group-hover:opacity-100 drop-shadow-sm w-8 h-8" /></div>
-                                            </div>
-                                        ) : <div className="aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">Wait</div>}
+                                <div className="flex items-center gap-4">
+                                    <div className="flex-1 text-center">
+                                        <div className="text-[10px] font-bold uppercase text-gray-400 mb-2">Start</div>
+                                        {p.turns[0] ? (
+                                            <img src={p.turns[0].generatedImage} onClick={() => setZoom({src: p.turns[0].generatedImage, cap: p.turns[0].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in hover:brightness-90 transition-all"/>
+                                        ) : <div className="w-full aspect-square rounded-lg border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
                                     </div>
-                                    <Icon name="MoveRight" className="text-gray-300 w-8 h-8" />
-                                    <div className="flex-1 text-center space-y-2">
-                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Current</span>
-                                        {project.turns.length > 0 ? (
-                                            <div className="aspect-square rounded-xl overflow-hidden border border-gray-200 cursor-zoom-in relative group" onClick={() => setZoomedImage({src: project.turns[project.turns.length-1].generatedImage, cap: project.turns[project.turns.length-1].prompt})}>
-                                                <img src={project.turns[project.turns.length-1].generatedImage} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-colors"><Icon name="ZoomIn" className="text-white opacity-0 group-hover:opacity-100 drop-shadow-sm w-8 h-8" /></div>
-                                            </div>
-                                        ) : <div className="aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">Wait</div>}
+                                    <Icon name="ArrowRight" className="text-gray-300"/>
+                                    <div className="flex-1 text-center">
+                                        <div className="text-[10px] font-bold uppercase text-gray-400 mb-2">Current</div>
+                                        {p.turns.length > 0 ? (
+                                            <img src={p.turns[p.turns.length-1].generatedImage} onClick={() => setZoom({src: p.turns[p.turns.length-1].generatedImage, cap: p.turns[p.turns.length-1].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in hover:brightness-90 transition-all"/>
+                                        ) : <div className="w-full aspect-square rounded-lg border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
                                     </div>
                                 </div>
-                                <div className="p-4 border-t border-gray-100 bg-[#fcfcfc]">
-                                    <button onClick={() => setExpandedProject(project)} className="w-full py-3 bg-white border border-gray-200 hover:border-[#111] hover:bg-[#111] hover:text-white font-bold rounded-xl text-sm uppercase tracking-wide transition-all shadow-sm">Inspect Journey & Reflection</button>
-                                </div>
+                                <button onClick={() => setExpand(p)} className="mt-6 w-full py-3 border border-gray-200 hover:border-[#111] rounded-xl font-bold text-sm uppercase transition-all">Inspect Journey</button>
                             </div>
                         ))}
                     </main>
 
-                    {expandedProject && (
+                    {/* Modals */}
+                    {expand && (
                         <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur overflow-y-auto">
-                            <div className="sticky top-0 bg-white/90 border-b border-gray-100 p-6 flex justify-between items-center z-10 shadow-sm">
-                                <h2 className="text-2xl font-bold tracking-tight">Project Analysis: {expandedProject.initiator.replace('_',' ')}</h2>
-                                <button onClick={() => setExpandedProject(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><Icon name="X" className="w-6 h-6 hover:text-[#CC0000]" /></button>
+                            <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center shadow-sm">
+                                <h2 className="text-xl font-bold">Project Analysis: Group {expand.initiator.split('_')[1]}</h2>
+                                <button onClick={() => setExpand(null)}><Icon name="X" className="w-6 h-6"/></button>
                             </div>
-                            <div className="max-w-[1600px] mx-auto p-10 space-y-12">
-                                <div className="grid grid-cols-5 gap-6">
+                            <div className="p-10 max-w-[1600px] mx-auto">
+                                <div className="grid grid-cols-5 gap-4">
                                     {Array(5).fill(null).map((_, i) => (
-                                        <div key={i} className={`flex flex-col ${!expandedProject.turns[i] && 'opacity-40 grayscale'} transition-all`}>
-                                            <div className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-400">Step {i+1}</div>
-                                            <div className="aspect-square rounded-xl overflow-hidden border border-gray-200 bg-gray-50 cursor-zoom-in relative group shadow-sm mb-3" onClick={() => expandedProject.turns[i] && setZoomedImage({src: expandedProject.turns[i].generatedImage, cap: expandedProject.turns[i].prompt})}>
-                                                {expandedProject.turns[i] ? (
-                                                    <><img src={expandedProject.turns[i].generatedImage} className="w-full h-full object-cover group-hover:scale-105 transition-transform" /><div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-colors"><Icon name="ZoomIn" className="text-white opacity-0 group-hover:opacity-100 w-8 h-8" /></div></>
-                                                ) : <div className="w-full h-full flex items-center justify-center"><Icon name="Clock" className="text-gray-300 w-8 h-8"/></div>}
-                                            </div>
-                                            <div className="text-xs text-gray-600 border border-gray-100 p-3 rounded-lg bg-white h-24 overflow-y-auto leading-relaxed shadow-sm">{expandedProject.turns[i]?.prompt || 'Waiting...'}</div>
+                                        <div key={i} className={!expand.turns[i] ? 'opacity-30' : ''}>
+                                            <div className="text-[10px] font-bold uppercase text-gray-400 mb-2">Step {i+1}</div>
+                                            {expand.turns[i] ? (
+                                                <div className="space-y-3">
+                                                    <img src={expand.turns[i].generatedImage} onClick={() => setZoom({src: expand.turns[i].generatedImage, cap: expand.turns[i].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in hover:scale-105 transition-transform"/>
+                                                    <div className="text-xs bg-gray-50 p-2 rounded border h-20 overflow-y-auto">{expand.turns[i].prompt}</div>
+                                                </div>
+                                            ) : <div className="w-full aspect-square border-2 border-dashed rounded-lg flex items-center justify-center text-gray-300"><Icon name="Clock" className="w-6 h-6"/></div>}
                                         </div>
                                     ))}
                                 </div>
-                                <div className="bg-[#fcfcfc] p-8 rounded-2xl border border-gray-200">
-                                    <h3 className="text-lg font-bold mb-4 text-[#CC0000] flex items-center gap-2"><Icon name="Users" className="w-5 h-5"/> Final Group Reflection</h3>
-                                    <p className={`text-lg leading-relaxed border-l-4 pl-4 ${expandedProject.reflection ? 'text-gray-800 border-[#CC0000]' : 'text-gray-400 border-gray-200 italic'}`}>"{expandedProject.reflection || "No reflection submitted yet."}"</p>
+                                <div className="mt-8 bg-gray-50 p-6 rounded-xl border">
+                                    <h3 className="font-bold mb-2">Reflection</h3>
+                                    <p className="text-gray-600 italic">"{expand.reflection || 'Pending submission...'}"</p>
                                 </div>
                             </div>
                         </div>
                     )}
-                    {zoomedImage && (
-                        <div className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center p-8">
-                            <button onClick={() => setZoomedImage(null)} className="absolute top-8 right-8 text-white/50 hover:text-white p-2"><Icon name="X" className="w-10 h-10" /></button>
-                            <img src={zoomedImage.src} className="max-h-[75vh] w-auto object-contain mb-8 rounded-lg shadow-2xl" />
-                            <p className="text-white text-center text-lg max-w-4xl bg-[#222] px-6 py-4 rounded-xl border border-white/10 shadow-xl">{zoomedImage.cap}</p>
+
+                    {zoom && (
+                        <div className="fixed inset-0 z-[60] bg-black/90 flex flex-col items-center justify-center p-8" onClick={() => setZoom(null)}>
+                            <img src={zoom.src} className="max-h-[80vh] w-auto rounded shadow-2xl mb-4"/>
+                            <p className="text-white text-center bg-gray-800 px-4 py-2 rounded border border-gray-700 max-w-2xl">{zoom.cap}</p>
                         </div>
                     )}
                 </div>
-            );
+            )
         };
 
         const App = () => {
-            const [gameState, setGameState] = useState(INITIAL_GAME_STATE);
-            const [userRole, setUserRole] = useState(null);
-            const [showAuth, setShowAuth] = useState(false);
-            const [teacherPwd, setTeacherPwd] = useState('');
-            const [pwdError, setPwdError] = useState(false);
+            const [gameState, setGameState] = useState({ 
+                projects: GROUP_ORDER.map((r,i) => ({ id: `p${i}`, initiator: r, turns: [], isComplete: false, reflection: null })),
+                reflectionPhase: false 
+            });
+            const [role, setRole] = useState(null);
+            const [pass, setPass] = useState('');
+            const [showPass, setShowPass] = useState(false);
 
-            const handleTurnComplete = (projectId, prompt, image) => {
+            const handleTurn = (pid, prompt, img) => {
                 setGameState(prev => {
-                    const updatedProjects = prev.projects.map(p => {
-                        if (p.id === projectId) {
-                            const newTurns = [...p.turns, { groupId: userRole, prompt, generatedImage: image, timestamp: Date.now() }];
-                            return { ...p, turns: newTurns, isComplete: newTurns.length >= 5 };
-                        }
-                        return p;
+                    const projects = prev.projects.map(p => {
+                        if(p.id !== pid) return p;
+                        const turns = [...p.turns, { groupId: role, prompt, generatedImage: img }];
+                        return { ...p, turns, isComplete: turns.length >= 5 };
                     });
-                    return { ...prev, projects: updatedProjects };
+                    return { ...prev, projects };
                 });
             };
 
-            const handleReflectionSubmit = (text) => {
-                 setGameState(prev => ({ ...prev, projects: prev.projects.map(p => p.initiator === userRole ? { ...p, reflection: text } : p) }));
-                 setUserRole(null);
+            const getTask = () => {
+                if(!role || role === 'TEACHER') return null;
+                if(gameState.reflectionPhase) {
+                    const p = gameState.projects.find(proj => proj.initiator === role);
+                    return (!p.reflection) ? { type: 'REFLECT', project: p } : { type: 'DONE' };
+                }
+                const gIdx = GROUP_ORDER.indexOf(role);
+                for(let r=1; r<=5; r++) {
+                    let iIdx = (gIdx - (r-1)) % 5;
+                    if(iIdx < 0) iIdx += 5;
+                    const p = gameState.projects[iIdx];
+                    if(p.turns.length >= r) continue;
+                    if(p.turns.length < r-1) return { type: 'WAIT', round: r };
+                    return { type: 'ACT', round: r, project: p };
+                }
+                return { type: 'DONE' };
             };
 
-            const handleReset = () => { if(confirm("Reset all activity?")) setGameState(INITIAL_GAME_STATE); };
+            const task = getTask();
 
-            const getActiveTask = () => {
-                if (!userRole || userRole === 'TEACHER') return null;
-                if (gameState.reflectionPhase) {
-                    const myProject = gameState.projects.find(p => p.initiator === userRole);
-                    if (!myProject.reflection) return { status: 'REFLECTION', project: myProject };
-                    return { status: 'COMPLETE_ALL' };
-                }
-                const groupIndex = GROUP_ORDER.indexOf(userRole);
-                for (let round = 1; round <= 5; round++) {
-                    let initiatorIndex = (groupIndex - (round - 1)) % 5;
-                    if (initiatorIndex < 0) initiatorIndex += 5;
-                    const project = gameState.projects[initiatorIndex];
-                    if (project.turns.length >= round) continue;
-                    if (project.turns.length < round - 1) return { status: 'WAITING', round, project };
-                    return { status: 'ACTIVE', round, project };
-                }
-                return { status: 'COMPLETE_GAME' };
-            };
-
-            // Basic check for key existence
-            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
-                 return <div className="min-h-screen flex items-center justify-center bg-white p-8 text-center"><div className="bg-red-50 p-8 rounded-2xl border border-red-100"><h2 className="text-2xl font-bold text-[#CC0000] mb-4">Setup Required</h2><p className="text-gray-700">Please edit game.html and paste your Gemini API Key in the HARDCODED_API_KEY variable.</p></div></div>;
-            }
-
-            if (userRole === 'TEACHER') return <><button onClick={() => setUserRole(null)} className="fixed top-6 right-6 z-50 text-sm font-semibold text-gray-400 hover:text-[#CC0000] underline">Exit Dashboard</button><TeacherDashboard gameState={gameState} onReset={handleReset} onToggleReflection={() => setGameState(p => ({...p, reflectionPhase: !p.reflectionPhase}))} /></>;
-
-            const task = getActiveTask();
-
-            if (task?.status === 'REFLECTION') return <ReflectionView project={task.project} onSubmit={handleReflectionSubmit} />;
-            
-            if (task?.status === 'ACTIVE') return <><button onClick={() => setUserRole(null)} className="fixed top-6 right-6 z-50 text-sm font-semibold text-gray-400 hover:text-[#CC0000] underline">Exit Role</button><StudentView key={`${userRole}-${task.round}`} currentGroup={userRole} roundNumber={task.round} projectId={task.project.id} previousTurn={task.round > 1 ? task.project.turns[task.round - 2] : null} onTurnComplete={(p, i) => handleTurnComplete(task.project.id, p, i)} /></>;
-
-            if (task?.status === 'WAITING' || task?.status === 'COMPLETE_GAME' || task?.status === 'COMPLETE_ALL') {
-                return (
-                    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
-                        <button onClick={() => setUserRole(null)} className="fixed top-6 right-6 z-50 text-sm font-semibold text-gray-400 hover:text-[#CC0000] underline">Exit Role</button>
-                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-8 ${task.status === 'WAITING' ? 'border-4 border-gray-100 border-t-[#CC0000] animate-spin' : 'bg-green-50 text-green-600'}`}>
-                            {task.status !== 'WAITING' && <Icon name="GraduationCap" className="w-10 h-10" />}
-                        </div>
-                        <h2 className="text-3xl font-bold text-[#111] mb-4">{task.status === 'WAITING' ? 'Transmission Pending' : 'All Tasks Complete'}</h2>
-                        <p className="text-gray-500 max-w-lg mx-auto text-lg leading-relaxed">{task.status === 'WAITING' ? `Waiting for the previous group (Round ${task.round - 1}).` : "Great work! Return to main display."}</p>
-                    </div>
-                );
-            }
-
-            return (
-                <div className="min-h-screen bg-white text-[#111] font-sans">
-                    <div className="max-w-[1120px] mx-auto px-6 py-20">
-                        <div className="text-center mb-16">
-                            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-[#111]">AI Visual Telephone</h1>
-                            <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto font-normal leading-relaxed">Collaborative generative AI translation game.</p>
-                        </div>
-                        <div className="grid lg:grid-cols-2 gap-12 items-start">
+            // Landing
+            if(!role) return (
+                <div className="min-h-screen bg-white p-8 font-sans">
+                    <div className="max-w-5xl mx-auto py-12 text-center">
+                        <h1 className="text-5xl font-bold mb-6">AI Visual Telephone</h1>
+                        <p className="text-xl text-gray-500 mb-12 max-w-2xl mx-auto">Collaborative generative AI design game.</p>
+                        <div className="grid md:grid-cols-2 gap-12 text-left">
                             <div>
-                                <h2 className="text-2xl font-bold mb-6 flex items-center gap-3"><Icon name="Users" className="w-6 h-6 text-[#CC0000]" /> Student Groups</h2>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                                    {GROUP_ORDER.map((group, idx) => (
-                                        <button key={group} onClick={() => setUserRole(group)} className="hover-card bg-[#f9f9f9] rounded-xl p-6 text-center border border-transparent hover:border-gray-200 group flex flex-col items-center h-48 justify-center transition-all">
-                                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md group-hover:text-[#CC0000] text-2xl font-bold transition-all">{idx + 1}</div>
-                                            <p className="font-semibold text-[#111]">Group {idx + 1}</p>
+                                <h2 className="text-2xl font-bold mb-6 flex gap-2 items-center"><Icon name="Users" className="text-[#CC0000]"/> Student Groups</h2>
+                                <div className="grid grid-cols-3 gap-4">
+                                    {GROUP_ORDER.map((g,i) => (
+                                        <button key={g} onClick={() => setRole(g)} className="hover-card bg-gray-50 p-6 rounded-xl border hover:border-gray-300 flex flex-col items-center">
+                                            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold shadow-sm mb-2 text-lg">{i+1}</div>
+                                            <span className="text-sm font-bold">Group {i+1}</span>
                                         </button>
                                     ))}
                                 </div>
                             </div>
-                            <div className="bg-[#f9f9f9] p-8 rounded-2xl border border-gray-100 flex flex-col justify-center text-center lg:text-left h-full shadow-sm">
-                                <h2 className="text-2xl font-bold mb-4 flex items-center gap-3 justify-center lg:justify-start"><Icon name="MonitorPlay" className="w-6 h-6 text-[#CC0000]" /> Instructor</h2>
-                                <p className="mb-8 text-gray-600 leading-relaxed">Access real-time dashboard and facilitate reflection.</p>
-                                <button onClick={() => setShowAuth(true)} className="btn-primary py-4 px-8 rounded-xl font-bold text-lg w-full lg:w-auto self-start flex items-center justify-center gap-2">Launch Dashboard <Icon name="ArrowRight" className="w-5 h-5" /></button>
+                            <div className="bg-gray-50 p-8 rounded-2xl border flex flex-col justify-center">
+                                <h2 className="text-2xl font-bold mb-4 flex gap-2 items-center"><Icon name="MonitorPlay" className="text-[#CC0000]"/> Instructor</h2>
+                                <p className="text-gray-600 mb-6">Access dashboard for real-time monitoring.</p>
+                                <button onClick={() => setShowPass(true)} className="btn-primary py-3 px-6 rounded-xl font-bold w-fit">Open Dashboard</button>
                             </div>
                         </div>
-                        <div className="mt-20 pt-10 border-t border-slate-100 text-center text-slate-400 text-sm"><p>CM501 • Fall 2025 • Visual Communication Design</p></div>
+                        {showPass && (
+                            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                                <div className="bg-white p-8 rounded-2xl w-full max-w-sm">
+                                    <h3 className="font-bold text-xl mb-4">Instructor Code</h3>
+                                    <input type="password" autoFocus className="w-full p-3 border rounded-lg mb-4 text-lg" placeholder="2025" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => { if(e.key === 'Enter' && pass === '2025') { setRole('TEACHER'); setShowPass(false); }}}/>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => setShowPass(false)} className="flex-1 py-3 text-gray-500 font-bold">Cancel</button>
+                                        <button onClick={() => { if(pass === '2025') { setRole('TEACHER'); setShowPass(false); }}} className="flex-1 py-3 bg-[#111] text-white rounded-lg font-bold">Enter</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        <div className="mt-20 pt-8 border-t text-gray-400 text-sm">CM501 Fall 2025</div>
                     </div>
-                    {showAuth && (
-                        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                            <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl border border-gray-100">
-                                <h3 className="text-xl font-bold text-[#111] mb-2">Instructor Access</h3>
-                                <p className="text-sm text-gray-500 mb-6">Enter passcode: 2025</p>
-                                <input type="password" value={teacherPwd} onChange={e => {setTeacherPwd(e.target.value); setPwdError(false);}} className={`w-full p-4 border rounded-xl mb-4 outline-none transition-all font-medium text-lg ${pwdError ? 'border-red-300 bg-red-50 text-red-900' : 'border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#111]'}`} placeholder="Passcode" autoFocus onKeyDown={(e) => { if (e.key === 'Enter') { if (teacherPwd === '2025') { setUserRole('TEACHER'); setShowAuth(false); setTeacherPwd(''); } else { setPwdError(true); }}}} />
-                                <div className="flex gap-3 mt-2"><button onClick={() => setShowAuth(false)} className="flex-1 py-3 text-gray-500 hover:bg-gray-100 rounded-xl font-bold">Cancel</button><button onClick={() => { if (teacherPwd === '2025') { setUserRole('TEACHER'); setShowAuth(false); setTeacherPwd(''); } else { setPwdError(true); }}} className="flex-1 py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg">Enter</button></div>
-                            </div>
-                        </div>
-                    )}
                 </div>
+            );
+
+            if(role === 'TEACHER') return (
+                <>
+                    <button onClick={() => setRole(null)} className="fixed top-5 right-5 z-50 text-sm font-bold text-gray-400 hover:text-red-600 underline">Exit</button>
+                    <TeacherDashboard gameState={gameState} onReset={() => setGameState(INITIAL_GAME_STATE)} onToggleReflection={() => setGameState(p => ({...p, reflectionPhase: !p.reflectionPhase}))} />
+                </>
+            );
+
+            if(task.type === 'WAIT' || task.type === 'DONE') return (
+                <div className="min-h-screen flex flex-col items-center justify-center bg-white p-8 text-center">
+                    <button onClick={() => setRole(null)} className="fixed top-5 right-5 z-50 text-sm font-bold text-gray-400 hover:text-red-600 underline">Exit</button>
+                    <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${task.type === 'WAIT' ? 'spinner border-4 border-gray-100 border-t-red-600' : 'bg-green-100 text-green-600'}`}>
+                        {task.type === 'DONE' && <Icon name="CheckCircle2" className="w-10 h-10"/>}
+                    </div>
+                    <h2 className="text-3xl font-bold mb-2">{task.type === 'WAIT' ? 'Pending...' : 'All Done!'}</h2>
+                    <p className="text-gray-500">{task.type === 'WAIT' ? `Waiting for Round ${task.round-1} to finish.` : 'Return to main screen.'}</p>
+                </div>
+            );
+
+            if(task.type === 'REFLECT') return (
+                <div className="min-h-screen bg-white p-8">
+                     <div className="max-w-2xl mx-auto py-12">
+                        <h1 className="text-3xl font-bold mb-6">Final Reflection</h1>
+                        <p className="mb-8 text-gray-600">Review your group's initiating chain and discuss.</p>
+                        <div className="flex gap-4 mb-8">
+                            <div className="flex-1 text-center bg-gray-50 p-4 rounded-lg"><span className="text-xs font-bold uppercase text-gray-400">Start</span><img src={task.project.turns[0].generatedImage} className="mt-2 rounded"/></div>
+                            <div className="flex-1 text-center bg-gray-50 p-4 rounded-lg"><span className="text-xs font-bold uppercase text-gray-400">End</span><img src={task.project.turns[task.project.turns.length-1].generatedImage} className="mt-2 rounded"/></div>
+                        </div>
+                        <textarea id="reflect-txt" className="w-full p-4 border rounded-xl h-40 mb-4 text-lg" placeholder="Write your group discussion notes here..."></textarea>
+                        <button onClick={() => { const val = document.getElementById('reflect-txt').value; setGameState(p => ({...p, projects: p.projects.map(proj => proj.id === task.project.id ? {...proj, reflection: val} : proj)})); setRole(null); }} className="btn-primary w-full py-4 rounded-xl font-bold">Submit & Finish</button>
+                     </div>
+                </div>
+            );
+
+            return (
+                <>
+                    <button onClick={() => setRole(null)} className="fixed top-5 right-5 z-50 text-sm font-bold text-gray-400 hover:text-red-600 underline">Exit</button>
+                    <StudentView 
+                        currentGroup={role} 
+                        roundNumber={task.round} 
+                        projectId={task.project.id} 
+                        previousTurn={task.round > 1 ? task.project.turns[task.round-2] : null}
+                        onTurnComplete={(txt, img) => handleTurn(task.project.id, txt, img)}
+                    />
+                </>
             );
         };
 
