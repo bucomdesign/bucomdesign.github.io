@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Visual Telephone</title>
     
-    <!-- 1. STYLES -->
+    <!-- FONTS & STYLES -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
       body { font-family: 'Manrope', sans-serif; color: #111; background: #fff; }
       
-      /* UI Utilities */
       .btn-primary { background: #111; color: #fff; transition: all 0.2s; }
       .btn-primary:hover { background: #CC0000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
       .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -23,85 +21,108 @@
       .hover-card { transition: transform 0.25s, box-shadow 0.25s; }
       .hover-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
       
-      /* Spinner */
+      .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #CC0000; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
       @keyframes spin { 100% { transform: rotate(360deg); } }
-      .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #CC0000; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
-      
-      /* Debug Console (Hidden by default unless error) */
-      #debug-console { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #222; color: #ff5555; padding: 1rem; font-family: monospace; font-size: 12px; max-height: 200px; overflow: auto; z-index: 9999; }
+
+      /* Scrollbar cleanup */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #bbb; }
     </style>
 
-    <!-- 2. LIBRARIES (Standard Order) -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- CORE LIBRARIES (Global fallback) -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 </head>
 <body>
-    
-    <!-- MOUNT POINT -->
+
     <div id="root">
+        <!-- Loading Fallback -->
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div class="spinner" style="width: 50px; height: 50px; border-width: 5px;"></div>
-            <p style="margin-top: 20px; font-weight: 600; color: #666;">Initializing Application...</p>
-            <p id="loading-status" style="margin-top: 10px; font-size: 12px; color: #999;">Loading scripts...</p>
+            <p style="margin-top: 20px; color: #666; font-weight: 600;">Loading AI Visual Telephone...</p>
         </div>
     </div>
 
-    <!-- ERROR CONSOLE -->
-    <div id="debug-console"></div>
+    <!-- 
+      ========================================
+       AI SERVICE MODULE (No Babel, Native JS)
+      ========================================
+    -->
+    <script type="module">
+        import { GoogleGenAI } from "https://esm.run/@google/genai";
 
-    <script>
-        // Global Error Handler
-        window.onerror = function(msg, url, line, col, error) {
-            const consoleEl = document.getElementById('debug-console');
-            if (consoleEl) {
-                consoleEl.style.display = 'block';
-                consoleEl.innerHTML += `<div><strong>Error:</strong> ${msg} <br/><span style="color:#888">${url}:${line}</span></div>`;
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        //           PASTE API KEY HERE
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+        // Expose function to global window so React can use it
+        window.generateImageService = async (prompt) => {
+            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
+                throw new Error("API_KEY_MISSING");
             }
-            return false;
+
+            const ai = new GoogleGenAI({ apiKey: HARDCODED_API_KEY });
+            
+            // Using the requested prompt enhancement for realism
+            const enhancedPrompt = `${prompt}, photorealistic, realistic photograph, 8k, highly detailed, sharp focus, cinematic lighting`;
+
+            try {
+                // Using the specific model from guidelines
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash-image',
+                    contents: { parts: [{ text: enhancedPrompt }] },
+                });
+
+                // Parse response
+                if (response.candidates && response.candidates[0].content && response.candidates[0].content.parts) {
+                    for (const part of response.candidates[0].content.parts) {
+                        if (part.inlineData && part.inlineData.data) {
+                            const mimeType = part.inlineData.mimeType || 'image/png';
+                            return `data:${mimeType};base64,${part.inlineData.data}`;
+                        }
+                    }
+                }
+                throw new Error("No image data returned from Gemini.");
+            } catch (error) {
+                console.error("Gemini Error:", error);
+                throw error;
+            }
         };
-        
-        // Log setup progress
-        setTimeout(() => {
-            const status = document.getElementById('loading-status');
-            if(status) status.innerText = "Compiling React...";
-        }, 500);
+
+        // Signal that AI service is ready
+        window.isAIReady = true;
     </script>
 
-    <!-- 3. APPLICATION CODE -->
-    <script type="text/babel">
-        
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        //                 CONFIGURATION
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        
-        // PASTE YOUR API KEY INSIDE THE QUOTES BELOW:
-        const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
+    <!-- 
+      ========================================
+       REACT APPLICATION (Compiled by Babel)
+      ========================================
+    -->
+    <script type="text/babel" data-presets="env,react">
+        const { useState, useEffect, useRef } = React;
 
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-        const { useState, useEffect } = React;
-        const { createRoot } = ReactDOM;
-
-        // --- ICONS ---
+        // --- ICONS (Inline SVG to avoid external dep) ---
         const Icon = ({ name, className }) => {
             const icons = {
                 Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>,
                 GraduationCap: <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>,
-                ArrowRight: <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>,
                 MonitorPlay: <path d="m10 7 5 3-5 3z"/><rect width="20" height="14" x="2" y="3" rx="2" ry="2"/><path d="M12 17v4"/><path d="M8 21h8"/>,
-                Loader2: <path d="M21 12a9 9 0 1 1-6.219-8.56"/>,
-                Send: <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>,
                 Image: <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>,
-                AlertCircle: <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>,
+                Send: <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>,
                 Edit3: <path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>,
+                AlertCircle: <circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/>,
                 Lightbulb: <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-1 1.5-2 1.5-3.5A6 6 0 0 0 6 8c0 1 .5 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>,
                 RefreshCw: <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>,
                 ZoomIn: <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/>,
                 X: <path d="M18 6 6 18"/><path d="m6 6 12 12"/>,
-                Clock: <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>,
                 CheckCircle2: <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>,
-                MoveRight: <path d="M18 8L22 12L18 16"/><path d="M2 12H22"/>,
+                Clock: <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>,
+                ArrowRight: <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>,
                 Lock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>,
                 Unlock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>
             };
@@ -114,6 +135,7 @@
 
         // --- CONSTANTS ---
         const GROUP_ORDER = ['GROUP_1', 'GROUP_2', 'GROUP_3', 'GROUP_4', 'GROUP_5'];
+        
         const INITIATOR_THEMES = {
             'GROUP_1': "What would your classroom look like if it became a magical world on the last day?",
             'GROUP_2': "Create a scene where everything goes hilariously wrong on the last day of class.",
@@ -122,65 +144,13 @@
             'GROUP_5': "Show the bittersweet feeling of walking out of the classroom for the very last time.",
             'TEACHER': ""
         };
+
         const PROMPT_RECIPE = [
             { name: "The Subject", examples: ["A chair", "A futuristic sneaker", "A perfume bottle", "A bus stop", "A tiny house", "A geometric explosion"] },
             { name: "The Style", examples: ["Art Deco", "Bauhaus", "Art Nouveau", "Cyberpunk", "Minimalist", "Memphis Design"] },
             { name: "The Material", examples: ["Polished chrome", "Raw concrete", "Rusted iron", "Blue velvet", "Fluffy cotton candy", "Translucent plastic"] },
             { name: "The Vibe", examples: ["Cinematic lighting", "Golden hour", "Neon noir", "Studio softbox", "Isometric view", "Fish-eye lens"] }
         ];
-
-        // --- API SERVICE ---
-        const generateImage = async (prompt) => {
-            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
-                throw new Error("Missing API Key. Please edit the HTML file.");
-            }
-
-            // Using Imagen 3 endpoint for direct image generation
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${HARDCODED_API_KEY}`;
-            
-            const payload = {
-                instances: [{
-                    prompt: `${prompt}, photorealistic, 8k, highly detailed, sharp focus`
-                }],
-                parameters: {
-                    sampleCount: 1,
-                    aspectRatio: "1:1"
-                }
-            };
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("API Error", errorText);
-                    throw new Error(`Google API Error: ${response.status}. See console for details.`);
-                }
-
-                const data = await response.json();
-                
-                // Imagen 3 Response Format: { predictions: [ { bytesBase64Encoded: "..." } ] }
-                if (data.predictions && data.predictions[0]?.bytesBase64Encoded) {
-                    return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                }
-                
-                // Fallback for some endpoints
-                if (data.candidates && data.candidates[0]?.content?.parts) {
-                   // ... handle text model fallback if necessary
-                   throw new Error("Model returned text instead of image.");
-                }
-
-                throw new Error("No image data received from API.");
-                
-            } catch (e) {
-                console.error("Gen Fail", e);
-                throw e;
-            }
-        };
 
         // --- COMPONENTS ---
 
@@ -210,17 +180,27 @@
             const [loading, setLoading] = useState(false);
             const [image, setImage] = useState(null);
             const [error, setError] = useState(null);
-
             const isInitiator = roundNumber === 1;
 
-            const handleGen = async () => {
+            const handleGenerate = async () => {
                 if(!prompt.trim()) return;
                 setLoading(true); setError(null);
+                
+                if (!window.generateImageService) {
+                    setError("AI Service not loaded yet. Refresh page.");
+                    setLoading(false);
+                    return;
+                }
+
                 try {
-                    const res = await generateImage(prompt);
-                    setImage(res);
+                    const base64 = await window.generateImageService(prompt);
+                    setImage(base64);
                 } catch(e) {
-                    setError(e.message);
+                    if (e.message === 'API_KEY_MISSING') {
+                        setError("CRITICAL: API Key is missing in the HTML file.");
+                    } else {
+                        setError("Failed to generate: " + e.message);
+                    }
                 } finally {
                     setLoading(false);
                 }
@@ -272,8 +252,8 @@
                                 
                                 <div className="mt-6">
                                     {!image ? (
-                                        <button onClick={handleGen} disabled={loading || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
-                                            {loading ? <div className="spinner w-5 h-5 border-white border-t-transparent"></div> : <Icon name="Image" className="w-5 h-5"/>}
+                                        <button onClick={handleGenerate} disabled={loading || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
+                                            {loading ? <div className="spinner"></div> : <Icon name="Image" className="w-5 h-5"/>}
                                             {loading ? 'Generating...' : 'Generate Image'}
                                         </button>
                                     ) : (
@@ -301,7 +281,6 @@
             const [zoom, setZoom] = useState(null);
             const [expand, setExpand] = useState(null);
             
-            // Calculate total turns made vs total expected (5 groups * 5 rounds = 25)
             const totalTurns = gameState.projects.reduce((acc, p) => acc + p.turns.length, 0);
             const progress = Math.round((totalTurns / 25) * 100);
 
@@ -403,6 +382,12 @@
             const [role, setRole] = useState(null);
             const [pass, setPass] = useState('');
             const [showPass, setShowPass] = useState(false);
+            const [keyError, setKeyError] = useState(false);
+
+            useEffect(() => {
+                // Check if API key is set in the module script via global check or similar
+                // We handle this at the generation step, but we can also warn early.
+            }, []);
 
             const handleTurn = (pid, prompt, img) => {
                 setGameState(prev => {
@@ -435,7 +420,7 @@
 
             const task = getTask();
 
-            // Landing
+            // Landing Screen
             if(!role) return (
                 <div className="min-h-screen bg-white p-8 font-sans">
                     <div className="max-w-5xl mx-auto py-12 text-center">
@@ -523,7 +508,7 @@
             );
         };
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
