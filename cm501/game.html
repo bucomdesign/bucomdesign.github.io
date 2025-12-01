@@ -80,7 +80,8 @@
                 ArrowRight: <><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>,
                 Lock: <><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></>,
                 Unlock: <><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></>,
-                UploadCloud: <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></>
+                UploadCloud: <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></>,
+                Download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></>
             };
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -97,7 +98,7 @@
             'GROUP_2': "Create a scene where everything goes hilariously wrong on the last day of class.",
             'GROUP_3': "How would the last day of class look in a school of the distant future?",
             'GROUP_4': "Illustrate the abstract concept of 'finishing something important' as a visual story.",
-            'GROUP_5': "Depict a unique way students might celebrate the end of the semester.",
+            'GROUP_5': "Show the bittersweet feeling of walking out of the classroom for the very last time.",
             'TEACHER': ""
         };
 
@@ -291,6 +292,65 @@
             const totalTurns = gameState.projects.reduce((acc, p) => acc + p.turns.length, 0);
             const progress = Math.round((totalTurns / 25) * 100);
 
+            // Export Documentation Function
+            const downloadReport = () => {
+                const reportContent = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>AI Visual Telephone - Class Documentation</title>
+                        <style>
+                            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 1200px; margin: 0 auto; padding: 40px; color: #333; }
+                            h1 { border-bottom: 2px solid #CC0000; padding-bottom: 20px; margin-bottom: 40px; }
+                            .project-section { margin-bottom: 80px; page-break-inside: avoid; }
+                            .project-header { background: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+                            .chain-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 20px; }
+                            .step { border: 1px solid #eee; border-radius: 8px; padding: 10px; }
+                            .step img { width: 100%; height: auto; border-radius: 4px; display: block; margin-bottom: 10px; }
+                            .prompt-text { font-size: 11px; color: #555; background: #fafafa; padding: 8px; border-radius: 4px; line-height: 1.4; }
+                            .reflection-box { background: #fff4f4; border-left: 4px solid #CC0000; padding: 20px; border-radius: 4px; }
+                            .meta { font-weight: bold; font-size: 12px; text-transform: uppercase; color: #888; margin-bottom: 4px; display: block; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>AI Visual Telephone: Class Documentation</h1>
+                        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                        
+                        ${gameState.projects.map(p => `
+                            <div class="project-section">
+                                <div class="project-header">
+                                    <h2 style="margin:0">Chain Initiated by ${p.initiator.replace('_', ' ')}</h2>
+                                    <span>${p.isComplete ? 'COMPLETE' : 'IN PROGRESS'}</span>
+                                </div>
+                                <div class="chain-grid">
+                                    ${p.turns.map((t, i) => `
+                                        <div class="step">
+                                            <span class="meta">Step ${i+1} (${t.groupId})</span>
+                                            <img src="${t.generatedImage}" />
+                                            <div class="prompt-text"><strong>Prompt:</strong> ${t.prompt}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div class="reflection-box">
+                                    <h3>Group Reflection</h3>
+                                    <p>${p.reflection ? p.reflection.replace(/\n/g, '<br>') : 'No reflection submitted.'}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </body>
+                    </html>
+                `;
+                
+                const blob = new Blob([reportContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `VisualTelephone_Report_${new Date().toISOString().slice(0,10)}.html`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
             return (
                 <div className="min-h-screen bg-white pb-20">
                     <header className="sticky top-0 bg-white/95 backdrop-blur border-b z-30 px-8 h-20 flex items-center justify-between">
@@ -298,17 +358,23 @@
                             <div className="bg-[#111] text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold">T</div>
                             <h1 className="font-bold text-lg">Instructor Dashboard</h1>
                         </div>
-                        <div className="flex items-center gap-6">
-                             <div className="flex flex-col items-end">
+                        <div className="flex items-center gap-4">
+                             <div className="flex flex-col items-end mr-4">
                                 <span className="text-[10px] font-bold uppercase text-gray-400">Class Progress</span>
                                 <div className="flex items-center gap-2">
                                     <div className="w-32 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-[#CC0000] transition-all duration-1000" style={{width: `${progress}%`}}></div></div>
                                     <span className="text-sm font-bold text-[#CC0000]">{progress}%</span>
                                 </div>
                             </div>
+                            
+                            <button onClick={downloadReport} className="px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 bg-[#111] text-white hover:bg-[#333]">
+                                <Icon name="Download" className="w-4 h-4"/> Export Report
+                            </button>
+
                             <button onClick={onToggleReflection} className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 ${gameState.reflectionPhase ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
                                 <Icon name={gameState.reflectionPhase ? 'Unlock' : 'Lock'} className="w-4 h-4"/> {gameState.reflectionPhase ? 'Reflection Open' : 'Unlock Reflection'}
                             </button>
+                            
                             <button onClick={onReset} className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-red-600"><Icon name="RefreshCw" className="w-5 h-5"/></button>
                         </div>
                     </header>
@@ -449,7 +515,7 @@
                             <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
                                 <div className="bg-white p-8 rounded-2xl w-full max-w-sm">
                                     <h3 className="font-bold text-xl mb-4">Instructor Code</h3>
-                                    <input type="password" autoFocus className="w-full p-3 border rounded-lg mb-4 text-lg" placeholder="2025" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => { if(e.key === 'Enter' && pass === '2025') { setRole('TEACHER'); setShowPass(false); }}}/>
+                                    <input type="password" autoFocus className="w-full p-3 border rounded-lg mb-4 text-lg" placeholder="Enter Passcode" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => { if(e.key === 'Enter' && pass === '2025') { setRole('TEACHER'); setShowPass(false); }}}/>
                                     <div className="flex gap-2">
                                         <button onClick={() => setShowPass(false)} className="flex-1 py-3 text-gray-500 font-bold">Cancel</button>
                                         <button onClick={() => { if(pass === '2025') { setRole('TEACHER'); setShowPass(false); }}} className="flex-1 py-3 bg-[#111] text-white rounded-lg font-bold">Enter</button>
@@ -482,15 +548,47 @@
 
             if(task.type === 'REFLECT') return (
                 <div className="min-h-screen bg-white p-8">
-                     <div className="max-w-2xl mx-auto py-12">
-                        <h1 className="text-3xl font-bold mb-6">Final Reflection</h1>
-                        <p className="mb-8 text-gray-600">Review your group's initiating chain and discuss.</p>
-                        <div className="flex gap-4 mb-8">
-                            <div className="flex-1 text-center bg-gray-50 p-4 rounded-lg"><span className="text-xs font-bold uppercase text-gray-400">Start</span><img src={task.project.turns[0].generatedImage} className="mt-2 rounded"/></div>
-                            <div className="flex-1 text-center bg-gray-50 p-4 rounded-lg"><span className="text-xs font-bold uppercase text-gray-400">End</span><img src={task.project.turns[task.project.turns.length-1].generatedImage} className="mt-2 rounded"/></div>
+                     <div className="max-w-6xl mx-auto py-12">
+                        <h1 className="text-3xl font-bold mb-2">Final Reflection</h1>
+                        <p className="mb-8 text-gray-600">Review the evolution of your original concept and discuss the outcome.</p>
+                        
+                        {/* FULL HISTORY GRID */}
+                        <div className="mb-12">
+                            <h3 className="text-lg font-bold border-b pb-4 mb-6">Project Evolution History</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                                {task.project.turns.map((turn, i) => (
+                                    <div key={i} className="flex flex-col gap-3 group">
+                                         <div className="flex items-center justify-between">
+                                             <span className="text-xs font-bold uppercase text-gray-400">Step {i+1}</span>
+                                             <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded font-bold text-gray-500">{turn.groupId.split('_')[1] || 'Init'}</span>
+                                         </div>
+                                         <div className="bg-gray-50 border border-gray-200 rounded-xl overflow-hidden aspect-square shadow-sm">
+                                            <img src={turn.generatedImage} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                                         </div>
+                                         <div className="text-[11px] bg-gray-50 p-3 rounded-lg border border-gray-100 h-32 overflow-y-auto leading-relaxed text-gray-600 shadow-inner">
+                                            <span className="block font-bold text-gray-900 mb-1">Prompt:</span>
+                                            {turn.prompt}
+                                         </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <textarea id="reflect-txt" className="w-full p-4 border rounded-xl h-40 mb-4 text-lg" placeholder="Write your group discussion notes here..."></textarea>
-                        <button onClick={() => { const val = document.getElementById('reflect-txt').value; setGameState(p => ({...p, projects: p.projects.map(proj => proj.id === task.project.id ? {...proj, reflection: val} : proj)})); setRole(null); }} className="btn-primary w-full py-4 rounded-xl font-bold">Submit & Finish</button>
+
+                        {/* QUESTIONS & INPUT */}
+                        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-200 shadow-sm">
+                            <h3 className="font-bold text-lg mb-4 text-[#CC0000] flex items-center gap-2">
+                                <Icon name="Users" className="w-5 h-5"/> Discussion Questions
+                            </h3>
+                            <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700 mb-8 font-medium max-w-3xl leading-relaxed">
+                                <li>How did the AI’s interpretation evolve?</li>
+                                <li>Did certain details survive or get lost along the way?</li>
+                                <li>How did each group’s prompt influence style, lighting, or composition?</li>
+                                <li>What can this teach about translating visuals back into language for design?</li>
+                            </ul>
+                            
+                            <textarea id="reflect-txt" className="w-full p-6 border border-gray-200 rounded-xl h-48 mb-6 text-base focus:ring-2 focus:ring-[#111] focus:border-transparent outline-none bg-white shadow-inner" placeholder="Type your group's reflection notes here..."></textarea>
+                            <button onClick={() => { const val = document.getElementById('reflect-txt').value; setGameState(p => ({...p, projects: p.projects.map(proj => proj.id === task.project.id ? {...proj, reflection: val} : proj)})); setRole(null); }} className="btn-primary w-full md:w-auto px-12 py-4 rounded-xl font-bold shadow-lg">Submit Reflection & Finish</button>
+                        </div>
                      </div>
                 </div>
             );
