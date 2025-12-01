@@ -14,16 +14,24 @@
     <!-- Babel for in-browser JSX compilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Styles from your class website -->
+    <!-- IMPORT MAP: This tells the browser where to download the libraries -->
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react@18.2.0",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+            "@google/genai": "https://esm.sh/@google/genai@0.1.1",
+            "lucide-react": "https://esm.sh/lucide-react@0.294.0"
+        }
+    }
+    </script>
+
     <style>
       body {
         font-family: 'Manrope', sans-serif;
         color: #111;
         background: #fff;
       }
-      
-      .text-accent { color: #CC0000; }
-      .bg-accent { background-color: #CC0000; }
       
       /* Buttons */
       .btn-primary {
@@ -55,39 +63,67 @@
         box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       }
       
-      /* Utilities */
-      .scrollbar-hide::-webkit-scrollbar {
+      /* Error Box */
+      #error-container {
           display: none;
-      }
-      .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: #fee2e2;
+          color: #991b1b;
+          padding: 1rem;
+          border-radius: 8px;
+          border: 1px solid #f87171;
+          max-width: 400px;
+          z-index: 9999;
+          font-size: 0.875rem;
+          font-family: monospace;
       }
     </style>
 </head>
 <body class="bg-white text-slate-900">
-    <div id="root"></div>
+    <div id="root">
+        <!-- Loading State before React kicks in -->
+        <div class="h-screen w-full flex flex-col items-center justify-center">
+            <div class="w-12 h-12 border-4 border-gray-200 border-t-[#CC0000] rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-500 font-medium animate-pulse">Loading Application...</p>
+        </div>
+    </div>
+    
+    <div id="error-container"></div>
+
+    <script>
+        // Global Error Handler to help debug on GitHub Pages
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            const container = document.getElementById('error-container');
+            container.style.display = 'block';
+            container.innerHTML = `<strong>Error:</strong> ${msg}<br><small>${url}:${lineNo}</small>`;
+            return false;
+        };
+        window.onunhandledrejection = function(event) {
+            const container = document.getElementById('error-container');
+            container.style.display = 'block';
+            container.innerText = "Async Error: " + event.reason;
+        };
+    </script>
 
     <!-- MAIN APP SCRIPT -->
-    <script type="text/babel" data-presets="typescript,react" data-type="module">
-        import React, { useState, useEffect, useRef } from 'https://esm.sh/react@18.2.0';
-        import { createRoot } from 'https://esm.sh/react-dom@18.2.0/client';
-        import { GoogleGenAI } from 'https://esm.sh/@google/genai';
+    <script type="text/babel" data-type="module">
+        import React, { useState, useEffect, useRef } from 'react';
+        import { createRoot } from 'react-dom/client';
+        import { GoogleGenAI } from '@google/genai';
         import { 
             Users, GraduationCap, ArrowRight, MonitorPlay, Loader2, Send, 
             Image as ImageIcon, AlertCircle, Edit3, Lightbulb, RefreshCw, 
             ZoomIn, X, Clock, CheckCircle2, Maximize2, MoveRight, Lock, Unlock 
-        } from 'https://esm.sh/lucide-react';
+        } from 'lucide-react';
 
         // ------------------------------------------------------------------
         // *** CONFIGURATION ***
         // ------------------------------------------------------------------
         
-        // INSTRUCTOR: STEP 1 - Get your API Key from https://aistudio.google.com/app/apikey
-        // INSTRUCTOR: STEP 2 - Paste it inside the quotes below.
-        // It should look like this: const HARDCODED_API_KEY = "AIzaSy...";
-        
-        const HARDCODED_API_KEY = "gen-lang-client-0800640930"; 
+        // INSTRUCTOR: PASTE YOUR API KEY INSIDE THE QUOTES BELOW
+        const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
 
         // ------------------------------------------------------------------
         // 1. CONSTANTS & TYPES
@@ -145,13 +181,19 @@
         let genAIClient = null;
 
         const initGemini = (apiKey) => {
-            genAIClient = new GoogleGenAI({ apiKey });
+            try {
+                genAIClient = new GoogleGenAI({ apiKey });
+            } catch (e) {
+                console.error("Failed to init Gemini", e);
+                alert("Critical Error: Could not initialize Google AI. Check API Key.");
+            }
         };
 
         const generateImage = async (prompt) => {
             if (!genAIClient) throw new Error("API Key missing. Instructor needs to set HARDCODED_API_KEY in the code.");
 
             try {
+                // Using flash-image for speed in this demo context
                 const model = 'gemini-2.5-flash-image';
                 const enhancedPrompt = `${prompt}, photorealistic, realistic photograph, 8k, highly detailed, sharp focus, cinematic lighting`;
 
