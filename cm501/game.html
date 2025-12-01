@@ -19,14 +19,14 @@
         window.process = { env: { NODE_ENV: 'production' } };
     </script>
 
-    <!-- IMPORT MAP: Defines where to load libraries -->
+    <!-- IMPORT MAP: Defines where to load libraries. Added ?bundle for stability -->
     <script type="importmap">
     {
         "imports": {
-            "react": "https://esm.sh/react@18.2.0",
-            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-            "@google/genai": "https://esm.sh/@google/genai@0.1.1",
-            "lucide-react": "https://esm.sh/lucide-react@0.294.0"
+            "react": "https://esm.sh/react@18.2.0?bundle",
+            "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?bundle",
+            "@google/genai": "https://esm.sh/@google/genai@0.1.1?bundle",
+            "lucide-react": "https://esm.sh/lucide-react@0.294.0?bundle"
         }
     }
     </script>
@@ -91,9 +91,10 @@
 <body class="bg-white text-slate-900">
     <div id="root">
         <!-- Loading State before React kicks in -->
-        <div class="h-screen w-full flex flex-col items-center justify-center">
-            <div class="w-12 h-12 border-4 border-gray-200 border-t-[#CC0000] rounded-full animate-spin mb-4"></div>
-            <p class="text-gray-500 font-medium animate-pulse">Initializing Application...</p>
+        <div class="h-screen w-full flex flex-col items-center justify-center bg-white">
+            <div class="w-12 h-12 border-4 border-gray-200 border-t-[#CC0000] rounded-full animate-spin mb-6"></div>
+            <p class="text-gray-900 font-bold text-lg animate-pulse">Initializing Application...</p>
+            <p class="text-gray-400 text-sm mt-2">Loading libraries from CDN</p>
         </div>
     </div>
     
@@ -196,7 +197,7 @@
                 console.log("Gemini Client Initialized");
             } catch (e) {
                 console.error("Failed to init Gemini", e);
-                throw new Error("Could not initialize Google AI. Check API Key format.");
+                // Don't throw here to allow UI to render, throw on usage
             }
         };
 
