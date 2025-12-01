@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Visual Telephone</title>
     
-    <!-- FONTS & STYLES -->
+    <!-- STYLES (Tailwind + Fonts) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
       body { font-family: 'Manrope', sans-serif; color: #111; background: #fff; }
       
+      /* Buttons */
       .btn-primary { background: #111; color: #fff; transition: all 0.2s; }
       .btn-primary:hover { background: #CC0000; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
       .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -18,95 +19,45 @@
       .btn-secondary { background: #f1f3f5; color: #444; transition: all 0.2s; }
       .btn-secondary:hover { background: #e2e6ea; transform: translateY(-2px); }
       
+      /* Cards */
       .hover-card { transition: transform 0.25s, box-shadow 0.25s; }
       .hover-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-      
-      .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #CC0000; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
-      @keyframes spin { 100% { transform: rotate(360deg); } }
 
-      /* Scrollbar cleanup */
+      /* Custom Scrollbar */
       ::-webkit-scrollbar { width: 8px; }
       ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+      /* File Input Hidden styling */
+      .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+      .file-input-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; }
     </style>
 
-    <!-- CORE LIBRARIES (Global fallback) -->
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <!-- REACT LIBRARIES (UMD - Most Stable for simple HTML) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
 
     <div id="root">
-        <!-- Loading Fallback -->
+        <!-- Initial Loading State -->
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div class="spinner" style="width: 50px; height: 50px; border-width: 5px;"></div>
-            <p style="margin-top: 20px; color: #666; font-weight: 600;">Loading AI Visual Telephone...</p>
+            <div style="width: 50px; height: 50px; border: 5px solid #eee; border-top-color: #CC0000; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+            <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
         </div>
     </div>
 
     <!-- 
-      ========================================
-       AI SERVICE MODULE (No Babel, Native JS)
-      ========================================
+      ======================================================
+       REACT APPLICATION
+      ======================================================
     -->
-    <script type="module">
-        import { GoogleGenAI } from "https://esm.run/@google/genai";
-
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        //           PASTE API KEY HERE
-        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
-        const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-
-        // Expose function to global window so React can use it
-        window.generateImageService = async (prompt) => {
-            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
-                throw new Error("API_KEY_MISSING");
-            }
-
-            const ai = new GoogleGenAI({ apiKey: HARDCODED_API_KEY });
-            
-            // Using the requested prompt enhancement for realism
-            const enhancedPrompt = `${prompt}, photorealistic, realistic photograph, 8k, highly detailed, sharp focus, cinematic lighting`;
-
-            try {
-                // Using the specific model from guidelines
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash-image',
-                    contents: { parts: [{ text: enhancedPrompt }] },
-                });
-
-                // Parse response
-                if (response.candidates && response.candidates[0].content && response.candidates[0].content.parts) {
-                    for (const part of response.candidates[0].content.parts) {
-                        if (part.inlineData && part.inlineData.data) {
-                            const mimeType = part.inlineData.mimeType || 'image/png';
-                            return `data:${mimeType};base64,${part.inlineData.data}`;
-                        }
-                    }
-                }
-                throw new Error("No image data returned from Gemini.");
-            } catch (error) {
-                console.error("Gemini Error:", error);
-                throw error;
-            }
-        };
-
-        // Signal that AI service is ready
-        window.isAIReady = true;
-    </script>
-
-    <!-- 
-      ========================================
-       REACT APPLICATION (Compiled by Babel)
-      ========================================
-    -->
-    <script type="text/babel" data-presets="env,react">
+    <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- ICONS (Inline SVG to avoid external dep) ---
+        // --- ICONS (SVG Components) ---
         const Icon = ({ name, className }) => {
             const icons = {
                 Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>,
@@ -124,7 +75,8 @@
                 Clock: <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>,
                 ArrowRight: <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>,
                 Lock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>,
-                Unlock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                Unlock: <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/>,
+                UploadCloud: <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/>
             };
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -146,28 +98,81 @@
         };
 
         const PROMPT_RECIPE = [
-            { name: "The Subject", examples: ["A chair", "A futuristic sneaker", "A perfume bottle", "A bus stop", "A tiny house", "A geometric explosion"] },
-            { name: "The Style", examples: ["Art Deco", "Bauhaus", "Art Nouveau", "Cyberpunk", "Minimalist", "Memphis Design"] },
-            { name: "The Material", examples: ["Polished chrome", "Raw concrete", "Rusted iron", "Blue velvet", "Fluffy cotton candy", "Translucent plastic"] },
-            { name: "The Vibe", examples: ["Cinematic lighting", "Golden hour", "Neon noir", "Studio softbox", "Isometric view", "Fish-eye lens"] }
+            { name: "1. The Subject", examples: ["Design Object (Sneaker, Chair)", "Architecture (Bus stop)", "Abstract (Geometric explosion)", "Diverse group of students"] },
+            { name: "2. The Material (Texture)", examples: ["Soft green grass", "Warm checkered blanket", "Fluffy fur", "Polished chrome", "Melting glass"] },
+            { name: "3. The Style (Camera)", examples: ["35mm lens", "Waist up shot", "Macro close-up", "Fish-eye lens", "Isometric view"] },
+            { name: "4. The Vibe (Lighting)", examples: ["Warm sunset from camera right", "Silk catching motion", "Golden hour", "Neon noir", "Studio softbox"] }
         ];
 
         // --- COMPONENTS ---
 
         const PromptGuide = () => (
-            <div className="bg-white h-full overflow-y-auto border-l border-gray-100 hidden xl:block w-[400px] shrink-0">
+            <div className="bg-white h-full overflow-y-auto border-l border-gray-100 hidden xl:block w-[450px] shrink-0">
                 <div className="p-8">
-                    <h3 className="text-xl font-bold text-[#111] mb-6 tracking-tight">Prompt Recipe Formula</h3>
-                    <div className="p-5 bg-[#fafafa] border border-gray-100 rounded-xl mb-10">
-                        <p className="text-sm font-bold text-[#111] mb-2">Instructions:</p>
-                        <p className="text-sm text-gray-600 leading-relaxed">Brainstorm one item from each category.</p>
-                        <div className="mt-4 pt-4 border-t border-gray-200 font-mono text-xs text-[#CC0000] font-bold">Subject + Style + Material + Vibe</div>
+                    <h3 className="text-xl font-bold text-[#111] mb-6 tracking-tight">Prompt Engineering 101</h3>
+                    
+                    {/* The 3 Steps Guide */}
+                    <div className="space-y-6 mb-10">
+                        <div className="p-5 bg-red-50 border border-red-100 rounded-xl">
+                            <h4 className="text-sm font-bold text-[#CC0000] uppercase mb-2">1. Don't Let It Guess</h4>
+                            <p className="text-sm text-gray-700 leading-relaxed">
+                                Guesses give you random props and strange faces. <br/>
+                                <strong>Low quality AI guesses. High quality AI follows direction.</strong>
+                            </p>
+                        </div>
+
+                        <div className="p-5 bg-blue-50 border border-blue-100 rounded-xl">
+                            <h4 className="text-sm font-bold text-blue-900 uppercase mb-2">2. The CTLT Method</h4>
+                            <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                                Control the frame instead of leaving it to chance. Lock these four elements:
+                            </p>
+                            <ul className="text-sm text-blue-800 font-bold grid grid-cols-2 gap-2">
+                                <li>• <span className="underline">C</span>amera</li>
+                                <li>• <span className="underline">T</span>one</li>
+                                <li>• <span className="underline">L</span>ight</li>
+                                <li>• <span className="underline">T</span>exture</li>
+                            </ul>
+                        </div>
+
+                        <div className="p-5 bg-gray-50 border border-gray-200 rounded-xl">
+                            <h4 className="text-sm font-bold text-[#111] uppercase mb-2">3. Direct, Don't Describe</h4>
+                            <div className="text-sm text-gray-700 leading-relaxed space-y-3">
+                                <p className="opacity-50 line-through">"A woman in a dress." (Decoration)</p>
+                                <p className="font-medium text-[#111]">"35mm lens, waist up, warm sunset from camera right, silk catching motion." (Design)</p>
+                            </div>
+                        </div>
                     </div>
-                    <div className="space-y-8">
+
+                    {/* The Example Breakdown */}
+                    <div className="mb-10 pt-8 border-t border-gray-100">
+                        <h4 className="text-sm font-bold text-[#111] uppercase mb-4 tracking-wider">Gold Standard Example</h4>
+                        <div className="bg-[#fafafa] p-5 rounded-xl border border-gray-200 space-y-4 text-sm">
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Subject</span>
+                                <p className="text-gray-600 leading-relaxed">"A joyful, diverse group of young adults and their exotic pet companions having a picnic gathering outdoors."</p>
+                            </div>
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Style (Camera)</span>
+                                <p className="text-gray-600 leading-relaxed">"Photorealistic, highly detailed, shallow depth of field to keep focus on foreground."</p>
+                            </div>
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Material (Texture)</span>
+                                <p className="text-gray-600 leading-relaxed">"Soft green grass, warm checkered picnic blankets, fluffy animal fur, smooth drink glasses."</p>
+                            </div>
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Vibe (Light)</span>
+                                <p className="text-gray-600 leading-relaxed">"Golden hour outdoor lighting, bright and sunny with a warm glow filtering through trees."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Quick Ref */}
+                    <div className="space-y-6 pt-6 border-t border-gray-100">
+                         <h4 className="text-sm font-bold text-[#111] uppercase">Quick Reference</h4>
                         {PROMPT_RECIPE.map((c, i) => (
                             <div key={i}>
-                                <h4 className="text-sm font-bold text-[#111] uppercase border-b pb-2 mb-3">{c.name}</h4>
-                                <p className="text-sm text-gray-600 leading-relaxed pl-3 border-l-2">{c.examples.join(', ')}</p>
+                                <h5 className="text-xs font-bold text-gray-900 mb-1">{c.name}</h5>
+                                <p className="text-xs text-gray-500 leading-relaxed">{c.examples.join(', ')}</p>
                             </div>
                         ))}
                     </div>
@@ -177,32 +182,17 @@
 
         const StudentView = ({ currentGroup, roundNumber, previousTurn, projectId, onTurnComplete }) => {
             const [prompt, setPrompt] = useState('');
-            const [loading, setLoading] = useState(false);
             const [image, setImage] = useState(null);
-            const [error, setError] = useState(null);
             const isInitiator = roundNumber === 1;
 
-            const handleGenerate = async () => {
-                if(!prompt.trim()) return;
-                setLoading(true); setError(null);
-                
-                if (!window.generateImageService) {
-                    setError("AI Service not loaded yet. Refresh page.");
-                    setLoading(false);
-                    return;
-                }
-
-                try {
-                    const base64 = await window.generateImageService(prompt);
-                    setImage(base64);
-                } catch(e) {
-                    if (e.message === 'API_KEY_MISSING') {
-                        setError("CRITICAL: API Key is missing in the HTML file.");
-                    } else {
-                        setError("Failed to generate: " + e.message);
-                    }
-                } finally {
-                    setLoading(false);
+            const handleFileUpload = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        setImage(reader.result);
+                    };
+                    reader.readAsDataURL(file);
                 }
             };
 
@@ -219,7 +209,9 @@
                                     </div>
                                 </div>
                                 <p className="text-gray-600 text-lg">
-                                    {isInitiator ? 'Start the chain. Use your theme to write a prompt.' : 'Analyze the image below. Recreate it with words.'}
+                                    {isInitiator 
+                                        ? 'Use the CTLT Method. Lock the Camera, Tone, Light, and Texture.' 
+                                        : 'Analyze the image below. Do not guess the story. Direct the lens, lighting, and materials to recreate it.'}
                                 </p>
                             </div>
 
@@ -241,30 +233,41 @@
                             )}
 
                             <div className="bg-white rounded-xl">
-                                <h2 className="text-lg font-bold mb-4 flex gap-2 items-center"><Icon name="Edit3" className="w-5 h-5 text-[#CC0000]"/> Draft Prompt</h2>
+                                <h2 className="text-lg font-bold mb-4 flex gap-2 items-center"><Icon name="Edit3" className="w-5 h-5 text-[#CC0000]"/> 1. Direct Your Vision</h2>
+                                <p className="text-sm text-gray-500 mb-2">Write your prompt here using the techniques from the guide.</p>
                                 <textarea 
-                                    className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[120px] text-lg transition-all"
-                                    placeholder={isInitiator ? "Describe your theme using the recipe..." : "Describe the image you see..."}
+                                    className="w-full p-6 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[160px] text-lg transition-all font-medium"
+                                    placeholder={isInitiator 
+                                        ? "Direct, don't describe. \nEx: '35mm lens, waist up, warm sunset from camera right, silk catching motion...' \nCombine Subject + Style + Material + Vibe." 
+                                        : "I see a [Subject] made of [Texture]. \nCamera: [Lens/Angle]. \nLighting: [Vibe/Direction]..."}
                                     value={prompt}
                                     onChange={e => setPrompt(e.target.value)}
                                 />
-                                {error && <div className="mt-4 p-3 bg-red-50 text-red-700 text-sm font-bold border border-red-100 rounded flex items-center gap-2"><Icon name="AlertCircle" className="w-4 h-4"/>{error}</div>}
                                 
-                                <div className="mt-6">
+                                <div className="mt-8">
+                                    <h2 className="text-lg font-bold mb-4 flex gap-2 items-center"><Icon name="UploadCloud" className="w-5 h-5 text-[#CC0000]"/> 2. Upload Result</h2>
+                                    <p className="text-sm text-gray-500 mb-4">Generate your image using your preferred AI tool (Midjourney, Firefly, ChatGPT, etc.), save it, and upload it here.</p>
+                                    
                                     {!image ? (
-                                        <button onClick={handleGenerate} disabled={loading || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2">
-                                            {loading ? <div className="spinner"></div> : <Icon name="Image" className="w-5 h-5"/>}
-                                            {loading ? 'Generating...' : 'Generate Image'}
-                                        </button>
+                                        <div className="file-input-wrapper w-full">
+                                            <button className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 pointer-events-none">
+                                                <Icon name="Image" className="w-5 h-5"/> Select Image File
+                                            </button>
+                                            <input type="file" accept="image/*" onChange={handleFileUpload} />
+                                        </div>
                                     ) : (
                                         <div className="space-y-4">
                                             <div className="bg-gray-50 border rounded-lg p-1"><img src={image} className="w-full max-h-[400px] object-contain mx-auto"/></div>
                                             <div className="flex gap-4">
-                                                <button onClick={() => setImage(null)} className="btn-secondary flex-1 py-3 rounded-xl font-bold">Try Again</button>
-                                                <button onClick={() => onTurnComplete(prompt, image)} className="flex-[2] py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
+                                                 <div className="file-input-wrapper flex-1">
+                                                    <button className="btn-secondary w-full py-3 rounded-xl font-bold pointer-events-none">Change Image</button>
+                                                    <input type="file" accept="image/*" onChange={handleFileUpload} />
+                                                </div>
+                                                <button onClick={() => onTurnComplete(prompt, image)} disabled={!prompt.trim()} className="flex-[2] py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                                                     <Icon name="Send" className="w-5 h-5"/> Transmit
                                                 </button>
                                             </div>
+                                            {!prompt.trim() && <p className="text-xs text-center text-red-500 font-bold">Please write your prompt text before transmitting.</p>}
                                         </div>
                                     )}
                                 </div>
@@ -382,12 +385,6 @@
             const [role, setRole] = useState(null);
             const [pass, setPass] = useState('');
             const [showPass, setShowPass] = useState(false);
-            const [keyError, setKeyError] = useState(false);
-
-            useEffect(() => {
-                // Check if API key is set in the module script via global check or similar
-                // We handle this at the generation step, but we can also warn early.
-            }, []);
 
             const handleTurn = (pid, prompt, img) => {
                 setGameState(prev => {
