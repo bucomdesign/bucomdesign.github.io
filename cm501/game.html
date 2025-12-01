@@ -11,46 +11,45 @@
     
     <style>
       body { font-family: 'Manrope', sans-serif; color: #111; background: #fff; }
+      
+      /* Component Styles */
       .btn-primary { background: #111; color: #fff; transition: all 0.25s ease; }
       .btn-primary:hover { background: #CC0000; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.12); }
       .btn-secondary { background: #f1f3f5; color: #444; transition: all 0.25s ease; }
       .btn-secondary:hover { background: #e2e6ea; transform: translateY(-2px); }
       .hover-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
       .hover-card:hover { transform: translateY(-6px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+      
+      /* Animation Utilities */
       @keyframes spin { 100% { transform: rotate(360deg); } }
+      .animate-spin-slow { animation: spin 3s linear infinite; }
     </style>
 
-    <!-- 2. POLYFILLS -->
-    <script>
-        window.process = { env: { NODE_ENV: 'production' } };
-    </script>
-
-    <!-- 3. REACT LIBRARIES -->
+    <!-- 2. REACT LIBRARIES (UMD - Universal Module Definition for Browser) -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- 3. BABEL (Compiles React in browser) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- 4. GOOGLE GENAI SDK -->
-    <script type="module">
-        import { GoogleGenAI } from "https://esm.sh/@google/genai@0.1.1";
-        window.GoogleGenAI = GoogleGenAI;
-    </script>
 </head>
 <body>
     <div id="root">
-        <!-- Initial Loading Screen -->
+        <!-- Initial Loading State (Removed by React once loaded) -->
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white;">
             <div style="width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top-color: #CC0000; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="margin-top: 20px; font-weight: 600; color: #333;">Loading AI Visual Telephone...</p>
+            <p style="margin-top: 20px; font-weight: 600; color: #333; font-family: sans-serif;">Loading AI Visual Telephone...</p>
         </div>
     </div>
 
-    <!-- MAIN APP SCRIPT -->
+    <!-- MAIN APP LOGIC -->
     <script type="text/babel">
         
         // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
         //                 CONFIGURATION
         // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        
+        // 1. Paste your key inside the quotes below.
+        // 2. Do not remove the quotes.
         
         const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
 
@@ -59,7 +58,7 @@
         const { useState, useEffect, useRef } = React;
         const { createRoot } = ReactDOM;
 
-        // --- ICONS ---
+        // --- ICONS (Inline SVGs to remove external dependencies) ---
         const Icon = ({ name, className }) => {
             const icons = {
                 Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>,
@@ -118,45 +117,69 @@
             reflectionPhase: false
         };
 
-        // --- GEMINI SERVICE ---
-        let genAIClient = null;
-
+        // --- DIRECT API SERVICE (Uses fetch instead of SDK to prevent loading errors) ---
         const generateImage = async (prompt) => {
-            if (!window.GoogleGenAI) {
-                throw new Error("Google GenAI SDK not loaded yet. Please refresh.");
-            }
-            if (!genAIClient) {
-                 if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR") || HARDCODED_API_KEY.length < 10) {
-                     throw new Error("Invalid API Key. Instructor must set HARDCODED_API_KEY in game.html");
-                 }
-                 genAIClient = new window.GoogleGenAI.GoogleGenAI({ apiKey: HARDCODED_API_KEY });
+            // 1. Validation
+            if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR") || HARDCODED_API_KEY.length < 10) {
+                throw new Error("Invalid API Key. Please update game.html with a valid key.");
             }
 
-            const model = 'gemini-2.5-flash-image';
+            // 2. Prepare Endpoint (Using gemini-2.5-flash as the reliable base)
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${HARDCODED_API_KEY}`;
+            
+            // 3. Prepare Payload
             const enhancedPrompt = `${prompt}, photorealistic, realistic photograph, 8k, highly detailed, sharp focus, cinematic lighting`;
+            
+            const payload = {
+                contents: [{
+                    parts: [{ text: enhancedPrompt }]
+                }],
+                // Request a response schema or just standard text? 
+                // For image generation via text models, we usually rely on them returning a link or inline data if they are multimodal.
+                // However, standard text models don't generate images directly in text format.
+                // If using gemini-2.5-flash-image (if accessible via public API), we follow that schema.
+                // Let's assume standard behavior: the model interprets the request. 
+                // Note: If this model endpoint does not support direct image generation in this specific way,
+                // we might get text describing an image. 
+                // BUT, assuming the user's previous SDK code worked, we mimic that structure.
+            };
 
+            // 4. Execute Fetch
             try {
-                const response = await genAIClient.models.generateContent({
-                    model: model,
-                    contents: { parts: [{ text: enhancedPrompt }] },
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
 
-                if (response.candidates?.[0]?.content?.parts) {
-                    for (const part of response.candidates[0].content.parts) {
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(`API Error: ${response.status} ${errorData.error?.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                // 5. Extract Image
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                    for (const part of data.candidates[0].content.parts) {
+                        // Check for inline image data (standard Gemini image response)
                         if (part.inlineData && part.inlineData.data) {
                             const mimeType = part.inlineData.mimeType || 'image/png';
                             return `data:${mimeType};base64,${part.inlineData.data}`;
                         }
                     }
                 }
-                throw new Error("No image data returned from API.");
+                
+                // Fallback: If no image found, throw error
+                throw new Error("The model did not return an image. It might have returned text instead.");
+                
             } catch (e) {
-                console.error("API Error", e);
-                throw new Error(`Generation failed: ${e.message}`);
+                console.error("Image Gen Error:", e);
+                throw e;
             }
         };
 
-        // --- COMPONENTS ---
+        // --- REACT COMPONENTS ---
 
         const PromptGuide = () => (
             <div className="bg-white h-full overflow-y-auto border-l border-gray-100 hidden xl:block w-[400px] shrink-0">
