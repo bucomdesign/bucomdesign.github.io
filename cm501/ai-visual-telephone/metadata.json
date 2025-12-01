@@ -1,0 +1,5 @@
+{
+  "name": "AI Visual Telephone",
+  "description": "An interactive collaborative game where student groups translate visuals back into language using Generative AI.",
+  "requestFramePermissions": []
+}
