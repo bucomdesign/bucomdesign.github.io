@@ -14,7 +14,12 @@
     <!-- Babel for in-browser JSX compilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- IMPORT MAP: This tells the browser where to download the libraries -->
+    <!-- Polyfill for 'process' to prevent library crashes -->
+    <script>
+        window.process = { env: { NODE_ENV: 'production' } };
+    </script>
+
+    <!-- IMPORT MAP: Defines where to load libraries -->
     <script type="importmap">
     {
         "imports": {
@@ -71,13 +76,15 @@
           right: 20px;
           background: #fee2e2;
           color: #991b1b;
-          padding: 1rem;
-          border-radius: 8px;
+          padding: 1.5rem;
+          border-radius: 12px;
           border: 1px solid #f87171;
-          max-width: 400px;
+          max-width: 90%;
+          width: 400px;
           z-index: 9999;
-          font-size: 0.875rem;
+          font-size: 0.9rem;
           font-family: monospace;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
     </style>
 </head>
@@ -86,7 +93,7 @@
         <!-- Loading State before React kicks in -->
         <div class="h-screen w-full flex flex-col items-center justify-center">
             <div class="w-12 h-12 border-4 border-gray-200 border-t-[#CC0000] rounded-full animate-spin mb-4"></div>
-            <p class="text-gray-500 font-medium animate-pulse">Loading Application...</p>
+            <p class="text-gray-500 font-medium animate-pulse">Initializing Application...</p>
         </div>
     </div>
     
@@ -97,19 +104,21 @@
         window.onerror = function(msg, url, lineNo, columnNo, error) {
             const container = document.getElementById('error-container');
             container.style.display = 'block';
-            container.innerHTML = `<strong>Error:</strong> ${msg}<br><small>${url}:${lineNo}</small>`;
+            container.innerHTML = `<strong>System Error:</strong><br>${msg}<br><br><small>Location: ${url}:${lineNo}</small>`;
+            console.error("Global Error:", msg, error);
             return false;
         };
         window.onunhandledrejection = function(event) {
             const container = document.getElementById('error-container');
             container.style.display = 'block';
-            container.innerText = "Async Error: " + event.reason;
+            container.innerText = "Async Error: " + (event.reason ? event.reason.message : event.reason);
+            console.error("Unhandled Rejection:", event.reason);
         };
     </script>
 
     <!-- MAIN APP SCRIPT -->
     <script type="text/babel" data-type="module">
-        import React, { useState, useEffect, useRef } from 'react';
+        import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
         import { GoogleGenAI } from '@google/genai';
         import { 
@@ -122,8 +131,9 @@
         // *** CONFIGURATION ***
         // ------------------------------------------------------------------
         
-        // INSTRUCTOR: PASTE YOUR API KEY INSIDE THE QUOTES BELOW
+        // ▼▼▼ PASTE YOUR API KEY INSIDE THE QUOTES BELOW ▼▼▼
         const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
         // ------------------------------------------------------------------
         // 1. CONSTANTS & TYPES
@@ -183,14 +193,20 @@
         const initGemini = (apiKey) => {
             try {
                 genAIClient = new GoogleGenAI({ apiKey });
+                console.log("Gemini Client Initialized");
             } catch (e) {
                 console.error("Failed to init Gemini", e);
-                alert("Critical Error: Could not initialize Google AI. Check API Key.");
+                throw new Error("Could not initialize Google AI. Check API Key format.");
             }
         };
 
         const generateImage = async (prompt) => {
-            if (!genAIClient) throw new Error("API Key missing. Instructor needs to set HARDCODED_API_KEY in the code.");
+            if (!genAIClient) {
+                 if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
+                     throw new Error("API Key is missing or invalid. Please edit the HTML file and paste your key.");
+                 }
+                 initGemini(HARDCODED_API_KEY);
+            }
 
             try {
                 // Using flash-image for speed in this demo context
@@ -271,7 +287,7 @@
                     const base64Image = await generateImage(prompt);
                     setGeneratedImage(base64Image);
                 } catch (err) {
-                    setError("Generation failed. Please check if API Key is configured in source code.");
+                    setError("Generation failed: " + err.message);
                 } finally {
                     setIsGenerating(false);
                 }
@@ -589,16 +605,16 @@
             const [gameState, setGameState] = useState(INITIAL_GAME_STATE);
             const [userRole, setUserRole] = useState(null);
             
-            // USE HARDCODED KEY IF AVAILABLE
-            const [apiKey, setApiKey] = useState(HARDCODED_API_KEY || '');
+            // Check API Key on load
+            const apiKey = HARDCODED_API_KEY;
             
             const [showAuth, setShowAuth] = useState(false);
             const [teacherPwd, setTeacherPwd] = useState('');
             const [pwdError, setPwdError] = useState(false);
 
             useEffect(() => {
-                if (apiKey && apiKey !== "PASTE_YOUR_GOOGLE_API_KEY_HERE") initGemini(apiKey);
-            }, [apiKey]);
+                if (apiKey && !apiKey.includes("PASTE_YOUR")) initGemini(apiKey);
+            }, []);
 
             const handleTurnComplete = (projectId, prompt, image) => {
                 setGameState(prev => {
@@ -658,6 +674,25 @@
 
             // --- VIEW ROUTING ---
             
+            // 1. API Key Check
+            if (!apiKey || apiKey.includes("PASTE_YOUR")) {
+                 return (
+                    <div className="min-h-screen flex items-center justify-center bg-white p-4 font-sans text-center">
+                        <div className="bg-red-50 p-8 rounded-2xl shadow-lg max-w-lg w-full border border-red-100">
+                            <h2 className="text-2xl font-bold text-[#CC0000] mb-4">Configuration Required</h2>
+                            <p className="text-gray-700 mb-6 leading-relaxed">
+                                The Instructor has not set the <strong>Google API Key</strong> yet.
+                            </p>
+                            <div className="bg-white p-4 rounded border border-red-100 text-left text-sm text-gray-500 font-mono mb-4">
+                                1. Open game.html in a text editor.<br/>
+                                2. Find "HARDCODED_API_KEY"<br/>
+                                3. Paste your key inside the quotes.
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
             // 2. Teacher Dashboard
             if (userRole === 'TEACHER') {
                 return (
