@@ -15,8 +15,7 @@
       "imports": {
         "react": "https://esm.sh/react@19.0.0",
         "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-        "lucide-react": "https://esm.sh/lucide-react@0.469.0",
-        "@google/genai": "https://esm.sh/@google/genai@0.1.1"
+        "lucide-react": "https://esm.sh/lucide-react@0.469.0"
       }
     }
     </script>
@@ -30,9 +29,8 @@
       import { 
         LogOut, ArrowUp, ArrowDown, CheckCircle, ShieldAlert, 
         FileSpreadsheet, Users, Copy, ExternalLink, Check, 
-        Trash2, ArrowLeft, Wand2, Loader2, AlertCircle, Upload, Download 
+        Trash2, ArrowLeft, AlertCircle
       } from 'lucide-react';
-      import { GoogleGenAI } from "@google/genai";
 
       /** 
        * ==========================================
@@ -178,32 +176,6 @@
 
       /** 
        * ==========================================
-       * SERVICE: Gemini (AI)
-       * ==========================================
-       */
-      const refineFeedback = async (draft, context) => {
-        // NOTE: In a static file, we can't hide API keys properly. 
-        // Users might need to enter it or we assume a safe env.
-        // For this demo, we'll return the draft if no key is present.
-        const apiKey = ''; // Enter API Key here if needed for testing
-        
-        if (!apiKey) return draft;
-
-        try {
-          const ai = new GoogleGenAI({ apiKey });
-          const model = 'gemini-2.5-flash';
-          const prompt = `You are a professional communication coach helping a student write peer feedback. Context: ${context}. Draft: "${draft}". Rewrite to be constructive and professional. Return ONLY the text.`;
-          
-          const response = await ai.models.generateContent({ model, contents: prompt });
-          return response.text || draft;
-        } catch (error) {
-          console.error("Gemini Error:", error);
-          return draft;
-        }
-      };
-
-      /** 
-       * ==========================================
        * UTILS: CSV/TSV Helper
        * ==========================================
        */
@@ -322,16 +294,6 @@
        * ==========================================
        */
       const EvaluationForm = ({ targetName, data, onChange, onNext, onBack, isLast }) => {
-        const [loadingAI, setLoadingAI] = useState(null);
-
-        const handleAIHelp = async (field, context) => {
-          const currentText = data[field];
-          if (!currentText || currentText.length < 5) return;
-          setLoadingAI(field);
-          const refined = await refineFeedback(currentText, context);
-          onChange(field, refined);
-          setLoadingAI(null);
-        };
 
         const isFormValid = () => {
           return (
@@ -477,7 +439,7 @@
         const [rankings, setRankings] = useState([]);
 
         // Instructor List
-        const INSTRUCTORS = ['choijen@bu.edu', 'choij126@gmail.com', 'jenjiunchoi@gmail.com'];
+        const INSTRUCTORS = ['choijen@bu.edu'];
         const isInstructor = (email) => INSTRUCTORS.includes(email);
 
         const getSubmissionsFromStorage = () => {
@@ -563,54 +525,6 @@
           setStep('SUCCESS');
         };
 
-        const handleDownloadReceipt = () => {
-           // Provide a JSON file for the student to email the instructor
-           const allSubmissions = getSubmissionsFromStorage();
-           const mySubmission = allSubmissions[currentUser.email];
-           const blob = new Blob([JSON.stringify(mySubmission, null, 2)], { type: 'application/json' });
-           const link = document.createElement('a');
-           link.href = URL.createObjectURL(blob);
-           link.download = `PeerEval_${currentUser.name.replace(/\s+/g, '_')}_${currentUser.section}.json`;
-           document.body.appendChild(link);
-           link.click();
-           document.body.removeChild(link);
-        };
-
-        const handleInstructorImport = (event) => {
-           const files = event.target.files;
-           if (!files) return;
-           
-           // We need to read all files and merge them into local storage
-           const promises = Array.from(files).map(file => {
-              return new Promise((resolve) => {
-                 const reader = new FileReader();
-                 reader.onload = (e) => {
-                    try {
-                       const data = JSON.parse(e.target.result);
-                       resolve(data);
-                    } catch (err) { resolve(null); }
-                 };
-                 reader.readAsText(file);
-              });
-           });
-
-           Promise.all(promises).then(results => {
-              const currentStore = getSubmissionsFromStorage();
-              let count = 0;
-              results.forEach((sub) => {
-                 if (sub && sub.evaluatorEmail) {
-                    currentStore[sub.evaluatorEmail] = sub;
-                    count++;
-                 }
-              });
-              localStorage.setItem('peer_eval_submissions', JSON.stringify(currentStore));
-              alert(`Successfully imported ${count} submissions.`);
-              // Force re-render logic via window reload or state update. 
-              // Simple way for this file:
-              window.location.reload();
-           });
-        };
-
         const handleCopyToClipboard = () => {
           const submissions = getSubmissionsFromStorage();
           const tsvContent = generateMasterData(STUDENTS, submissions, 'tsv');
@@ -677,12 +591,6 @@
                        <h2 className="text-2xl font-bold text-gray-900">Instructor Dashboard</h2>
                     </div>
 
-                    <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                       <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2"><Upload size={18}/> Import Student Submissions</h3>
-                       <p className="text-sm text-blue-700 mb-3">Since there is no server, students must send you their submission files (JSON). Upload them here to populate your dashboard.</p>
-                       <input type="file" multiple accept=".json" onChange={handleInstructorImport} className="block w-full text-sm text-blue-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"/>
-                    </div>
-
                     <div className="grid grid-cols-3 gap-4 mb-6">
                        <div className="bg-gray-50 p-4 rounded text-center">
                           <span className="block text-2xl font-bold">{statsSubmissions}</span>
@@ -700,6 +608,7 @@
 
                     <div className="bg-green-50 border border-green-100 rounded-lg p-6 mb-6">
                         <h3 className="font-bold text-green-800 mb-2 flex items-center gap-2"><FileSpreadsheet size={18}/> Export Report</h3>
+                        <p className="text-sm text-green-700 mb-4">Generate a full class spreadsheet from the data stored on this browser.</p>
                         <div className="flex gap-4">
                            <button onClick={handleCopyToClipboard} className="flex-1 bg-white border border-green-300 text-green-700 hover:bg-green-100 px-4 py-3 rounded flex items-center justify-center gap-2">
                               {copySuccess ? <Check size={18}/> : <Copy size={18}/>} Copy for Sheets
@@ -746,15 +655,6 @@
                    <h2 className="text-2xl font-bold mb-4">Submission Complete</h2>
                    <p className="text-gray-600 mb-8">Your peer evaluation has been recorded locally.</p>
                    
-                   <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mb-6 text-left">
-                      <h4 className="font-bold text-yellow-800 text-sm mb-2">Required Step:</h4>
-                      <p className="text-xs text-yellow-800">Please download your submission receipt below and email it to your instructor.</p>
-                   </div>
-
-                   <button onClick={handleDownloadReceipt} className="w-full bg-blue-600 text-white px-4 py-3 rounded mb-3 hover:bg-blue-700 flex items-center justify-center gap-2">
-                      <Download size={18} /> Download Receipt (JSON)
-                   </button>
-
                    {isInstructor(currentUser?.email) && (
                       <button onClick={() => setStep('INSTRUCTOR_DASHBOARD')} className="w-full bg-red-600 text-white px-4 py-3 rounded hover:bg-red-700 mb-3">Go to Dashboard</button>
                    )}
