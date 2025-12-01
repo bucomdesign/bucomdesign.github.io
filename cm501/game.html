@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,63 +20,46 @@
       @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 
-    <!-- 2. POLYFILLS (Required for some libraries) -->
+    <!-- 2. POLYFILLS -->
     <script>
         window.process = { env: { NODE_ENV: 'production' } };
     </script>
 
-    <!-- 3. REACT LIBRARIES (UMD Globals) -->
+    <!-- 3. REACT LIBRARIES -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- 4. GOOGLE GENAI SDK (ESM Import mapped to Window) -->
+    <!-- 4. GOOGLE GENAI SDK -->
     <script type="module">
         import { GoogleGenAI } from "https://esm.sh/@google/genai@0.1.1";
         window.GoogleGenAI = GoogleGenAI;
-        console.log("Google GenAI SDK Loaded");
     </script>
 </head>
 <body>
     <div id="root">
-        <!-- Loading Screen (Will be replaced by React) -->
+        <!-- Initial Loading Screen -->
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white;">
             <div style="width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top-color: #CC0000; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="margin-top: 20px; font-weight: 600; color: #333;">Loading Application...</p>
+            <p style="margin-top: 20px; font-weight: 600; color: #333;">Loading AI Visual Telephone...</p>
         </div>
     </div>
 
-    <!-- Error Handler overlay -->
-    <div id="error-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; padding:40px; color:#CC0000;">
-        <h2 style="font-size:24px; font-weight:bold; margin-bottom:10px;">Startup Error</h2>
-        <pre id="error-message" style="background:#fff0f0; padding:20px; border:1px solid #ffcccc; border-radius:8px; white-space:pre-wrap;"></pre>
-    </div>
-
-    <script>
-        window.onerror = function(msg, url, line, col, error) {
-            document.getElementById('root').style.display = 'none';
-            document.getElementById('error-overlay').style.display = 'block';
-            document.getElementById('error-message').textContent = `Error: ${msg}\nLine: ${line}`;
-            return false;
-        };
-    </script>
-
-    <!-- 5. MAIN APPLICATION CODE -->
+    <!-- MAIN APP SCRIPT -->
     <script type="text/babel">
-        // ------------------------------------------------------------------
-        // *** CONFIGURATION ***
-        // ------------------------------------------------------------------
         
-        // ▼▼▼ PASTE YOUR API KEY INSIDE THE QUOTES BELOW ▼▼▼
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        //                 CONFIGURATION
+        // ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+        
         const HARDCODED_API_KEY = "AIzaSyBqHLJJIkH7FG91D2TLv7jEalI9Jht3N44"; 
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-        const { useState, useEffect } = React;
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+        const { useState, useEffect, useRef } = React;
         const { createRoot } = ReactDOM;
 
-        // ------------------------------------------------------------------
-        // ICONS (Inline)
-        // ------------------------------------------------------------------
+        // --- ICONS ---
         const Icon = ({ name, className }) => {
             const icons = {
                 Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>,
@@ -106,9 +88,7 @@
             );
         };
 
-        // ------------------------------------------------------------------
-        // CONSTANTS
-        // ------------------------------------------------------------------
+        // --- CONSTANTS ---
         const GROUP_ORDER = ['GROUP_1', 'GROUP_2', 'GROUP_3', 'GROUP_4', 'GROUP_5'];
 
         const INITIATOR_THEMES = {
@@ -138,21 +118,16 @@
             reflectionPhase: false
         };
 
-        // ------------------------------------------------------------------
-        // SERVICE (Using window.GoogleGenAI)
-        // ------------------------------------------------------------------
+        // --- GEMINI SERVICE ---
         let genAIClient = null;
 
         const generateImage = async (prompt) => {
-            // Check if Library loaded
             if (!window.GoogleGenAI) {
-                throw new Error("Google GenAI SDK failed to load from CDN. Check internet connection.");
+                throw new Error("Google GenAI SDK not loaded yet. Please refresh.");
             }
-
-            // Init Client
             if (!genAIClient) {
-                 if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
-                     throw new Error("Instructor has not set API Key yet.");
+                 if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR") || HARDCODED_API_KEY.length < 10) {
+                     throw new Error("Invalid API Key. Instructor must set HARDCODED_API_KEY in game.html");
                  }
                  genAIClient = new window.GoogleGenAI.GoogleGenAI({ apiKey: HARDCODED_API_KEY });
             }
@@ -176,14 +151,12 @@
                 }
                 throw new Error("No image data returned from API.");
             } catch (e) {
-                console.error(e);
-                throw new Error(`API Error: ${e.message}`);
+                console.error("API Error", e);
+                throw new Error(`Generation failed: ${e.message}`);
             }
         };
 
-        // ------------------------------------------------------------------
-        // COMPONENTS
-        // ------------------------------------------------------------------
+        // --- COMPONENTS ---
 
         const PromptGuide = () => (
             <div className="bg-white h-full overflow-y-auto border-l border-gray-100 hidden xl:block w-[400px] shrink-0">
@@ -191,7 +164,7 @@
                     <h3 className="text-xl font-bold text-[#111] mb-6 tracking-tight">Prompt Recipe Formula</h3>
                     <div className="p-5 bg-[#fafafa] border border-gray-100 rounded-xl mb-10">
                         <p className="text-sm font-bold text-[#111] mb-2">Instructions:</p>
-                        <p className="text-sm text-gray-600 leading-relaxed">Brainstorm one item from each of the four categories below.</p>
+                        <p className="text-sm text-gray-600 leading-relaxed">Brainstorm one item from each category to build your prompt.</p>
                         <div className="mt-4 pt-4 border-t border-gray-200 font-mono text-xs text-[#CC0000] font-bold tracking-wide">Subject + Art Style + Material + Vibe</div>
                     </div>
                     <div className="space-y-10">
@@ -248,7 +221,7 @@
                                 </p>
                             </div>
                             {isInitiator && (
-                                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl flex items-start gap-4">
+                                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl flex items-start gap-4 animate-pulse-once">
                                     <div className="bg-white p-2 rounded-full shadow-sm shrink-0"><Icon name="Lightbulb" className="w-6 h-6 text-amber-500" /></div>
                                     <div>
                                         <h3 className="font-bold text-amber-900 text-lg mb-2">Theme: "The Last Day"</h3>
@@ -273,7 +246,7 @@
                                 {error && <div className="mt-4 p-4 bg-red-50 text-[#CC0000] rounded-lg text-sm font-bold flex items-center gap-2"><Icon name="AlertCircle" className="w-4 h-4"/>{error}</div>}
                                 <div className="mt-6">
                                     {!generatedImage ? (
-                                        <button onClick={handleGenerate} disabled={isGenerating || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-lg disabled:opacity-50 transition-all">
+                                        <button onClick={handleGenerate} disabled={isGenerating || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-lg disabled:opacity-50 transition-all cursor-pointer">
                                             {isGenerating ? <Icon name="Loader2" className="animate-spin w-5 h-5" /> : <Icon name="Image" className="w-5 h-5" />}
                                             {isGenerating ? 'GENERATING...' : 'GENERATE IMAGE'}
                                         </button>
@@ -490,6 +463,7 @@
                 return { status: 'COMPLETE_GAME' };
             };
 
+            // Basic check for key existence
             if (!HARDCODED_API_KEY || HARDCODED_API_KEY.includes("PASTE_YOUR")) {
                  return <div className="min-h-screen flex items-center justify-center bg-white p-8 text-center"><div className="bg-red-50 p-8 rounded-2xl border border-red-100"><h2 className="text-2xl font-bold text-[#CC0000] mb-4">Setup Required</h2><p className="text-gray-700">Please edit game.html and paste your Gemini API Key in the HARDCODED_API_KEY variable.</p></div></div>;
             }
