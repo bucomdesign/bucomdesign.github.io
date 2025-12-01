@@ -71,6 +71,14 @@
         } from 'https://esm.sh/lucide-react';
 
         // ------------------------------------------------------------------
+        // *** CONFIGURATION ***
+        // ------------------------------------------------------------------
+        
+        // INSTRUCTOR: PASTE YOUR API KEY INSIDE THE QUOTES BELOW
+        // Example: const HARDCODED_API_KEY = "AIzaSy...";
+        const HARDCODED_API_KEY = ""; 
+
+        // ------------------------------------------------------------------
         // 1. CONSTANTS & TYPES
         // ------------------------------------------------------------------
 
@@ -113,10 +121,10 @@
                 id: `project-${index + 1}`,
                 initiator: role,
                 turns: [],
-                reflection: null, // New: Stores the group's reflection text
+                reflection: null,
                 isComplete: false
             })),
-            reflectionPhase: false // New: Global switch for phase 2
+            reflectionPhase: false
         };
 
         // ------------------------------------------------------------------
@@ -130,7 +138,7 @@
         };
 
         const generateImage = async (prompt) => {
-            if (!genAIClient) throw new Error("API Key not initialized");
+            if (!genAIClient) throw new Error("API Key missing. Instructor needs to set HARDCODED_API_KEY in the code.");
 
             try {
                 const model = 'gemini-2.5-flash-image';
@@ -210,7 +218,7 @@
                     const base64Image = await generateImage(prompt);
                     setGeneratedImage(base64Image);
                 } catch (err) {
-                    setError("Generation failed. Check API Key or try again.");
+                    setError("Generation failed. Please check if API Key is configured in source code.");
                 } finally {
                     setIsGenerating(false);
                 }
@@ -502,8 +510,10 @@
         const App = () => {
             const [gameState, setGameState] = useState(INITIAL_GAME_STATE);
             const [userRole, setUserRole] = useState(null);
-            const [apiKey, setApiKey] = useState(() => localStorage.getItem('GEMINI_API_KEY') || '');
-            const [apiKeyInput, setApiKeyInput] = useState('');
+            
+            // USE HARDCODED KEY IF AVAILABLE
+            const [apiKey, setApiKey] = useState(HARDCODED_API_KEY || '');
+            
             const [showAuth, setShowAuth] = useState(false);
             const [teacherPwd, setTeacherPwd] = useState('');
             const [pwdError, setPwdError] = useState(false);
@@ -568,23 +578,6 @@
 
             // --- VIEW ROUTING ---
             
-            // 1. API Key Screen
-            if (!apiKey) {
-                return (
-                    <div className="min-h-screen flex items-center justify-center bg-gray-50 font-sans p-4">
-                        <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center">
-                            <h2 className="text-2xl font-bold mb-4">Setup Required</h2>
-                            <p className="text-gray-500 mb-6">Enter your Google Gemini API Key to enable the AI features for this session.</p>
-                            <input type="password" value={apiKeyInput} onChange={e => setApiKeyInput(e.target.value)} 
-                                   className="w-full p-4 border rounded-xl mb-4" placeholder="Paste API Key here..." />
-                            <button onClick={() => {
-                                if(apiKeyInput) { localStorage.setItem('GEMINI_API_KEY', apiKeyInput); setApiKey(apiKeyInput); }
-                            }} className="btn-primary w-full py-3 rounded-xl font-bold">Start Session</button>
-                        </div>
-                    </div>
-                );
-            }
-
             // 2. Teacher Dashboard
             if (userRole === 'TEACHER') {
                 return (
