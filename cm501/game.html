@@ -54,6 +54,15 @@
         transform: translateY(-6px);
         box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       }
+      
+      /* Utilities */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
     </style>
 </head>
 <body class="bg-white text-slate-900">
@@ -74,9 +83,11 @@
         // *** CONFIGURATION ***
         // ------------------------------------------------------------------
         
-        // INSTRUCTOR: PASTE YOUR API KEY INSIDE THE QUOTES BELOW
-        // Example: const HARDCODED_API_KEY = "AIzaSy...";
-        const HARDCODED_API_KEY = ""; 
+        // INSTRUCTOR: STEP 1 - Get your API Key from https://aistudio.google.com/app/apikey
+        // INSTRUCTOR: STEP 2 - Paste it inside the quotes below.
+        // It should look like this: const HARDCODED_API_KEY = "AIzaSy...";
+        
+        const HARDCODED_API_KEY = "gen-lang-client-0800640930"; 
 
         // ------------------------------------------------------------------
         // 1. CONSTANTS & TYPES
@@ -252,11 +263,13 @@
 
                             {/* Initiator Theme */}
                             {isInitiator && (
-                                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl flex items-start gap-4">
-                                    <Lightbulb className="w-6 h-6 text-amber-500 shrink-0" />
+                                <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl flex items-start gap-4 animate-in slide-in-from-top-4">
+                                    <div className="bg-white p-2 rounded-full shadow-sm shrink-0">
+                                        <Lightbulb className="w-6 h-6 text-amber-500" />
+                                    </div>
                                     <div>
                                         <h3 className="font-bold text-amber-900 text-lg mb-2">Theme: "The Last Day"</h3>
-                                        <p className="text-amber-900 text-xl font-semibold font-serif">"{INITIATOR_THEMES[currentGroup]}"</p>
+                                        <p className="text-amber-900 text-xl font-semibold font-serif italic">"{INITIATOR_THEMES[currentGroup]}"</p>
                                     </div>
                                 </div>
                             )}
@@ -267,7 +280,9 @@
                                     <div className="flex items-center gap-2 mb-6 text-gray-500 text-xs font-bold uppercase tracking-widest">
                                         <ImageIcon className="w-4 h-4" /> Incoming Transmission
                                     </div>
-                                    <img src={referenceImage} className="w-full max-h-[500px] object-contain mx-auto border bg-white" />
+                                    <div className="bg-white border p-1 rounded-lg">
+                                        <img src={referenceImage} className="w-full max-h-[500px] object-contain mx-auto" />
+                                    </div>
                                 </div>
                             )}
 
@@ -279,21 +294,21 @@
                                 <textarea
                                     value={prompt}
                                     onChange={(e) => setPrompt(e.target.value)}
-                                    placeholder={isInitiator ? "Describe your theme (Subject + Style + Material + Vibe)..." : "Describe the image above..."}
-                                    className="w-full p-6 rounded-xl bg-[#fafafa] border border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[160px] text-lg"
+                                    placeholder={isInitiator ? "Describe your theme (Subject + Style + Material + Vibe)..." : "Describe the image above in your own words..."}
+                                    className="w-full p-6 rounded-xl bg-[#fafafa] border border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[160px] text-lg font-medium text-[#111] transition-all"
                                 />
-                                {error && <div className="mt-4 p-4 bg-red-50 text-[#CC0000] rounded-lg text-sm font-bold">{error}</div>}
+                                {error && <div className="mt-4 p-4 bg-red-50 text-[#CC0000] rounded-lg text-sm font-bold flex items-center gap-2"><AlertCircle className="w-4 h-4"/>{error}</div>}
 
                                 <div className="mt-6">
                                     {!generatedImage ? (
-                                        <button onClick={handleGenerate} disabled={isGenerating || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-lg disabled:opacity-50">
+                                        <button onClick={handleGenerate} disabled={isGenerating || !prompt} className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 text-lg disabled:opacity-50 transition-all">
                                             {isGenerating ? <Loader2 className="animate-spin" /> : <ImageIcon />}
                                             {isGenerating ? 'GENERATING...' : 'GENERATE IMAGE'}
                                         </button>
                                     ) : (
                                         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8">
-                                            <div className="bg-[#fafafa] border rounded-lg overflow-hidden">
-                                                <img src={generatedImage} className="w-full max-h-[500px] object-contain mx-auto" />
+                                            <div className="bg-[#fafafa] border border-gray-100 rounded-lg overflow-hidden p-1 shadow-sm">
+                                                <img src={generatedImage} className="w-full max-h-[500px] object-contain mx-auto rounded" />
                                             </div>
                                             <div className="flex gap-4">
                                                 <button onClick={() => setGeneratedImage(null)} className="btn-secondary flex-1 py-4 rounded-xl font-bold">Discard</button>
@@ -324,7 +339,7 @@
                 <div className="min-h-screen bg-white text-[#111] p-8 md:p-12 overflow-y-auto">
                     <div className="max-w-5xl mx-auto space-y-12">
                         <header className="text-center space-y-4">
-                            <h1 className="text-4xl font-bold">Project Reflection</h1>
+                            <h1 className="text-4xl font-bold tracking-tight">Project Reflection</h1>
                             <p className="text-xl text-gray-600">Review the evolution of your initiating project and discuss the changes.</p>
                         </header>
 
@@ -332,14 +347,18 @@
                             <div className="space-y-4">
                                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 text-center">
                                     <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 block">Where it Started</span>
-                                    <img src={firstImage} className="w-full h-auto rounded-lg shadow-sm mb-4" />
+                                    <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm mb-4">
+                                        <img src={firstImage} className="w-full h-auto rounded" />
+                                    </div>
                                     <p className="text-sm font-mono text-gray-500 bg-white p-3 rounded border">"{project.turns[0]?.prompt}"</p>
                                 </div>
                             </div>
                             <div className="space-y-4">
                                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 text-center">
                                     <span className="text-xs font-bold text-[#CC0000] uppercase tracking-widest mb-4 block">Where it Ended</span>
-                                    <img src={lastImage} className="w-full h-auto rounded-lg shadow-sm mb-4" />
+                                    <div className="bg-white p-1 rounded-lg border border-gray-100 shadow-sm mb-4">
+                                        <img src={lastImage} className="w-full h-auto rounded" />
+                                    </div>
                                     <p className="text-sm font-mono text-gray-500 bg-white p-3 rounded border">"{project.turns[project.turns.length-1]?.prompt}"</p>
                                 </div>
                             </div>
@@ -349,7 +368,7 @@
                             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
                                 <Users className="w-6 h-6 text-[#CC0000]" /> Group Discussion
                             </h3>
-                            <ul className="list-disc list-inside space-y-2 mb-6 text-gray-600 ml-4">
+                            <ul className="list-disc list-inside space-y-2 mb-6 text-gray-600 ml-4 marker:text-[#CC0000]">
                                 <li>How did the AI’s interpretation evolve?</li>
                                 <li>Did certain details survive or get lost along the way?</li>
                                 <li>How did prompt styles influence lighting or composition?</li>
@@ -358,7 +377,7 @@
                                 value={reflection}
                                 onChange={(e) => setReflection(e.target.value)}
                                 placeholder="Type your group's collective reflection here..."
-                                className="w-full p-6 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CC0000] min-h-[200px] text-lg"
+                                className="w-full p-6 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#111] min-h-[200px] text-lg transition-all outline-none"
                             ></textarea>
                             <button 
                                 onClick={() => onSubmit(reflection)}
@@ -387,8 +406,8 @@
                     <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
                         <div className="max-w-[1600px] mx-auto px-8 h-20 flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 bg-[#111] text-white flex items-center justify-center font-bold rounded-lg">T</div>
-                                <h1 className="font-bold text-xl">Instructor Dashboard</h1>
+                                <div className="w-10 h-10 bg-[#111] text-white flex items-center justify-center font-bold rounded-lg text-lg">T</div>
+                                <h1 className="font-bold text-xl tracking-tight">Instructor Dashboard</h1>
                             </div>
                             <div className="flex items-center gap-8">
                                 <div className="flex flex-col items-end">
@@ -405,7 +424,7 @@
                                     {gameState.reflectionPhase ? <Unlock className="w-4 h-4"/> : <Lock className="w-4 h-4"/>}
                                     {gameState.reflectionPhase ? 'Reflection Active' : 'Unlock Reflection'}
                                 </button>
-                                <button onClick={onReset} className="p-2 text-gray-400 hover:text-[#CC0000]"><RefreshCw className="w-5 h-5"/></button>
+                                <button onClick={onReset} className="p-2 text-gray-400 hover:text-[#CC0000] rounded-lg hover:bg-red-50 transition-colors" title="Reset"><RefreshCw className="w-5 h-5"/></button>
                             </div>
                         </div>
                     </header>
@@ -415,37 +434,39 @@
                              const first = project.turns[0];
                              const last = project.turns[project.turns.length - 1];
                              return (
-                                <div key={project.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all flex flex-col">
+                                <div key={project.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-all duration-300 flex flex-col">
                                     <div className="px-8 py-5 border-b border-gray-100 flex justify-between items-center bg-[#fcfcfc]">
                                         <div className="flex items-center gap-3">
-                                            <span className="w-8 h-8 rounded bg-[#111] text-white flex items-center justify-center font-bold">{idx + 1}</span>
+                                            <span className="w-8 h-8 rounded-lg bg-[#111] text-white flex items-center justify-center font-bold">{idx + 1}</span>
                                             <span className="font-bold uppercase tracking-wide text-sm">{project.initiator.replace('_', ' ')}'s Chain</span>
                                         </div>
-                                        <span className="text-xs font-bold bg-gray-100 px-3 py-1 rounded-full text-gray-500">
+                                        <span className={`text-xs font-bold px-3 py-1 rounded-full border ${project.isComplete ? 'bg-green-50 text-green-700 border-green-100' : 'bg-gray-100 text-gray-500 border-gray-200'}`}>
                                             {project.isComplete ? 'COMPLETE' : `STEP ${project.turns.length}/5`}
                                         </span>
                                     </div>
                                     <div className="p-8 flex items-center gap-6 flex-1">
                                         <div className="flex-1 text-center space-y-2">
-                                            <span className="text-xs font-bold text-gray-400 uppercase">Start</span>
+                                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Start</span>
                                             {first ? (
-                                                <div className="aspect-square rounded-xl overflow-hidden border cursor-zoom-in" onClick={() => setZoomedImage({src: first.generatedImage, cap: first.prompt})}>
-                                                    <img src={first.generatedImage} className="w-full h-full object-cover" />
+                                                <div className="aspect-square rounded-xl overflow-hidden border border-gray-200 cursor-zoom-in relative group" onClick={() => setZoomedImage({src: first.generatedImage, cap: first.prompt})}>
+                                                    <img src={first.generatedImage} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-colors"><ZoomIn className="text-white opacity-0 group-hover:opacity-100 drop-shadow-sm" /></div>
                                                 </div>
-                                            ) : <div className="aspect-square bg-gray-50 rounded-xl border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
+                                            ) : <div className="aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">Wait</div>}
                                         </div>
-                                        <MoveRight className="text-gray-300" />
+                                        <MoveRight className="text-gray-300 w-8 h-8" />
                                         <div className="flex-1 text-center space-y-2">
-                                            <span className="text-xs font-bold text-gray-400 uppercase">Current</span>
+                                            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Current</span>
                                             {last ? (
-                                                <div className="aspect-square rounded-xl overflow-hidden border cursor-zoom-in" onClick={() => setZoomedImage({src: last.generatedImage, cap: last.prompt})}>
-                                                    <img src={last.generatedImage} className="w-full h-full object-cover" />
+                                                <div className="aspect-square rounded-xl overflow-hidden border border-gray-200 cursor-zoom-in relative group" onClick={() => setZoomedImage({src: last.generatedImage, cap: last.prompt})}>
+                                                    <img src={last.generatedImage} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-colors"><ZoomIn className="text-white opacity-0 group-hover:opacity-100 drop-shadow-sm" /></div>
                                                 </div>
-                                            ) : <div className="aspect-square bg-gray-50 rounded-xl border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
+                                            ) : <div className="aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-gray-300">Wait</div>}
                                         </div>
                                     </div>
                                     <div className="p-4 border-t border-gray-100 bg-[#fcfcfc]">
-                                        <button onClick={() => setExpandedProject(project)} className="w-full py-3 bg-white border border-gray-200 hover:border-[#111] font-bold rounded-xl text-sm uppercase tracking-wide transition-all">
+                                        <button onClick={() => setExpandedProject(project)} className="w-full py-3 bg-white border border-gray-200 hover:border-[#111] hover:bg-[#111] hover:text-white font-bold rounded-xl text-sm uppercase tracking-wide transition-all shadow-sm">
                                             Inspect Journey & Reflection
                                         </button>
                                     </div>
@@ -456,34 +477,49 @@
 
                     {/* Modals */}
                     {expandedProject && (
-                        <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur overflow-y-auto">
-                            <div className="sticky top-0 bg-white/90 border-b p-6 flex justify-between items-center z-10">
-                                <h2 className="text-2xl font-bold">Project Analysis</h2>
-                                <button onClick={() => setExpandedProject(null)}><X className="w-8 h-8 hover:text-[#CC0000]" /></button>
+                        <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur overflow-y-auto animate-in fade-in duration-200">
+                            <div className="sticky top-0 bg-white/90 border-b border-gray-100 p-6 flex justify-between items-center z-10 shadow-sm">
+                                <div>
+                                    <h2 className="text-2xl font-bold tracking-tight">Project Analysis</h2>
+                                    <p className="text-gray-500 text-sm">Reviewing {expandedProject.initiator.replace('_',' ')}'s Chain</p>
+                                </div>
+                                <button onClick={() => setExpandedProject(null)} className="p-2 hover:bg-gray-100 rounded-full transition-colors"><X className="w-6 h-6 hover:text-[#CC0000]" /></button>
                             </div>
                             <div className="max-w-[1600px] mx-auto p-10 space-y-12">
                                 {/* Evolution Strip */}
-                                <div className="grid grid-cols-5 gap-4">
+                                <div className="grid grid-cols-5 gap-6">
                                     {Array(5).fill(null).map((_, i) => {
                                         const turn = expandedProject.turns[i];
                                         return (
-                                            <div key={i} className={`space-y-3 ${!turn && 'opacity-30'}`}>
-                                                <div className="aspect-square rounded-xl overflow-hidden border bg-gray-50 cursor-zoom-in" 
-                                                     onClick={() => turn && setZoomedImage({src: turn.generatedImage, cap: turn.prompt})}>
-                                                    {turn && <img src={turn.generatedImage} className="w-full h-full object-cover" />}
+                                            <div key={i} className={`flex flex-col ${!turn && 'opacity-40 grayscale'} transition-all`}>
+                                                <div className="mb-2 flex justify-between items-center text-xs font-bold uppercase tracking-wider text-gray-400">
+                                                    <span>Step {i+1}</span>
                                                 </div>
-                                                <p className="text-xs text-gray-500 border p-2 rounded bg-white h-24 overflow-y-auto">
-                                                    {turn?.prompt || 'Waiting...'}
-                                                </p>
+                                                <div className="aspect-square rounded-xl overflow-hidden border border-gray-200 bg-gray-50 cursor-zoom-in relative group shadow-sm mb-3" 
+                                                     onClick={() => turn && setZoomedImage({src: turn.generatedImage, cap: turn.prompt})}>
+                                                    {turn ? (
+                                                        <>
+                                                            <img src={turn.generatedImage} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 flex items-center justify-center transition-colors"><ZoomIn className="text-white opacity-0 group-hover:opacity-100 drop-shadow-sm" /></div>
+                                                        </>
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center"><Clock className="text-gray-300"/></div>
+                                                    )}
+                                                </div>
+                                                <div className="text-xs text-gray-600 border border-gray-100 p-3 rounded-lg bg-white h-24 overflow-y-auto leading-relaxed shadow-sm">
+                                                    {turn?.prompt || 'Waiting for input...'}
+                                                </div>
                                             </div>
                                         )
                                     })}
                                 </div>
                                 {/* Reflection Section */}
-                                <div className="bg-gray-50 p-8 rounded-2xl border border-gray-200">
-                                    <h3 className="text-lg font-bold mb-4 text-[#CC0000]">Final Reflection</h3>
+                                <div className="bg-[#fcfcfc] p-8 rounded-2xl border border-gray-200">
+                                    <h3 className="text-lg font-bold mb-4 text-[#CC0000] flex items-center gap-2">
+                                        <Users className="w-5 h-5"/> Final Group Reflection
+                                    </h3>
                                     {expandedProject.reflection ? (
-                                        <p className="text-lg leading-relaxed text-gray-800 italic">"{expandedProject.reflection}"</p>
+                                        <p className="text-lg leading-relaxed text-gray-800 italic border-l-4 border-[#CC0000] pl-4">"{expandedProject.reflection}"</p>
                                     ) : (
                                         <p className="text-gray-400 italic">No reflection submitted yet.</p>
                                     )}
@@ -493,10 +529,10 @@
                     )}
 
                     {zoomedImage && (
-                        <div className="fixed inset-0 z-[60] bg-black/95 flex flex-col items-center justify-center p-8 animate-in fade-in">
-                            <button onClick={() => setZoomedImage(null)} className="absolute top-8 right-8 text-white/50 hover:text-white"><X className="w-12 h-12" /></button>
-                            <img src={zoomedImage.src} className="max-h-[80vh] w-auto object-contain mb-8" />
-                            <p className="text-white text-center text-lg max-w-4xl bg-[#222] p-4 rounded-xl border border-white/10">{zoomedImage.cap}</p>
+                        <div className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center p-8 animate-in fade-in duration-200">
+                            <button onClick={() => setZoomedImage(null)} className="absolute top-8 right-8 text-white/50 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all"><X className="w-10 h-10" /></button>
+                            <img src={zoomedImage.src} className="max-h-[75vh] w-auto object-contain mb-8 rounded-lg shadow-2xl" />
+                            <p className="text-white text-center text-lg max-w-4xl bg-[#222] px-6 py-4 rounded-xl border border-white/10 shadow-xl">{zoomedImage.cap}</p>
                         </div>
                     )}
                 </div>
@@ -519,7 +555,7 @@
             const [pwdError, setPwdError] = useState(false);
 
             useEffect(() => {
-                if (apiKey) initGemini(apiKey);
+                if (apiKey && apiKey !== "PASTE_YOUR_GOOGLE_API_KEY_HERE") initGemini(apiKey);
             }, [apiKey]);
 
             const handleTurnComplete = (projectId, prompt, image) => {
@@ -549,7 +585,9 @@
             };
 
             const handleReset = () => {
-                if(confirm("Reset entire class?")) setGameState(INITIAL_GAME_STATE);
+                if(confirm("Reset entire class activity? All generated images and prompts will be lost.")) {
+                    setGameState(INITIAL_GAME_STATE);
+                }
             };
 
             // Task Logic
@@ -582,7 +620,7 @@
             if (userRole === 'TEACHER') {
                 return (
                     <>
-                        <button onClick={() => setUserRole(null)} className="fixed top-4 right-4 z-50 text-gray-400 hover:text-[#CC0000] underline">Exit</button>
+                        <button onClick={() => setUserRole(null)} className="fixed top-6 right-6 z-50 text-sm font-semibold text-gray-400 hover:text-[#CC0000] underline decoration-2 decoration-transparent hover:decoration-[#CC0000] transition-all">Exit Dashboard</button>
                         <TeacherDashboard 
                             gameState={gameState} 
                             onReset={handleReset} 
@@ -602,7 +640,7 @@
             if (task?.status === 'ACTIVE') {
                  return (
                     <>
-                        <button onClick={() => setUserRole(null)} className="fixed top-4 right-4 z-50 text-gray-400 hover:text-[#CC0000] underline">Exit</button>
+                        <button onClick={() => setUserRole(null)} className="fixed top-6 right-6 z-50 text-sm font-semibold text-gray-400 hover:text-[#CC0000] underline decoration-2 decoration-transparent hover:decoration-[#CC0000] transition-all">Exit Role</button>
                         <StudentView 
                             key={`${userRole}-${task.round}`}
                             currentGroup={userRole} 
@@ -618,20 +656,25 @@
             if (task?.status === 'WAITING' || task?.status === 'COMPLETE_GAME' || task?.status === 'COMPLETE_ALL') {
                 return (
                     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center font-sans">
-                        <button onClick={() => setUserRole(null)} className="fixed top-4 right-4 z-50 text-gray-400 hover:text-[#CC0000] underline">Exit Role</button>
-                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-8 ${task.status === 'WAITING' ? 'border-4 border-t-[#CC0000] animate-spin' : 'bg-green-50 text-green-600'}`}>
+                        <button onClick={() => setUserRole(null)} className="fixed top-6 right-6 z-50 text-sm font-semibold text-gray-400 hover:text-[#CC0000] underline decoration-2 decoration-transparent hover:decoration-[#CC0000] transition-all">Exit Role</button>
+                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-8 ${task.status === 'WAITING' ? 'border-4 border-slate-100 border-t-[#CC0000] animate-spin' : 'bg-green-50 text-green-600'}`}>
                             {task.status === 'WAITING' ? '' : <GraduationCap className="w-10 h-10" />}
                         </div>
                         <h2 className="text-3xl font-bold text-[#111] mb-4">
                             {task.status === 'WAITING' ? 'Transmission Pending' : 'All Tasks Complete'}
                         </h2>
-                        <p className="text-gray-500 max-w-lg mx-auto text-lg">
+                        <p className="text-gray-500 max-w-lg mx-auto text-lg leading-relaxed">
                             {task.status === 'WAITING' 
                                 ? `Please wait. The previous group is still working on Round ${task.round - 1}.` 
                                 : gameState.reflectionPhase 
-                                    ? "Reflection submitted. Return to main screen." 
+                                    ? "Your reflection has been recorded. Please return to the main display." 
                                     : "Great work! Please wait for the Instructor to unlock the Reflection Phase."}
                         </p>
+                        {task.status === 'WAITING' && (
+                             <div className="mt-8 px-4 py-2 bg-[#f9f9f9] rounded text-sm font-mono text-slate-500 border border-slate-200">
+                                WAITING FOR: PROJECT {task.project.id.toUpperCase()}
+                             </div>
+                        )}
                     </div>
                 );
             }
@@ -641,54 +684,68 @@
                 <div className="min-h-screen bg-white text-[#111] font-sans">
                     <div className="max-w-[1120px] mx-auto px-6 py-20">
                         <div className="text-center mb-16">
-                            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">AI Visual Telephone</h1>
-                            <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto">
-                                An interactive collaborative game where groups translate visuals back into language.
+                            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 text-[#111]">AI Visual Telephone</h1>
+                            <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto font-normal leading-relaxed">
+                                An interactive collaborative game where groups translate visuals back into language using Generative AI.
                             </p>
                         </div>
 
-                        <div className="grid lg:grid-cols-2 gap-12">
+                        <div className="grid lg:grid-cols-2 gap-12 items-start">
                             <div>
                                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
                                     <Users className="w-6 h-6 text-[#CC0000]" /> Student Groups
                                 </h2>
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                                     {GROUP_ORDER.map((group, idx) => (
-                                        <button key={group} onClick={() => setUserRole(group)} className="hover-card bg-[#f9f9f9] rounded-xl p-6 text-center border border-transparent hover:border-gray-200 group flex flex-col items-center h-48 justify-center">
-                                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:text-[#CC0000] text-2xl font-bold transition-colors">{idx + 1}</div>
-                                            <p className="font-semibold">Group {idx + 1}</p>
+                                        <button key={group} onClick={() => setUserRole(group)} className="hover-card bg-[#f9f9f9] rounded-xl p-6 text-center border border-transparent hover:border-gray-200 group flex flex-col items-center h-48 justify-center transition-all">
+                                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm group-hover:shadow-md group-hover:text-[#CC0000] text-2xl font-bold transition-all">{idx + 1}</div>
+                                            <p className="font-semibold text-[#111]">Group {idx + 1}</p>
                                         </button>
                                     ))}
                                 </div>
                             </div>
-                            <div className="bg-[#f9f9f9] p-8 rounded-2xl border border-gray-100 flex flex-col justify-center text-center lg:text-left">
+                            <div className="bg-[#f9f9f9] p-8 rounded-2xl border border-gray-100 flex flex-col justify-center text-center lg:text-left h-full shadow-sm">
                                 <h2 className="text-2xl font-bold mb-4 flex items-center gap-3 justify-center lg:justify-start">
                                     <MonitorPlay className="w-6 h-6 text-[#CC0000]" /> Instructor
                                 </h2>
                                 <p className="mb-8 text-gray-600 leading-relaxed">
-                                    Access the centralized dashboard to monitor progress and facilitate discussion.
+                                    Access the centralized dashboard to monitor progress in real-time, view side-by-side comparisons, and facilitate the final class discussion.
                                 </p>
                                 <button onClick={() => setShowAuth(true)} className="btn-primary py-4 px-8 rounded-xl font-bold text-lg w-full lg:w-auto self-start flex items-center justify-center gap-2">
                                     Launch Dashboard <ArrowRight className="w-5 h-5" />
                                 </button>
                             </div>
                         </div>
+                        
+                         <div className="mt-20 pt-10 border-t border-slate-100 text-center text-slate-400 text-sm">
+                            <p>CM501 • Fall 2025 • Visual Communication Design</p>
+                         </div>
                     </div>
 
                     {/* Password Modal */}
                     {showAuth && (
-                        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-                            <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl">
-                                <h3 className="text-xl font-bold mb-2">Instructor Access</h3>
+                        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                            <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200 border border-gray-100">
+                                <h3 className="text-xl font-bold text-[#111] mb-2">Instructor Access</h3>
+                                <p className="text-sm text-gray-500 mb-6">Enter passcode to view dashboard.</p>
+                                
                                 <input type="password" value={teacherPwd} onChange={e => {setTeacherPwd(e.target.value); setPwdError(false);}} 
-                                    className="w-full p-4 border rounded-xl mb-4 text-lg" placeholder="Passcode" autoFocus />
-                                {pwdError && <p className="text-[#CC0000] text-sm font-bold mb-4">Incorrect passcode.</p>}
-                                <div className="flex gap-3">
-                                    <button onClick={() => setShowAuth(false)} className="flex-1 py-3 text-gray-500 hover:bg-gray-100 rounded-xl font-bold">Cancel</button>
+                                    className={`w-full p-4 border rounded-xl mb-4 outline-none transition-all font-medium text-lg ${pwdError ? 'border-red-300 bg-red-50 text-red-900' : 'border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-[#111]'}`} 
+                                    placeholder="Passcode" autoFocus 
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                             if (teacherPwd === '2025') { setUserRole('TEACHER'); setShowAuth(false); setTeacherPwd(''); } 
+                                             else { setPwdError(true); }
+                                        }
+                                    }}
+                                />
+                                {pwdError && <p className="text-[#CC0000] text-sm font-bold mb-4 animate-pulse">Incorrect passcode.</p>}
+                                <div className="flex gap-3 mt-2">
+                                    <button onClick={() => setShowAuth(false)} className="flex-1 py-3 text-gray-500 hover:bg-gray-100 hover:text-[#111] rounded-xl font-bold transition-colors">Cancel</button>
                                     <button onClick={() => {
                                         if (teacherPwd === '2025') { setUserRole('TEACHER'); setShowAuth(false); setTeacherPwd(''); } 
                                         else { setPwdError(true); }
-                                    }} className="flex-1 py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg">Enter</button>
+                                    }} className="flex-1 py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg transition-all hover:-translate-y-0.5">Enter</button>
                                 </div>
                             </div>
                         </div>
