@@ -37,13 +37,15 @@
       /* Spinner */
       .spinner { animation: spin 1s linear infinite; }
       @keyframes spin { 100% { transform: rotate(360deg); } }
+      
+      .slide-over { position: fixed; right: 0; top: 0; height: 100%; transition: transform 0.3s ease-in-out; z-index: 40; }
+      .slide-over.closed { transform: translateX(100%); }
+      .slide-over.open { transform: translateX(0); }
     </style>
 
     <!-- LIBRARIES -->
-    <!-- React -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- PeerJS for Networking -->
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -54,7 +56,7 @@
         <!-- Initial Loading State -->
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="width: 50px; height: 50px; border: 5px solid #eee; border-top-color: #CC0000; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <p style="margin-top: 20px; color: #666; font-family: sans-serif;">Loading Visual Telephone...</p>
+            <p style="margin-top: 20px; color: #666; font-family: sans-serif;">Initializing Application...</p>
         </div>
     </div>
 
@@ -64,7 +66,7 @@
       ======================================================
     -->
     <script type="text/babel">
-        const { useState, useEffect, useRef, useMemo } = React;
+        const { useState, useEffect, useRef } = React;
 
         // --- ICONS (SVG Components) ---
         const Icon = ({ name, className }) => {
@@ -87,7 +89,10 @@
                 Unlock: <><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></>,
                 UploadCloud: <><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></>,
                 Download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></>,
-                BookOpen: <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>
+                Wifi: <><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></>,
+                WifiOff: <><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.58 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></>,
+                BookOpen: <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>,
+                LogOut: <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></>
             };
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -117,23 +122,34 @@
 
         // --- COMPONENTS ---
 
-        const PromptGuide = () => (
-            <div className="bg-white h-full overflow-y-auto">
-                <div className="p-8">
+        const PromptGuide = ({ isOpen, onClose, isMobile }) => {
+            const Content = () => (
+                <div className="p-8 h-full overflow-y-auto">
+                    {isMobile && <button onClick={onClose} className="absolute top-4 right-4"><Icon name="X" className="w-6 h-6"/></button>}
                     <h3 className="text-xl font-bold text-[#111] mb-6 tracking-tight">Prompt Engineering 101</h3>
+                    
                     <div className="space-y-6 mb-10">
                         <div className="p-5 bg-red-50 border border-red-100 rounded-xl">
                             <h4 className="text-sm font-bold text-[#CC0000] uppercase mb-2">1. Don't Let It Guess</h4>
-                            <p className="text-sm text-gray-700 leading-relaxed">Guesses give you random props and strange faces. <strong>Low quality AI guesses. High quality AI follows direction.</strong></p>
+                            <p className="text-sm text-gray-700 leading-relaxed">
+                                Guesses give you random props and strange faces. <br/>
+                                <strong>Low quality AI guesses. High quality AI follows direction.</strong>
+                            </p>
                         </div>
+
                         <div className="p-5 bg-blue-50 border border-blue-100 rounded-xl">
                             <h4 className="text-sm font-bold text-blue-900 uppercase mb-2">2. The CTLT Method</h4>
-                            <p className="text-sm text-gray-700 leading-relaxed mb-2">Lock these four elements:</p>
+                            <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                                Control the frame instead of leaving it to chance. Lock these four elements:
+                            </p>
                             <ul className="text-sm text-blue-800 font-bold grid grid-cols-2 gap-2">
-                                <li>• <span className="underline">C</span>amera</li><li>• <span className="underline">T</span>one</li>
-                                <li>• <span className="underline">L</span>ight</li><li>• <span className="underline">T</span>exture</li>
+                                <li>• <span className="underline">C</span>amera</li>
+                                <li>• <span className="underline">T</span>one</li>
+                                <li>• <span className="underline">L</span>ight</li>
+                                <li>• <span className="underline">T</span>exture</li>
                             </ul>
                         </div>
+
                         <div className="p-5 bg-gray-50 border border-gray-200 rounded-xl">
                             <h4 className="text-sm font-bold text-[#111] uppercase mb-2">3. Direct, Don't Describe</h4>
                             <div className="text-sm text-gray-700 leading-relaxed space-y-3">
@@ -142,70 +158,125 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        );
 
-        const StudentView = ({ currentGroup, roundNumber, previousTurn, projectId, onTurnComplete, connectionStatus }) => {
+                    <div className="mb-10 pt-8 border-t border-gray-100">
+                        <h4 className="text-sm font-bold text-[#111] uppercase mb-4 tracking-wider">Gold Standard Example</h4>
+                        <div className="bg-[#fafafa] p-5 rounded-xl border border-gray-200 space-y-4 text-sm">
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Subject</span>
+                                <p className="text-gray-600 leading-relaxed">"A joyful, diverse group of young adults and their exotic pet companions having a picnic gathering outdoors."</p>
+                            </div>
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Style (Camera)</span>
+                                <p className="text-gray-600 leading-relaxed">"Photorealistic, highly detailed, shallow depth of field to keep focus on foreground."</p>
+                            </div>
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Material (Texture)</span>
+                                <p className="text-gray-600 leading-relaxed">"Soft green grass, warm checkered picnic blankets, fluffy animal fur, smooth drink glasses."</p>
+                            </div>
+                            <div>
+                                <span className="font-bold text-[#CC0000] block text-xs uppercase mb-1">Vibe (Light)</span>
+                                <p className="text-gray-600 leading-relaxed">"Golden hour outdoor lighting, bright and sunny with a warm glow filtering through trees."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-6 pt-6 border-t border-gray-100">
+                         <h4 className="text-sm font-bold text-[#111] uppercase">Quick Reference</h4>
+                        {PROMPT_RECIPE.map((c, i) => (
+                            <div key={i}>
+                                <h5 className="text-xs font-bold text-gray-900 mb-1">{c.name}</h5>
+                                <p className="text-xs text-gray-500 leading-relaxed">{c.examples.join(', ')}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+
+            if (isMobile) {
+                return (
+                    <div className={`slide-over bg-white border-l shadow-2xl w-full sm:w-[450px] ${isOpen ? 'open' : 'closed'}`}>
+                        <Content />
+                    </div>
+                );
+            }
+            return (
+                <div className="bg-white h-full overflow-y-auto border-l border-gray-100 hidden xl:block w-[450px] shrink-0">
+                    <Content />
+                </div>
+            );
+        };
+
+        const StudentView = ({ currentGroup, roundNumber, previousTurn, projectId, onTurnComplete, isConnected }) => {
             const [prompt, setPrompt] = useState('');
             const [image, setImage] = useState(null);
-            const [isSending, setIsSending] = useState(false);
             const [showGuide, setShowGuide] = useState(false);
+            const [sending, setSending] = useState(false);
             const isInitiator = roundNumber === 1;
 
             const handleFileUpload = (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onloadend = () => setImage(reader.result);
+                    reader.onloadend = () => {
+                        setImage(reader.result);
+                    };
                     reader.readAsDataURL(file);
                 }
             };
 
             const handleTransmit = () => {
-                if (!prompt.trim() || !image) return;
-                
-                if (connectionStatus !== 'CONNECTED') {
-                    alert('Not connected to the Instructor. Please check your internet connection or ask Instructor to check their dashboard.');
+                if(!prompt.trim() || !image) return;
+                if(!isConnected) {
+                    alert("Lost connection to Instructor. Please refresh or check Wi-Fi.");
                     return;
                 }
-
-                setIsSending(true);
-                // Slight delay to show UI feedback before action triggers
+                setSending(true);
+                // Simulate network delay for feel, then send
                 setTimeout(() => {
                     onTurnComplete(prompt, image);
-                    // We don't turn isSending off immediately because usually the component unmounts 
-                    // or changes state when the turn is processed.
-                }, 500);
+                    setSending(false);
+                }, 800);
             };
 
             return (
-                <div className="h-screen bg-white flex flex-col xl:flex-row overflow-hidden font-sans">
-                    {/* Main Workspace */}
-                    <div className="flex-1 flex flex-col h-full overflow-y-auto relative">
-                        {/* Connection Status Badge */}
-                        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-white/80 backdrop-blur px-3 py-1.5 rounded-full border border-gray-200 shadow-sm text-xs font-bold">
-                            <span className={`w-2 h-2 rounded-full ${connectionStatus === 'CONNECTED' ? 'bg-green-500' : 'bg-red-500 animate-pulse'}`}></span>
-                            {connectionStatus === 'CONNECTED' ? 'LIVE' : 'CONNECTING...'}
-                        </div>
+                <div className="h-screen bg-white flex flex-col md:flex-row overflow-hidden relative">
+                    {/* Header for Mobile/Tablet that opens Guide */}
+                    <div className="xl:hidden fixed bottom-6 right-6 z-30">
+                        <button onClick={() => setShowGuide(true)} className="bg-[#111] text-white p-4 rounded-full shadow-lg hover:scale-105 transition-transform">
+                            <Icon name="BookOpen" className="w-6 h-6" />
+                        </button>
+                    </div>
 
-                        <div className="max-w-4xl mx-auto w-full p-8 md:p-12 space-y-8 pb-32"> {/* Extra padding bottom for mobile FAB */}
+                    <div className="flex-1 flex flex-col h-full overflow-y-auto">
+                        <div className="max-w-4xl mx-auto w-full p-8 md:p-12 space-y-8">
                             <div className="border-b pb-6">
-                                <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-12 h-12 bg-[#111] text-white flex items-center justify-center rounded-xl font-bold text-xl">{currentGroup.split('_')[1]}</div>
-                                    <div>
-                                        <h1 className="text-3xl font-bold text-[#111]">{isInitiator ? 'The Initiator' : 'The Interpreter'}</h1>
-                                        <span className="text-xs font-bold text-[#CC0000] uppercase tracking-wider">Round {roundNumber} / 5</span>
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-[#111] text-white flex items-center justify-center rounded-xl font-bold text-xl">{currentGroup.split('_')[1]}</div>
+                                        <div>
+                                            <h1 className="text-3xl font-bold text-[#111]">{isInitiator ? 'The Initiator' : 'The Interpreter'}</h1>
+                                            <span className="text-xs font-bold text-[#CC0000] uppercase tracking-wider">Round {roundNumber} / 5</span>
+                                        </div>
+                                    </div>
+                                    <div className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 ${isConnected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                        <Icon name={isConnected ? "Wifi" : "WifiOff"} className="w-3 h-3" />
+                                        {isConnected ? 'ONLINE' : 'OFFLINE'}
                                     </div>
                                 </div>
                                 <p className="text-gray-600 text-lg">
-                                    {isInitiator ? 'Use the CTLT Method. Lock the Camera, Tone, Light, and Texture.' : 'Analyze the image below. Direct the lens, lighting, and materials to recreate it.'}
+                                    {isInitiator 
+                                        ? 'Use the CTLT Method. Lock the Camera, Tone, Light, and Texture.' 
+                                        : 'Analyze the image below. Do not guess the story. Direct the lens, lighting, and materials to recreate it.'}
                                 </p>
                             </div>
 
                             {isInitiator && (
                                 <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl">
-                                    <div className="flex items-center gap-2 mb-2"><Icon name="Lightbulb" className="w-5 h-5 text-amber-600"/><span className="font-bold text-amber-900">Theme Assignment</span></div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Icon name="Lightbulb" className="w-5 h-5 text-amber-600"/>
+                                        <span className="font-bold text-amber-900">Theme Assignment</span>
+                                    </div>
                                     <p className="text-amber-900 text-lg font-serif italic">"{INITIATOR_THEMES[currentGroup]}"</p>
                                 </div>
                             )}
@@ -219,90 +290,82 @@
 
                             <div className="bg-white rounded-xl">
                                 <h2 className="text-lg font-bold mb-4 flex gap-2 items-center"><Icon name="Edit3" className="w-5 h-5 text-[#CC0000]"/> 1. Direct Your Vision</h2>
+                                <p className="text-sm text-gray-500 mb-2">Write your prompt here using the techniques from the guide.</p>
                                 <textarea 
                                     className="w-full p-6 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-[#111] min-h-[160px] text-lg transition-all font-medium"
-                                    placeholder={isInitiator ? "Direct, don't describe.\nEx: '35mm lens, waist up...'" : "I see a [Subject] made of [Texture].\nCamera: [Lens/Angle]."}
+                                    placeholder={isInitiator 
+                                        ? "Direct, don't describe. \nEx: '35mm lens, waist up, warm sunset from camera right, silk catching motion...' \nCombine Subject + Style + Material + Vibe." 
+                                        : "I see a [Subject] made of [Texture]. \nCamera: [Lens/Angle]. \nLighting: [Vibe/Direction]..."}
                                     value={prompt}
                                     onChange={e => setPrompt(e.target.value)}
                                 />
                                 
                                 <div className="mt-8">
                                     <h2 className="text-lg font-bold mb-4 flex gap-2 items-center"><Icon name="UploadCloud" className="w-5 h-5 text-[#CC0000]"/> 2. Upload Result</h2>
+                                    <p className="text-sm text-gray-500 mb-4">Generate your image using your preferred AI tool (Midjourney, Firefly, ChatGPT, etc.), save it, and upload it here.</p>
+                                    
                                     {!image ? (
                                         <div className="file-input-wrapper w-full">
-                                            <button className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 pointer-events-none"><Icon name="Image" className="w-5 h-5"/> Select Image File</button>
+                                            <button className="btn-primary w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 pointer-events-none">
+                                                <Icon name="Image" className="w-5 h-5"/> Select Image File
+                                            </button>
                                             <input type="file" accept="image/*" onChange={handleFileUpload} />
                                         </div>
                                     ) : (
                                         <div className="space-y-4">
                                             <div className="bg-gray-50 border rounded-lg p-1"><img src={image} className="w-full max-h-[400px] object-contain mx-auto"/></div>
                                             <div className="flex gap-4">
-                                                <div className="file-input-wrapper flex-1"><button className="btn-secondary w-full py-3 rounded-xl font-bold pointer-events-none">Change</button><input type="file" accept="image/*" onChange={handleFileUpload} /></div>
-                                                <button 
-                                                    onClick={handleTransmit} 
-                                                    disabled={!prompt.trim() || isSending || connectionStatus !== 'CONNECTED'} 
-                                                    className="flex-[2] py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-                                                >
-                                                    {isSending ? (
-                                                        <><Icon name="RefreshCw" className="w-5 h-5 animate-spin"/> Sending...</>
+                                                 <div className="file-input-wrapper flex-1">
+                                                    <button className="btn-secondary w-full py-3 rounded-xl font-bold pointer-events-none">Change Image</button>
+                                                    <input type="file" accept="image/*" onChange={handleFileUpload} />
+                                                </div>
+                                                <button onClick={handleTransmit} disabled={!prompt.trim() || !isConnected || sending} className="flex-[2] py-3 bg-[#111] hover:bg-[#CC0000] text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                    {sending ? (
+                                                        <>
+                                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                            Sending...
+                                                        </>
                                                     ) : (
-                                                        <><Icon name="Send" className="w-5 h-5"/> Transmit</>
+                                                        <>
+                                                            <Icon name="Send" className="w-5 h-5"/> Transmit
+                                                        </>
                                                     )}
                                                 </button>
                                             </div>
+                                            {!prompt.trim() && <p className="text-xs text-center text-red-500 font-bold">Please write your prompt text before transmitting.</p>}
                                         </div>
                                     )}
                                 </div>
                             </div>
+                            <div className="h-10"></div>
                         </div>
                     </div>
-
-                    {/* Mobile Toggle Button */}
-                    <button 
-                        onClick={() => setShowGuide(true)}
-                        className="xl:hidden fixed bottom-6 right-6 z-40 bg-[#111] text-white px-5 py-3 rounded-full shadow-xl flex items-center gap-2 font-bold hover:bg-[#CC0000] transition-colors"
-                    >
-                        <Icon name="BookOpen" className="w-5 h-5"/> Prompt Guide
-                    </button>
-
-                    {/* Desktop Sidebar (Permanent) */}
-                    <div className="hidden xl:block w-[400px] shrink-0 h-full border-l border-gray-100 overflow-y-auto">
-                        <PromptGuide />
-                    </div>
-
-                    {/* Mobile Sidebar (Slide-over) */}
-                    {showGuide && (
-                        <div className="fixed inset-0 z-50 xl:hidden">
-                            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowGuide(false)}></div>
-                            <div className="absolute top-0 right-0 bottom-0 w-[85%] max-w-[400px] bg-white shadow-2xl animate-[slideIn_0.3s_ease-out]">
-                                <div className="p-4 flex justify-end border-b border-gray-100">
-                                    <button onClick={() => setShowGuide(false)} className="p-2 bg-gray-100 rounded-full hover:bg-gray-200"><Icon name="X" className="w-5 h-5"/></button>
-                                </div>
-                                <div className="h-full overflow-y-auto pb-20">
-                                    <PromptGuide />
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    
+                    {/* Prompt Guide - Responsive */}
+                    <PromptGuide isOpen={showGuide} onClose={() => setShowGuide(false)} isMobile={true} />
+                    <PromptGuide isOpen={true} isMobile={false} />
                 </div>
             );
         };
 
-        const TeacherDashboard = ({ gameState, onReset, onToggleReflection, roomCode, peerCount }) => {
+        const TeacherDashboard = ({ gameState, onReset, onToggleReflection, roomCode, peerCount, onExit }) => {
             const [zoom, setZoom] = useState(null);
             const [expand, setExpand] = useState(null);
             
             const totalTurns = gameState.projects.reduce((acc, p) => acc + p.turns.length, 0);
             const progress = Math.round((totalTurns / 25) * 100);
 
-            // Export logic... (same as before)
+            // Export Documentation
             const downloadReport = () => {
-                const reportContent = `<!DOCTYPE html><html><head><title>Visual Telephone Report</title></head><body><h1>Class Report</h1><p>${new Date().toDateString()}</p>${gameState.projects.map(p => `<h3>${p.initiator} Chain</h3>${p.turns.map((t,i) => `<div><strong>Step ${i+1}:</strong> ${t.prompt}<br/><img src="${t.generatedImage}" width="200"/></div>`).join('')}`).join('')}</body></html>`;
+                const reportContent = `<!DOCTYPE html><html><head><title>Class Documentation</title><style>body{font-family:sans-serif;padding:40px;max-width:1200px;margin:0 auto;}img{max-width:100%;height:auto;border-radius:4px;}</style></head><body><h1>AI Visual Telephone Report</h1><p>${new Date().toLocaleDateString()}</p>${gameState.projects.map(p => `<div><h2>${p.initiator} Chain</h2><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px">${p.turns.map((t,i) => `<div><p>Step ${i+1}</p><img src="${t.generatedImage}" /><p><strong>Prompt:</strong> ${t.prompt}</p></div>`).join('')}</div><p><strong>Reflection:</strong> ${p.reflection || 'None'}</p></div><hr/>`).join('')}</body></html>`;
                 const blob = new Blob([reportContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
+                a.href = url;
                 a.download = `Report_${new Date().toISOString().slice(0,10)}.html`;
+                document.body.appendChild(a);
                 a.click();
+                document.body.removeChild(a);
             };
 
             return (
@@ -310,50 +373,61 @@
                     <header className="sticky top-0 bg-white/95 backdrop-blur border-b z-30 px-8 h-20 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <div className="bg-[#111] text-white w-10 h-10 rounded-lg flex items-center justify-center font-bold">T</div>
-                            <div>
-                                <h1 className="font-bold text-lg leading-tight">Instructor Dashboard</h1>
-                                <div className="text-xs text-gray-500 flex items-center gap-2">
-                                    <span className="font-bold text-[#CC0000] bg-red-50 px-1.5 rounded">CODE: {roomCode}</span>
-                                    <span className="flex items-center gap-1"><Icon name="Users" className="w-3 h-3"/> {peerCount} Connected</span>
-                                </div>
-                            </div>
+                            <h1 className="font-bold text-lg hidden md:block">Instructor Dashboard</h1>
                         </div>
+
+                        {/* ROOM CODE DISPLAY */}
+                        <div className="flex items-center gap-4 bg-gray-100 px-4 py-2 rounded-lg border border-gray-200">
+                            <span className="text-xs font-bold text-gray-500 uppercase">Room Code:</span>
+                            <span className="text-xl font-mono font-bold text-[#CC0000]">{roomCode}</span>
+                            <span className="text-xs text-gray-400 border-l pl-3 ml-2">{peerCount} Devices Connected</span>
+                        </div>
+
                         <div className="flex items-center gap-4">
-                             <div className="flex flex-col items-end mr-4">
-                                <span className="text-[10px] font-bold uppercase text-gray-400">Progress</span>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-32 h-2 bg-gray-100 rounded-full overflow-hidden"><div className="h-full bg-[#CC0000] transition-all duration-1000" style={{width: `${progress}%`}}></div></div>
-                                    <span className="text-sm font-bold text-[#CC0000]">{progress}%</span>
-                                </div>
-                            </div>
-                            <button onClick={downloadReport} className="px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 bg-[#111] text-white hover:bg-[#333]"><Icon name="Download" className="w-4 h-4"/> Export</button>
-                            <button onClick={onToggleReflection} className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 ${gameState.reflectionPhase ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}><Icon name={gameState.reflectionPhase ? 'Unlock' : 'Lock'} className="w-4 h-4"/> {gameState.reflectionPhase ? 'Close Reflection' : 'Unlock Reflection'}</button>
-                            <button onClick={onReset} className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-red-600"><Icon name="RefreshCw" className="w-5 h-5"/></button>
+                            <button onClick={downloadReport} className="hidden md:flex px-4 py-2 rounded-lg font-bold text-sm items-center gap-2 bg-[#111] text-white hover:bg-[#333]">
+                                <Icon name="Download" className="w-4 h-4"/> Export
+                            </button>
+
+                            <button onClick={onToggleReflection} className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 ${gameState.reflectionPhase ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
+                                <Icon name={gameState.reflectionPhase ? 'Unlock' : 'Lock'} className="w-4 h-4"/> {gameState.reflectionPhase ? 'Reflect' : 'Unlock'}
+                            </button>
+                            
+                            <button onClick={onReset} className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 hover:text-red-600" title="Reset Game"><Icon name="RefreshCw" className="w-5 h-5"/></button>
+                            
+                            <button onClick={onExit} className="p-2 hover:bg-red-50 rounded-lg text-red-500 hover:text-red-700 border border-transparent hover:border-red-100" title="Exit Session"><Icon name="LogOut" className="w-5 h-5"/></button>
                         </div>
                     </header>
                     <main className="p-8 grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-[1600px] mx-auto">
                         {gameState.projects.map((p, i) => (
                             <div key={p.id} className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm hover:shadow-md transition-all">
                                 <div className="flex justify-between items-center mb-6">
-                                    <div className="flex items-center gap-3"><span className="w-8 h-8 rounded bg-[#111] text-white flex items-center justify-center font-bold text-sm">{i+1}</span><span className="font-bold text-sm uppercase tracking-wide">{p.initiator.replace('_',' ')} CHAIN</span></div>
+                                    <div className="flex items-center gap-3">
+                                        <span className="w-8 h-8 rounded bg-[#111] text-white flex items-center justify-center font-bold text-sm">{i+1}</span>
+                                        <span className="font-bold text-sm uppercase tracking-wide">{p.initiator.replace('_',' ')} CHAIN</span>
+                                    </div>
                                     <span className={`text-xs font-bold px-2 py-1 rounded ${p.isComplete ? 'bg-green-50 text-green-700' : 'bg-gray-100 text-gray-500'}`}>{p.isComplete ? 'COMPLETE' : `STEP ${p.turns.length}/5`}</span>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <div className="flex-1 text-center">
                                         <div className="text-[10px] font-bold uppercase text-gray-400 mb-2">Start</div>
-                                        {p.turns[0] ? <img src={p.turns[0].generatedImage} onClick={() => setZoom({src: p.turns[0].generatedImage, cap: p.turns[0].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in"/> : <div className="w-full aspect-square rounded-lg border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
+                                        {p.turns[0] ? (
+                                            <img src={p.turns[0].generatedImage} onClick={() => setZoom({src: p.turns[0].generatedImage, cap: p.turns[0].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in hover:brightness-90 transition-all"/>
+                                        ) : <div className="w-full aspect-square rounded-lg border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
                                     </div>
                                     <Icon name="ArrowRight" className="text-gray-300"/>
                                     <div className="flex-1 text-center">
                                         <div className="text-[10px] font-bold uppercase text-gray-400 mb-2">Current</div>
-                                        {p.turns.length > 0 ? <img src={p.turns[p.turns.length-1].generatedImage} onClick={() => setZoom({src: p.turns[p.turns.length-1].generatedImage, cap: p.turns[p.turns.length-1].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in"/> : <div className="w-full aspect-square rounded-lg border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
+                                        {p.turns.length > 0 ? (
+                                            <img src={p.turns[p.turns.length-1].generatedImage} onClick={() => setZoom({src: p.turns[p.turns.length-1].generatedImage, cap: p.turns[p.turns.length-1].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in hover:brightness-90 transition-all"/>
+                                        ) : <div className="w-full aspect-square rounded-lg border-2 border-dashed flex items-center justify-center text-gray-300">Wait</div>}
                                     </div>
                                 </div>
                                 <button onClick={() => setExpand(p)} className="mt-6 w-full py-3 border border-gray-200 hover:border-[#111] rounded-xl font-bold text-sm uppercase transition-all">Inspect Journey</button>
                             </div>
                         ))}
                     </main>
-                    {/* Expand Modal & Zoom Modal logic same as previous ... */}
+
+                    {/* Modals */}
                     {expand && (
                         <div className="fixed inset-0 z-50 bg-white/95 backdrop-blur overflow-y-auto">
                             <div className="sticky top-0 bg-white border-b p-6 flex justify-between items-center shadow-sm">
@@ -361,13 +435,13 @@
                                 <button onClick={() => setExpand(null)}><Icon name="X" className="w-6 h-6"/></button>
                             </div>
                             <div className="p-10 max-w-[1600px] mx-auto">
-                                <div className="grid grid-cols-5 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                                     {Array(5).fill(null).map((_, i) => (
                                         <div key={i} className={!expand.turns[i] ? 'opacity-30' : ''}>
                                             <div className="text-[10px] font-bold uppercase text-gray-400 mb-2">Step {i+1}</div>
                                             {expand.turns[i] ? (
                                                 <div className="space-y-3">
-                                                    <img src={expand.turns[i].generatedImage} onClick={() => setZoom({src: expand.turns[i].generatedImage, cap: expand.turns[i].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in"/>
+                                                    <img src={expand.turns[i].generatedImage} onClick={() => setZoom({src: expand.turns[i].generatedImage, cap: expand.turns[i].prompt})} className="w-full aspect-square object-cover rounded-lg border cursor-zoom-in hover:scale-105 transition-transform"/>
                                                     <div className="text-xs bg-gray-50 p-2 rounded border h-20 overflow-y-auto">{expand.turns[i].prompt}</div>
                                                 </div>
                                             ) : <div className="w-full aspect-square border-2 border-dashed rounded-lg flex items-center justify-center text-gray-300"><Icon name="Clock" className="w-6 h-6"/></div>}
@@ -381,6 +455,7 @@
                             </div>
                         </div>
                     )}
+
                     {zoom && (
                         <div className="fixed inset-0 z-[60] bg-black/90 flex flex-col items-center justify-center p-8" onClick={() => setZoom(null)}>
                             <img src={zoom.src} className="max-h-[80vh] w-auto rounded shadow-2xl mb-4"/>
@@ -388,170 +463,180 @@
                         </div>
                     )}
                 </div>
-            );
+            )
         };
 
         const App = () => {
             // STATE
-            const [role, setRole] = useState(null); // 'TEACHER' | 'GROUP_X'
-            const [isHost, setIsHost] = useState(false);
-            const [roomCode, setRoomCode] = useState('');
-            const [inputCode, setInputCode] = useState('');
-            const [connectionStatus, setConnectionStatus] = useState('DISCONNECTED'); // DISCONNECTED, CONNECTING, CONNECTED
-            const [peerCount, setPeerCount] = useState(0);
-            
             const [gameState, setGameState] = useState({ 
                 projects: GROUP_ORDER.map((r,i) => ({ id: `p${i}`, initiator: r, turns: [], isComplete: false, reflection: null })),
                 reflectionPhase: false 
             });
-
-            // AUTH
+            const [role, setRole] = useState(null);
             const [pass, setPass] = useState('');
             const [showPass, setShowPass] = useState(false);
-            const [showJoin, setShowJoin] = useState(false);
-            const [selectedGroup, setSelectedGroup] = useState(null);
+            
+            // NETWORKING STATE
+            const [peer, setPeer] = useState(null);
+            const [hostConn, setHostConn] = useState(null);
+            const [clientConns, setClientConns] = useState([]);
+            const [roomCodeInput, setRoomCodeInput] = useState('');
+            const [myRoomCode, setMyRoomCode] = useState(null);
+            const [isConnected, setIsConnected] = useState(false);
 
-            // PEERJS REF
-            const peerRef = useRef(null);
-            const connRef = useRef(null); // For students
-            const connectionsRef = useRef([]); // For teacher
-
-            // 1. TEACHER: START HOSTING
-            const startHosting = () => {
-                const code = Math.random().toString(36).substring(2, 6).toUpperCase();
-                setRoomCode(code);
-                setIsHost(true);
-                setRole('TEACHER');
-
-                const peer = new Peer(`cm501-${code}-HOST`);
+            // --- TEACHER (HOST) LOGIC ---
+            const initializeHost = () => {
+                // Generate short readable ID: cm501-xxxx
+                const shortId = 'cm501-' + Math.floor(1000 + Math.random() * 9000);
                 
-                peer.on('open', (id) => {
-                    setConnectionStatus('CONNECTED');
-                    console.log('Host opened:', id);
-                });
-
-                peer.on('connection', (conn) => {
-                    connectionsRef.current.push(conn);
-                    setPeerCount(prev => prev + 1);
-                    
-                    conn.on('open', () => {
-                        // Send current state to new student immediately
-                        conn.send({ type: 'STATE_SYNC', state: gameState });
-                    });
-
-                    conn.on('data', (data) => {
-                        if (data.type === 'TURN') {
-                            handleTurn(data.projectId, data.prompt, data.image, data.groupId);
-                        } else if (data.type === 'REFLECTION') {
-                            handleReflection(data.projectId, data.reflection);
-                        }
-                    });
-
-                    conn.on('close', () => {
-                        connectionsRef.current = connectionsRef.current.filter(c => c !== conn);
-                        setPeerCount(prev => prev - 1);
-                    });
-                });
-
-                peerRef.current = peer;
-            };
-
-            // 2. STUDENT: JOIN SESSION
-            const joinSession = () => {
-                if (!inputCode) return;
-                const peer = new Peer(); // Random ID for student
+                const newPeer = new Peer(shortId, { debug: 1 });
                 
-                peer.on('open', (id) => {
-                    setConnectionStatus('CONNECTING');
-                    const conn = peer.connect(`cm501-${inputCode.toUpperCase()}-HOST`);
-                    
-                    conn.on('open', () => {
-                        setConnectionStatus('CONNECTED');
-                        setRole(selectedGroup);
-                        setRoomCode(inputCode.toUpperCase());
-                        setShowJoin(false);
-                    });
-
-                    conn.on('data', (data) => {
-                        if (data.type === 'STATE_SYNC') {
-                            setGameState(data.state);
-                        }
-                    });
-
-                    conn.on('close', () => setConnectionStatus('DISCONNECTED'));
-                    connRef.current = conn;
+                newPeer.on('open', (id) => {
+                    console.log('Host ID:', id);
+                    setMyRoomCode(id);
+                    setIsConnected(true);
                 });
-                
-                peerRef.current = peer;
-            };
 
-            // 3. LOGIC: STATE UPDATES
-            const broadcastState = (newState) => {
-                connectionsRef.current.forEach(conn => {
-                    if (conn.open) conn.send({ type: 'STATE_SYNC', state: newState });
-                });
-            };
-
-            const handleTurn = (pid, prompt, img, groupId) => {
-                if (isHost) {
-                    setGameState(prev => {
-                        const projects = prev.projects.map(p => {
-                            if(p.id !== pid) return p;
-                            const turns = [...p.turns, { groupId, prompt, generatedImage: img }];
-                            return { ...p, turns, isComplete: turns.length >= 5 };
-                        });
-                        const newState = { ...prev, projects };
-                        broadcastState(newState);
-                        return newState;
-                    });
-                } else {
-                    if (connRef.current && connRef.current.open) {
-                        connRef.current.send({ type: 'TURN', projectId: pid, prompt, image: img, groupId });
+                newPeer.on('error', (err) => {
+                    console.warn('Peer error:', err);
+                    if (err.type === 'unavailable-id') {
+                        // Retry with new ID if collision
+                        console.log('ID taken, retrying...');
+                        setTimeout(initializeHost, 500);
                     } else {
-                        alert("Lost connection to Instructor. Please reconnect.");
+                        setIsConnected(false);
                     }
+                });
+
+                newPeer.on('connection', (conn) => {
+                    console.log('Client connected:', conn.peer);
+                    setClientConns(prev => [...prev, conn]);
+                    
+                    // Send current state to new client immediately
+                    conn.on('open', () => {
+                         conn.send({ type: 'SYNC_STATE', payload: gameState });
+                    });
+
+                    conn.on('data', (data) => {
+                        handleNetworkData(data);
+                    });
+                });
+                
+                setPeer(newPeer);
+            };
+            
+            // Cleanup Peer on unmount/exit
+            const cleanupPeer = () => {
+                if (peer) {
+                    peer.destroy();
+                    setPeer(null);
+                }
+                setClientConns([]);
+                setMyRoomCode(null);
+                setIsConnected(false);
+                setHostConn(null);
+            };
+
+            const handleExit = () => {
+                if (window.confirm("Are you sure you want to exit the session? This will disconnect all students.")) {
+                    cleanupPeer();
+                    setRole(null);
                 }
             };
 
-            const handleReflection = (pid, text) => {
-                if (isHost) {
+            // --- STUDENT (CLIENT) LOGIC ---
+            const joinGame = (code) => {
+                if (!code.startsWith('cm501-')) {
+                   // Allow user to just type numbers, auto-prefix
+                   code = 'cm501-' + code.replace('cm501-', '');
+                }
+                
+                const newPeer = new Peer(null, { debug: 1 });
+                newPeer.on('open', (id) => {
+                    const conn = newPeer.connect(code);
+                    conn.on('open', () => {
+                        console.log("Connected to Host");
+                        setIsConnected(true);
+                        setHostConn(conn);
+                    });
+                    conn.on('data', (data) => {
+                        handleNetworkData(data);
+                    });
+                    conn.on('close', () => setIsConnected(false));
+                    conn.on('error', () => setIsConnected(false));
+                });
+                setPeer(newPeer);
+            };
+
+            // --- SHARED DATA HANDLER ---
+            const handleNetworkData = (data) => {
+                if (data.type === 'SYNC_STATE') {
+                    // Client receiving master state
+                    setGameState(data.payload);
+                } else if (data.type === 'TURN_UPDATE') {
+                    // Host receiving turn data from client
+                    updateStateAndBroadcast(data.payload);
+                } else if (data.type === 'REFLECTION_UPDATE') {
+                    // Host receiving reflection
                      setGameState(prev => {
-                        const projects = prev.projects.map(p => p.id === pid ? {...p, reflection: text} : p);
-                        const newState = { ...prev, projects };
-                        broadcastState(newState);
+                        const newState = {
+                            ...prev,
+                            projects: prev.projects.map(proj => proj.id === data.payload.projectId ? {...proj, reflection: data.payload.text} : proj)
+                        };
+                        broadcastState(newState); // Send back to everyone
                         return newState;
-                     });
-                } else {
-                     if (connRef.current && connRef.current.open) {
-                        connRef.current.send({ type: 'REFLECTION', projectId: pid, reflection: text });
-                     }
+                    });
                 }
             };
 
+            const updateStateAndBroadcast = ({ projectId, role, prompt, img }) => {
+                setGameState(prev => {
+                    const projects = prev.projects.map(p => {
+                        if(p.id !== projectId) return p;
+                        const turns = [...p.turns, { groupId: role, prompt, generatedImage: img }];
+                        return { ...p, turns, isComplete: turns.length >= 5 };
+                    });
+                    const newState = { ...prev, projects };
+                    broadcastState(newState); // Sync everyone
+                    return newState;
+                });
+            };
+
+            const broadcastState = (state) => {
+                clientConns.forEach(conn => {
+                    if(conn.open) conn.send({ type: 'SYNC_STATE', payload: state });
+                });
+            };
+
+            // Teacher toggle reflection
             const toggleReflection = () => {
-                if (!isHost) return;
                 setGameState(prev => {
                     const newState = { ...prev, reflectionPhase: !prev.reflectionPhase };
                     broadcastState(newState);
                     return newState;
                 });
             };
-            
-            const resetGame = () => {
-                if (!isHost) return;
-                const newState = { 
-                    projects: GROUP_ORDER.map((r,i) => ({ id: `p${i}`, initiator: r, turns: [], isComplete: false, reflection: null })),
-                    reflectionPhase: false 
-                };
-                setGameState(newState);
-                broadcastState(newState);
+
+            // --- LOCAL HANDLERS ---
+            const handleTurnSubmit = (pid, prompt, img) => {
+                if (hostConn) {
+                    // Send to Host
+                    hostConn.send({ type: 'TURN_UPDATE', payload: { projectId: pid, role, prompt, img } });
+                }
             };
 
-            // HELPER: Get Task for Student
+            const handleReflectionSubmit = (pid, text) => {
+                if (hostConn) {
+                    hostConn.send({ type: 'REFLECTION_UPDATE', payload: { projectId: pid, text } });
+                }
+            };
+
             const getTask = () => {
                 if(!role || role === 'TEACHER') return null;
                 if(gameState.reflectionPhase) {
                     const p = gameState.projects.find(proj => proj.initiator === role);
+                    // Only show reflection screen if they participated (turns > 0)
+                    if(p.turns.length === 0) return { type: 'DONE' }; 
                     return (!p.reflection) ? { type: 'REFLECT', project: p } : { type: 'DONE' };
                 }
                 const gIdx = GROUP_ORDER.indexOf(role);
@@ -568,107 +653,115 @@
 
             const task = getTask();
 
-            // --- VIEWS ---
-
-            // LANDING
+            // 1. LANDING SCREEN
             if(!role) return (
                 <div className="min-h-screen bg-white p-8 font-sans">
                     <div className="max-w-5xl mx-auto py-12 text-center">
                         <h1 className="text-5xl font-bold mb-6">AI Visual Telephone</h1>
-                        <p className="text-xl text-gray-500 mb-12 max-w-2xl mx-auto">Real-time collaborative generative AI design game.</p>
+                        <p className="text-xl text-gray-500 mb-12 max-w-2xl mx-auto">Collaborative generative AI design game.</p>
+                        
                         <div className="grid md:grid-cols-2 gap-12 text-left">
                             <div>
                                 <h2 className="text-2xl font-bold mb-6 flex gap-2 items-center"><Icon name="Users" className="text-[#CC0000]"/> Student Groups</h2>
+                                
+                                <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                    <label className="text-xs font-bold text-gray-500 uppercase block mb-2">1. Enter Room Code from Instructor</label>
+                                    <input 
+                                        type="text" 
+                                        placeholder="e.g. 4821 or cm501-4821" 
+                                        className="w-full p-3 border rounded-lg text-lg font-mono tracking-widest uppercase"
+                                        value={roomCodeInput}
+                                        onChange={(e) => setRoomCodeInput(e.target.value)}
+                                    />
+                                </div>
+
                                 <div className="grid grid-cols-3 gap-4">
                                     {GROUP_ORDER.map((g,i) => (
-                                        <button key={g} onClick={() => { setSelectedGroup(g); setShowJoin(true); }} className="hover-card bg-gray-50 p-6 rounded-xl border hover:border-gray-300 flex flex-col items-center">
-                                            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center font-bold shadow-sm mb-2 text-lg">{i+1}</div>
-                                            <span className="text-sm font-bold">Group {i+1}</span>
+                                        <button 
+                                            key={g} 
+                                            disabled={!roomCodeInput}
+                                            onClick={() => { joinGame(roomCodeInput); setRole(g); }} 
+                                            className="hover-card bg-white p-4 rounded-xl border-2 border-gray-100 hover:border-[#111] flex flex-col items-center disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                        >
+                                            <div className="w-10 h-10 bg-[#111] text-white rounded-full flex items-center justify-center font-bold mb-2">{i+1}</div>
+                                            <span className="text-xs font-bold">Group {i+1}</span>
                                         </button>
                                     ))}
                                 </div>
+                                {!roomCodeInput && <p className="text-xs text-red-500 mt-2">* Enter Room Code first to join</p>}
                             </div>
+
                             <div className="bg-gray-50 p-8 rounded-2xl border flex flex-col justify-center">
                                 <h2 className="text-2xl font-bold mb-4 flex gap-2 items-center"><Icon name="MonitorPlay" className="text-[#CC0000]"/> Instructor</h2>
-                                <p className="text-gray-600 mb-6">Host a session and monitor real-time progress.</p>
+                                <p className="text-gray-600 mb-6">Start a new session and generate a Room Code.</p>
                                 <button onClick={() => setShowPass(true)} className="btn-primary py-3 px-6 rounded-xl font-bold w-fit">Open Dashboard</button>
                             </div>
                         </div>
 
-                        {/* Student Join Modal */}
-                        {showJoin && (
-                            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                                <div className="bg-white p-8 rounded-2xl w-full max-w-sm">
-                                    <h3 className="font-bold text-xl mb-2">Join Session</h3>
-                                    <p className="text-gray-500 mb-4 text-sm">Ask your instructor for the 4-letter Room Code.</p>
-                                    <input type="text" autoFocus className="w-full p-3 border rounded-lg mb-4 text-lg uppercase tracking-widest text-center" placeholder="CODE" value={inputCode} onChange={e => setInputCode(e.target.value)} maxLength={4}/>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => setShowJoin(false)} className="flex-1 py-3 text-gray-500 font-bold">Cancel</button>
-                                        <button onClick={joinSession} className="flex-1 py-3 bg-[#111] text-white rounded-lg font-bold">Connect</button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Teacher Auth Modal */}
                         {showPass && (
                             <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
                                 <div className="bg-white p-8 rounded-2xl w-full max-w-sm">
                                     <h3 className="font-bold text-xl mb-4">Instructor Code</h3>
-                                    <input type="password" autoFocus className="w-full p-3 border rounded-lg mb-4 text-lg" placeholder="Enter Passcode" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => { if(e.key === 'Enter' && pass === '2025') { startHosting(); setShowPass(false); }}}/>
+                                    <input type="password" autoFocus className="w-full p-3 border rounded-lg mb-4 text-lg" placeholder="Enter Passcode" value={pass} onChange={e => setPass(e.target.value)} onKeyDown={e => { if(e.key === 'Enter' && pass === '2025') { initializeHost(); setRole('TEACHER'); setShowPass(false); }}}/>
                                     <div className="flex gap-2">
                                         <button onClick={() => setShowPass(false)} className="flex-1 py-3 text-gray-500 font-bold">Cancel</button>
-                                        <button onClick={() => { if(pass === '2025') { startHosting(); setShowPass(false); }}} className="flex-1 py-3 bg-[#111] text-white rounded-lg font-bold">Enter</button>
+                                        <button onClick={() => { if(pass === '2025') { initializeHost(); setRole('TEACHER'); setShowPass(false); }}} className="flex-1 py-3 bg-[#111] text-white rounded-lg font-bold">Enter</button>
                                     </div>
                                 </div>
                             </div>
                         )}
-                        <div className="mt-20 pt-8 border-t text-gray-400 text-sm">CM501 Fall 2025</div>
+                         <div className="mt-20 pt-8 border-t text-gray-400 text-sm">CM501 Fall 2025 • v2.0 Networked</div>
                     </div>
                 </div>
             );
 
-            // TEACHER VIEW
+            // 2. TEACHER VIEW
             if(role === 'TEACHER') return (
                 <TeacherDashboard 
                     gameState={gameState} 
-                    onReset={resetGame} 
-                    onToggleReflection={toggleReflection} 
-                    roomCode={roomCode}
-                    peerCount={peerCount}
+                    roomCode={myRoomCode || 'Generating...'} 
+                    peerCount={clientConns.length}
+                    onReset={() => { setGameState({ projects: GROUP_ORDER.map((r,i) => ({ id: `p${i}`, initiator: r, turns: [], isComplete: false, reflection: null })), reflectionPhase: false }); broadcastState(INITIAL_GAME_STATE); }} 
+                    onToggleReflection={toggleReflection}
+                    onExit={handleExit}
                 />
             );
 
-            // STUDENT WAIT VIEW
+            // 3. STUDENT VIEWS
             if(task.type === 'WAIT' || task.type === 'DONE') return (
                 <div className="min-h-screen flex flex-col items-center justify-center bg-white p-8 text-center relative">
-                    <div className="absolute top-4 right-4 text-xs font-bold text-gray-400 flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${connectionStatus === 'CONNECTED' ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        {connectionStatus} TO HOST
-                    </div>
+                    <div className="absolute top-4 right-4 text-xs font-mono text-gray-400">{isConnected ? '🟢 Connected' : '🔴 Offline'}</div>
                     <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${task.type === 'WAIT' ? 'spinner border-4 border-gray-100 border-t-red-600' : 'bg-green-100 text-green-600'}`}>
                         {task.type === 'DONE' && <Icon name="CheckCircle2" className="w-10 h-10"/>}
                     </div>
                     <h2 className="text-3xl font-bold mb-2">{task.type === 'WAIT' ? 'Pending...' : 'All Done!'}</h2>
-                    <p className="text-gray-500 max-w-md mx-auto">{task.type === 'WAIT' ? `Waiting for Round ${task.round-1} to finish. Ensure the Teacher Dashboard is open.` : 'Wait for the instructor to open the reflection phase.'}</p>
+                    <p className="text-gray-500">{task.type === 'WAIT' ? `Waiting for Round ${task.round-1} to finish. Your screen will update automatically.` : 'Wait for the class discussion.'}</p>
                 </div>
             );
 
-            // REFLECTION VIEW
             if(task.type === 'REFLECT') return (
                 <div className="min-h-screen bg-white p-8">
                      <div className="max-w-6xl mx-auto py-12">
-                        <h1 className="text-3xl font-bold mb-2">Final Reflection</h1>
-                        <p className="mb-8 text-gray-600">Review the evolution of your original concept and discuss the outcome.</p>
-                        
+                        <div className="flex justify-between items-center mb-6">
+                            <h1 className="text-3xl font-bold">Final Reflection</h1>
+                            <div className="text-xs font-mono text-gray-400">{isConnected ? '🟢 Connected' : '🔴 Offline'}</div>
+                        </div>
                         <div className="mb-12">
                             <h3 className="text-lg font-bold border-b pb-4 mb-6">Project Evolution History</h3>
                             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                                 {task.project.turns.map((turn, i) => (
                                     <div key={i} className="flex flex-col gap-3 group">
-                                         <div className="flex items-center justify-between"><span className="text-xs font-bold uppercase text-gray-400">Step {i+1}</span><span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded font-bold text-gray-500">{turn.groupId.split('_')[1]}</span></div>
-                                         <div className="bg-gray-50 border border-gray-200 rounded-xl overflow-hidden aspect-square shadow-sm"><img src={turn.generatedImage} className="w-full h-full object-cover"/></div>
-                                         <div className="text-[11px] bg-gray-50 p-3 rounded-lg border border-gray-100 h-32 overflow-y-auto leading-relaxed text-gray-600 shadow-inner"><span className="block font-bold text-gray-900 mb-1">Prompt:</span>{turn.prompt}</div>
+                                         <div className="flex items-center justify-between">
+                                             <span className="text-xs font-bold uppercase text-gray-400">Step {i+1}</span>
+                                             <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded font-bold text-gray-500">{turn.groupId.split('_')[1] || 'Init'}</span>
+                                         </div>
+                                         <div className="bg-gray-50 border border-gray-200 rounded-xl overflow-hidden aspect-square shadow-sm">
+                                            <img src={turn.generatedImage} className="w-full h-full object-cover" />
+                                         </div>
+                                         <div className="text-[11px] bg-gray-50 p-3 rounded-lg border border-gray-100 h-32 overflow-y-auto leading-relaxed text-gray-600 shadow-inner">
+                                            <span className="block font-bold text-gray-900 mb-1">Prompt:</span>
+                                            {turn.prompt}
+                                         </div>
                                     </div>
                                 ))}
                             </div>
@@ -682,22 +775,21 @@
                                 <li>How did each group’s prompt influence style, lighting, or composition?</li>
                                 <li>What can this teach about translating visuals back into language for design?</li>
                             </ul>
-                            <textarea id="reflect-txt" className="w-full p-6 border border-gray-200 rounded-xl h-48 mb-6 text-base focus:ring-2 focus:ring-[#111] focus:border-transparent outline-none bg-white shadow-inner" placeholder="Type reflection notes..."></textarea>
-                            <button onClick={() => { const val = document.getElementById('reflect-txt').value; handleReflection(task.project.id, val); setRole(null); }} className="btn-primary w-full md:w-auto px-12 py-4 rounded-xl font-bold shadow-lg">Submit & Finish</button>
+                            <textarea id="reflect-txt" className="w-full p-6 border border-gray-200 rounded-xl h-48 mb-6 text-base focus:ring-2 focus:ring-[#111] focus:border-transparent outline-none bg-white shadow-inner" placeholder="Type your group's reflection notes here..."></textarea>
+                            <button onClick={() => { const val = document.getElementById('reflect-txt').value; handleReflectionSubmit(task.project.id, val); setRole(null); }} className="btn-primary w-full md:w-auto px-12 py-4 rounded-xl font-bold shadow-lg">Submit Reflection</button>
                         </div>
                      </div>
                 </div>
             );
 
-            // ACTIVE STUDENT VIEW
             return (
                 <StudentView 
                     currentGroup={role} 
                     roundNumber={task.round} 
                     projectId={task.project.id} 
                     previousTurn={task.round > 1 ? task.project.turns[task.round-2] : null}
-                    onTurnComplete={(txt, img) => handleTurn(task.project.id, txt, img, role)}
-                    connectionStatus={connectionStatus}
+                    onTurnComplete={(txt, img) => handleTurnSubmit(task.project.id, txt, img)}
+                    isConnected={isConnected}
                 />
             );
         };
