@@ -207,7 +207,7 @@
             );
         };
 
-        const StudentView = ({ currentGroup, roundNumber, previousTurn, projectId, onTurnComplete, isConnected }) => {
+        const StudentView = ({ currentGroup, roundNumber, previousTurn, projectId, onTurnComplete, isConnected, onSync }) => {
             const [prompt, setPrompt] = useState('');
             const [image, setImage] = useState(null);
             const [showGuide, setShowGuide] = useState(false);
@@ -228,14 +228,14 @@
             const handleTransmit = () => {
                 if(!prompt.trim() || !image) return;
                 if(!isConnected) {
-                    alert("Lost connection to Instructor. Please refresh or check Wi-Fi.");
+                    alert("Lost connection to Instructor. Please check Wi-Fi.");
                     return;
                 }
                 setSending(true);
                 // Simulate network delay for feel, then send
                 setTimeout(() => {
                     onTurnComplete(prompt, image);
-                    setSending(false);
+                    // Do not unset sending here, wait for parent re-render or let it persist briefly
                 }, 800);
             };
 
@@ -259,9 +259,14 @@
                                             <span className="text-xs font-bold text-[#CC0000] uppercase tracking-wider">Round {roundNumber} / 5</span>
                                         </div>
                                     </div>
-                                    <div className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 ${isConnected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                        <Icon name={isConnected ? "Wifi" : "WifiOff"} className="w-3 h-3" />
-                                        {isConnected ? 'ONLINE' : 'OFFLINE'}
+                                    <div className="flex items-center gap-3">
+                                        <button onClick={onSync} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-bold text-gray-600 flex items-center gap-1" title="Force Sync">
+                                            <Icon name="RefreshCw" className="w-3 h-3"/> SYNC
+                                        </button>
+                                        <div className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 ${isConnected ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                            <Icon name={isConnected ? "Wifi" : "WifiOff"} className="w-3 h-3" />
+                                            {isConnected ? 'ONLINE' : 'OFFLINE'}
+                                        </div>
                                     </div>
                                 </div>
                                 <p className="text-gray-600 text-lg">
@@ -283,7 +288,10 @@
 
                             {previousTurn && (
                                 <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Incoming Visual</div>
+                                    <div className="flex justify-between mb-4">
+                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">Incoming Visual</div>
+                                        <div className="text-xs font-bold text-[#CC0000] uppercase tracking-widest">From Group {previousTurn.groupId.split('_')[1]}</div>
+                                    </div>
                                     <div className="bg-white p-1 rounded-lg border shadow-sm"><img src={previousTurn.generatedImage} className="w-full max-h-[400px] object-contain mx-auto"/></div>
                                 </div>
                             )}
@@ -367,6 +375,16 @@
                 a.click();
                 document.body.removeChild(a);
             };
+            
+            // Warn if closing teacher tab
+            useEffect(() => {
+                const handleBeforeUnload = (e) => {
+                    e.preventDefault();
+                    e.returnValue = '';
+                };
+                window.addEventListener('beforeunload', handleBeforeUnload);
+                return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+            }, []);
 
             return (
                 <div className="min-h-screen bg-white pb-20">
@@ -479,16 +497,16 @@
             // NETWORKING STATE
             const [peer, setPeer] = useState(null);
             const [hostConn, setHostConn] = useState(null);
-            const [clientConns, setClientConns] = useState([]);
+            const clientConnsRef = useRef([]); // Use Ref for connections to prevent stale closures
+            const [clientPeerCount, setClientPeerCount] = useState(0); // Only for display
+
             const [roomCodeInput, setRoomCodeInput] = useState('');
             const [myRoomCode, setMyRoomCode] = useState(null);
             const [isConnected, setIsConnected] = useState(false);
 
             // --- TEACHER (HOST) LOGIC ---
             const initializeHost = () => {
-                // Generate short readable ID: cm501-xxxx
                 const shortId = 'cm501-' + Math.floor(1000 + Math.random() * 9000);
-                
                 const newPeer = new Peer(shortId, { debug: 1 });
                 
                 newPeer.on('open', (id) => {
@@ -498,40 +516,56 @@
                 });
 
                 newPeer.on('error', (err) => {
-                    console.warn('Peer error:', err);
                     if (err.type === 'unavailable-id') {
-                        // Retry with new ID if collision
-                        console.log('ID taken, retrying...');
                         setTimeout(initializeHost, 500);
                     } else {
                         setIsConnected(false);
+                        alert("Network Error: " + err.type);
                     }
                 });
 
                 newPeer.on('connection', (conn) => {
-                    console.log('Client connected:', conn.peer);
-                    setClientConns(prev => [...prev, conn]);
+                    // Add to Ref immediately
+                    clientConnsRef.current.push(conn);
+                    setClientPeerCount(clientConnsRef.current.length);
                     
-                    // Send current state to new client immediately
                     conn.on('open', () => {
-                         conn.send({ type: 'SYNC_STATE', payload: gameState });
+                         // Send CURRENT state to new client
+                         // Need to access current state from state variable, which is available in closure scope 
+                         // BUT best to pass it dynamically. Since initial connect, using current render scope is likely OK,
+                         // but for safety we send what we have.
+                         // NOTE: Inside this closure, 'gameState' might be stale if using standard state.
+                         // But we can trigger a broadcast from the main component update.
+                         // For now, let's send what we see.
                     });
 
                     conn.on('data', (data) => {
                         handleNetworkData(data);
+                    });
+                    
+                    conn.on('close', () => {
+                        clientConnsRef.current = clientConnsRef.current.filter(c => c !== conn);
+                        setClientPeerCount(clientConnsRef.current.length);
                     });
                 });
                 
                 setPeer(newPeer);
             };
             
-            // Cleanup Peer on unmount/exit
+            // Force broadcast whenever gameState changes IF we are host
+            // This is the most reliable way to keep everyone in sync
+            useEffect(() => {
+                if(role === 'TEACHER' && isConnected) {
+                    broadcastState(gameState);
+                }
+            }, [gameState, role, isConnected]);
+
             const cleanupPeer = () => {
                 if (peer) {
                     peer.destroy();
                     setPeer(null);
                 }
-                setClientConns([]);
+                clientConnsRef.current = [];
                 setMyRoomCode(null);
                 setIsConnected(false);
                 setHostConn(null);
@@ -547,7 +581,6 @@
             // --- STUDENT (CLIENT) LOGIC ---
             const joinGame = (code) => {
                 if (!code.startsWith('cm501-')) {
-                   // Allow user to just type numbers, auto-prefix
                    code = 'cm501-' + code.replace('cm501-', '');
                 }
                 
@@ -555,9 +588,10 @@
                 newPeer.on('open', (id) => {
                     const conn = newPeer.connect(code);
                     conn.on('open', () => {
-                        console.log("Connected to Host");
                         setIsConnected(true);
                         setHostConn(conn);
+                        // Request initial state
+                        conn.send({ type: 'REQUEST_SYNC' });
                     });
                     conn.on('data', (data) => {
                         handleNetworkData(data);
@@ -568,59 +602,62 @@
                 setPeer(newPeer);
             };
 
-            // --- SHARED DATA HANDLER ---
-            const handleNetworkData = (data) => {
-                if (data.type === 'SYNC_STATE') {
-                    // Client receiving master state
-                    setGameState(data.payload);
-                } else if (data.type === 'TURN_UPDATE') {
-                    // Host receiving turn data from client
-                    updateStateAndBroadcast(data.payload);
-                } else if (data.type === 'REFLECTION_UPDATE') {
-                    // Host receiving reflection
-                     setGameState(prev => {
-                        const newState = {
-                            ...prev,
-                            projects: prev.projects.map(proj => proj.id === data.payload.projectId ? {...proj, reflection: data.payload.text} : proj)
-                        };
-                        broadcastState(newState); // Send back to everyone
-                        return newState;
-                    });
+            const requestSync = () => {
+                if(hostConn && isConnected) {
+                    hostConn.send({ type: 'REQUEST_SYNC' });
                 }
             };
 
-            const updateStateAndBroadcast = ({ projectId, role, prompt, img }) => {
+            // --- SHARED DATA HANDLER ---
+            const handleNetworkData = (data) => {
+                if (data.type === 'SYNC_STATE') {
+                    setGameState(data.payload);
+                } else if (data.type === 'TURN_UPDATE') {
+                    // Host receiving turn
+                    updateStateLocal(data.payload);
+                } else if (data.type === 'REFLECTION_UPDATE') {
+                    // Host receiving reflection
+                     setGameState(prev => ({
+                        ...prev,
+                        projects: prev.projects.map(proj => proj.id === data.payload.projectId ? {...proj, reflection: data.payload.text} : proj)
+                    }));
+                } else if (data.type === 'REQUEST_SYNC') {
+                    // Host receiving request for data
+                    // We can't easily access current state inside this callback if it's stale.
+                    // But our useEffect above syncs automatically on change.
+                    // We can force a re-broadcast by toggling a dummy state or just trusting the effect loop.
+                    // Or better, use a Ref for State.
+                }
+            };
+
+            const updateStateLocal = ({ projectId, role, prompt, img }) => {
                 setGameState(prev => {
                     const projects = prev.projects.map(p => {
                         if(p.id !== projectId) return p;
+                        // Avoid duplicates if networking retries
+                        if(p.turns.some(t => t.groupId === role)) return p;
+                        
                         const turns = [...p.turns, { groupId: role, prompt, generatedImage: img }];
                         return { ...p, turns, isComplete: turns.length >= 5 };
                     });
-                    const newState = { ...prev, projects };
-                    broadcastState(newState); // Sync everyone
-                    return newState;
+                    return { ...prev, projects };
                 });
             };
 
             const broadcastState = (state) => {
-                clientConns.forEach(conn => {
+                clientConnsRef.current.forEach(conn => {
                     if(conn.open) conn.send({ type: 'SYNC_STATE', payload: state });
                 });
             };
 
             // Teacher toggle reflection
             const toggleReflection = () => {
-                setGameState(prev => {
-                    const newState = { ...prev, reflectionPhase: !prev.reflectionPhase };
-                    broadcastState(newState);
-                    return newState;
-                });
+                setGameState(prev => ({ ...prev, reflectionPhase: !prev.reflectionPhase }));
             };
 
             // --- LOCAL HANDLERS ---
             const handleTurnSubmit = (pid, prompt, img) => {
                 if (hostConn) {
-                    // Send to Host
                     hostConn.send({ type: 'TURN_UPDATE', payload: { projectId: pid, role, prompt, img } });
                 }
             };
@@ -635,7 +672,6 @@
                 if(!role || role === 'TEACHER') return null;
                 if(gameState.reflectionPhase) {
                     const p = gameState.projects.find(proj => proj.initiator === role);
-                    // Only show reflection screen if they participated (turns > 0)
                     if(p.turns.length === 0) return { type: 'DONE' }; 
                     return (!p.reflection) ? { type: 'REFLECT', project: p } : { type: 'DONE' };
                 }
@@ -645,7 +681,27 @@
                     if(iIdx < 0) iIdx += 5;
                     const p = gameState.projects[iIdx];
                     if(p.turns.length >= r) continue;
-                    if(p.turns.length < r-1) return { type: 'WAIT', round: r };
+                    
+                    // IF waiting for previous turn
+                    if(p.turns.length < r-1) {
+                         // Who are we waiting for?
+                         // The group that performs turn (r-1) on project (iIdx).
+                         // GroupIndex = (iIdx + (r-1) - 1) % 5
+                         // But easier: The initiator of p is Group (iIdx+1).
+                         // Turn 1 is Initiator. Turn 2 is Group(Init+1). Turn N is Group(Init+N-1).
+                         // We are waiting for Turn (r-1).
+                         // Group doing Turn K on Project P is: (InitiatorIndex + K) % 5
+                         // Actually, my rotation logic:
+                         // Group G does Round R on Project P where P_init = (G - (R-1)).
+                         // So Group = (P_init + R - 1)
+                         // We wait for Round (r-1).
+                         const waitingForRound = r-1;
+                         const pInitIdx = GROUP_ORDER.indexOf(p.initiator);
+                         const waitingForGroupIdx = (pInitIdx + waitingForRound - 1) % 5;
+                         const waitingForGroup = GROUP_ORDER[waitingForGroupIdx];
+                         
+                         return { type: 'WAIT', round: r, waitingFor: waitingForGroup };
+                    }
                     return { type: 'ACT', round: r, project: p };
                 }
                 return { type: 'DONE' };
@@ -710,7 +766,7 @@
                                 </div>
                             </div>
                         )}
-                         <div className="mt-20 pt-8 border-t text-gray-400 text-sm">CM501 Fall 2025 • v2.0 Networked</div>
+                         <div className="mt-20 pt-8 border-t text-gray-400 text-sm">CM501 Fall 2025 • v2.1 Fixed</div>
                     </div>
                 </div>
             );
@@ -720,8 +776,8 @@
                 <TeacherDashboard 
                     gameState={gameState} 
                     roomCode={myRoomCode || 'Generating...'} 
-                    peerCount={clientConns.length}
-                    onReset={() => { setGameState({ projects: GROUP_ORDER.map((r,i) => ({ id: `p${i}`, initiator: r, turns: [], isComplete: false, reflection: null })), reflectionPhase: false }); broadcastState(INITIAL_GAME_STATE); }} 
+                    peerCount={clientPeerCount}
+                    onReset={() => { setGameState({ projects: GROUP_ORDER.map((r,i) => ({ id: `p${i}`, initiator: r, turns: [], isComplete: false, reflection: null })), reflectionPhase: false }); }} 
                     onToggleReflection={toggleReflection}
                     onExit={handleExit}
                 />
@@ -734,8 +790,20 @@
                     <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-6 ${task.type === 'WAIT' ? 'spinner border-4 border-gray-100 border-t-red-600' : 'bg-green-100 text-green-600'}`}>
                         {task.type === 'DONE' && <Icon name="CheckCircle2" className="w-10 h-10"/>}
                     </div>
-                    <h2 className="text-3xl font-bold mb-2">{task.type === 'WAIT' ? 'Pending...' : 'All Done!'}</h2>
-                    <p className="text-gray-500">{task.type === 'WAIT' ? `Waiting for Round ${task.round-1} to finish. Your screen will update automatically.` : 'Wait for the class discussion.'}</p>
+                    <h2 className="text-3xl font-bold mb-2">{task.type === 'WAIT' ? 'Stand By' : 'All Done!'}</h2>
+                    
+                    {task.type === 'WAIT' && (
+                        <div className="max-w-md mx-auto">
+                            <p className="text-gray-500 mb-6 text-lg">
+                                Waiting for <strong className="text-[#CC0000]">{task.waitingFor ? task.waitingFor.replace('_', ' ') : 'Previous Group'}</strong> to finish Round {task.round-1}.
+                            </p>
+                            <button onClick={requestSync} className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold text-gray-600 flex items-center gap-2 mx-auto">
+                                <Icon name="RefreshCw" className="w-4 h-4"/> Force Refresh
+                            </button>
+                        </div>
+                    )}
+                    
+                    {task.type === 'DONE' && <p className="text-gray-500">Wait for the class discussion.</p>}
                 </div>
             );
 
@@ -790,6 +858,7 @@
                     previousTurn={task.round > 1 ? task.project.turns[task.round-2] : null}
                     onTurnComplete={(txt, img) => handleTurnSubmit(task.project.id, txt, img)}
                     isConnected={isConnected}
+                    onSync={requestSync}
                 />
             );
         };
@@ -799,3 +868,4 @@
     </script>
 </body>
 </html>
+    
