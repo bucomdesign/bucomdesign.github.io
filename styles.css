@@ -179,6 +179,12 @@ a:hover {
   margin-bottom: 3rem;
 }
 
+.intro-item img {
+  max-width: 100%;
+  height: auto;
+  display: block;      /* optional, removes inline gaps */
+}
+
 /* Resource Links with bullet separators */
 .resource-links {
   margin: 2rem -.8rem;
