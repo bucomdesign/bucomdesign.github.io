@@ -56,6 +56,18 @@ a:hover {
 /* 2. LAYOUT / MAIN CONTENT / IMAGES      */
 /* -------------------------------------- */
 
+.bu-header {
+  display: flex;
+  align-items: center;   /* vertically center logo and text */
+  gap: 1rem;             /* spacing between logo and text */
+  margin-bottom: 1.5rem;
+}
+
+.bu-logo {
+  max-width: 100px;      /* adjust size as needed */
+  height: auto;
+}
+
 main {
   margin-top: 2rem;
 }
