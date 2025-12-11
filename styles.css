@@ -1,4 +1,7 @@
-/* Base Styling */
+/* -------------------------------------- */
+/* 1. BASE STYLING / TYPOGRAPHY           */
+/* -------------------------------------- */
+
 body {
   font-family: 'Manrope', sans-serif;
   font-size: 16px;
@@ -8,124 +11,6 @@ body {
   background: #fff;
   color: #111;
   max-width: 1120px;
-}
-
-/* Navigation */
-nav {
-  text-align: left;
-  margin-bottom: 4rem;
-}
-
-nav a {
-  margin-right: 2rem;
-  text-decoration: none;
-  color: #111;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  position: relative;
-  padding-bottom: 6px;
-  transition: color 0.2s ease;
-}
-
-nav a:hover {
-  color: #CC0000;
-}
-
-/* Hover underline for all nav links */
-nav a::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  height: 2px;
-  width: 0;
-  background-color: #CC0000;
-  border-radius: 2px;
-  transform: translateX(-50%);
-  transition: width 0.3s ease, background-color 0.3s ease;
-}
-
-/* Expand underline on hover */
-nav a:hover::after {
-  width: 100%;
-}
-
-/* Default underline for active nav link */
-nav a.active::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-  background-color: #111; /* default active underline */
-  border-radius: 2px;
-  transform: translateX(-50%);
-  transition: background-color 0.3s ease, width 0.3s ease;
-}
-
-/* Active link hover effect */
-nav a.active:hover::after {
-  background-color: #CC0000;
-  width: 100%;
-}
-
-/* Hide active underline when hovering over other nav items */
-nav:hover a:not(.active):hover ~ a.active::after,
-nav:hover a:not(.active)::after ~ a.active::after {
-  width: 0;
-}
-
-/* Dropdown container */
-.nav-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.nav-dropdown > a::after {
-  font-size: 0.8rem;
-  margin-left: 4px;
-}
-
-/* Dropdown content */
-.nav-dropdown .dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #fff;
-  min-width: 180px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border-radius: 6px;
-  z-index: 100;
-  text-align: left;
-}
-
-.nav-dropdown .dropdown-content a {
-  display: block;
-  padding: 0.75rem 1rem;
-  color: #111;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background 0.2s ease;
-}
-
-.nav-dropdown .dropdown-content a:hover {
-  background-color: #f2f2f2;
-  color: #cc0000;
-}
-
-.nav-dropdown:hover .dropdown-content {
-  display: block;
-}
-
-/* Main Content */
-main {
-  margin-top: 2rem;
-}
-
-main section {
-  margin-bottom: 4rem;
 }
 
 h2 {
@@ -157,14 +42,6 @@ p {
   line-height: 1.9;
 }
 
-img.responsive-gif {
-  width: 100%;
-  max-width: 720px;
-  height: auto;
-  display: block;
-  margin: 2.5rem 0;
-}
-
 a {
   color: #000;
   text-decoration: none;
@@ -175,6 +52,30 @@ a:hover {
   color: #CC0000;
 }
 
+/* -------------------------------------- */
+/* 2. LAYOUT / MAIN CONTENT / IMAGES      */
+/* -------------------------------------- */
+
+main {
+  margin-top: 2rem;
+}
+
+main section {
+  margin-bottom: 4rem;
+}
+
+section {
+  margin-bottom: 5rem;
+}
+
+img.responsive-gif {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  display: block;
+  margin: 2.5rem 0;
+}
+
 .intro-item {
   margin-bottom: 3rem;
 }
@@ -182,55 +83,229 @@ a:hover {
 .intro-item img {
   max-width: 100%;
   height: auto;
-  display: block;      /* optional, removes inline gaps */
+  display: block;
   margin-bottom: 120px;
 }
 
-/* Resource Links with bullet separators */
+/* -------------------------------------- */
+/* 3. NAVIGATION                          */
+/* -------------------------------------- */
+
+nav {
+  text-align: left;
+  margin-bottom: 4rem;
+}
+
+nav a {
+  margin-right: 2rem;
+  text-decoration: none;
+  color: #111;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  position: relative;
+  padding-bottom: 6px;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #CC0000;
+}
+
+/* Hover underline */
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #CC0000;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+/* Active link underline */
+nav a.active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #111;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: background-color 0.3s ease, width 0.3s ease;
+}
+
+nav a.active:hover::after {
+  background-color: #CC0000;
+}
+
+/* Dropdown */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown > a::after {
+  font-size: 0.8rem;
+  margin-left: 4px;
+}
+
+.nav-dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  z-index: 100;
+  text-align: left;
+}
+
+.nav-dropdown .dropdown-content a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #111;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.nav-dropdown .dropdown-content a:hover {
+  background-color: #f2f2f2;
+  color: #cc0000;
+}
+
+.nav-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* -------------------------------------- */
+/* 4. LINKS: PILL STYLES                  */
+/* -------------------------------------- */
+
+.pill-link {
+  display: inline-block;
+  padding: 4px 14px;
+  background: #f5f5f5;
+  border-radius: 999px;
+  font-weight: 500;
+  color: #111;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid #ddd;
+}
+
+.pill-link:hover {
+  background: #cc0000;
+  color: #fff;
+  border-color: #cc0000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+/* -------------------------------------- */
+/* 5. RESOURCE LINKS                      */
+/* -------------------------------------- */
+
 .resource-links {
   margin: 2rem -.8rem;
   text-align: left;
 }
 
 .resource-links a {
-  text-decoration: none; /* no underline */
+  text-decoration: none;
   color: #111;
   font-weight: 600;
   letter-spacing: 0.03em;
-  padding: 0 0.8rem; /* space for bullets */
+  padding: 0 0.8rem;
   transition: color 0.2s ease;
   position: relative;
 }
 
 .resource-links a:hover {
-  color: #CC0000; /* just text color change */
+  color: #CC0000;
 }
 
-/* Add bullet separator after each link except the last one */
 .resource-links a:not(:last-child)::after {
   content: "•";
   color: #111;
   position: absolute;
-  right: -0.5rem; /* adjust spacing between bullet and next link */
+  right: -0.5rem;
 }
 
-/* Footer */
-footer {
-  text-align: left;
-  margin-top: 5rem;
+/* -------------------------------------- */
+/* 6. COURSE GRID & CARDS                 */
+/* -------------------------------------- */
+
+.course-grid {
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 4rem;
+  row-gap: 1rem;
+}
+
+.course-grid h2,
+.course-grid h3 {
+  grid-column: 1 / -1;
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.course-grid a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.course-item {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: all 0.25s ease;
+  display: block;
+}
+
+.course-item:hover {
+  background: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border-color: #ccc;
+}
+
+.course-item h4 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.course-item p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.course-item .coming {
+  font-weight: 400;
   font-size: 0.95rem;
-  color: #555;
-  line-height: 1.6;
+  color: #777;
 }
 
-hr {
-  border: none;
-  height: 1px;
-  background-color: #ccc;
-  margin: 3rem 0;
-}
+/* -------------------------------------- */
+/* 7. WEEK LIST (ARROWS)                  */
+/* -------------------------------------- */
 
-/* Week List Styles */
 .week-list {
   list-style: none;
   padding-left: 0;
@@ -240,22 +315,23 @@ hr {
 .week-list li {
   margin-bottom: 1rem;
   position: relative;
-  padding-left: 1.5rem; /* space for arrow */
+  padding-left: 1.5rem;
 }
 
+/* Arrow for ACTIVE WEEK */
 .week-list li.active::before {
-  content: "↓"; /* down arrow for active */
+  content: "↓";
   position: absolute;
   left: 0;
   color: #111;
   transition: color 0.2s ease;
 }
 
-.week-list li.active a:hover::before,
 .week-list li.active:hover::before {
-  color: #CC0000; /* arrow changes color on hover */
+  color: #CC0000;
 }
 
+/* Disabled weeks */
 .week-list li.disabled {
   color: #999;
   pointer-events: none;
@@ -271,68 +347,35 @@ hr {
   opacity: 60%;
 }
 
-.week-list li.disabled {
-  color: #999;
-  cursor: not-allowed;
-  opacity: 60%;
-  pointer-events: auto; 
-}
-/* 
-.week-list li.disabled::after {
-  content: "⏳ Not yet, champ!";
-  position: absolute;
-  left: 0; 
-  top: 45%;
-  transform: translateY(-50%);
-  background-color: #fff;
-  color: #111;
-  padding: 1.2rem 16rem 1rem 1rem;
-  font-size: 0.95rem;
-  text-align: left;
-  border-radius: 4px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  margin-left: 0.5rem;
-  z-index: 10;
-}
-
-
-.week-list li.disabled:hover::after {
-  opacity: 1;
-}
-*/
-
-/* Align week content under active week text */
 .news-item {
-  padding-left: 1.5rem; /* same as arrow space */
+  padding-left: 1.5rem;
 }
 
-/* ---------- ROULETTE (Refined & Designer-Approved) ---------- */
+/* -------------------------------------- */
+/* 8. ROULETTE UI COMPONENT               */
+/* -------------------------------------- */
+
 .roulette-container {
   background: #fff;
   padding: 4rem 3rem;
   border-radius: 24px;
   margin: 6rem auto;
   text-align: center;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.06);  /* softer shadow */
+  box-shadow: 0 16px 40px rgba(0,0,0,0.06);
   max-width: 960px;
   width: 92%;
-  font-family: 'Manrope', sans-serif;
 }
 
-/* Headline — bold but elegant */
+/* Headline */
 .roulette-container h2 {
   font-size: 2.75rem;
   margin-bottom: 2rem;
   font-weight: 700;
   letter-spacing: -0.5px;
   color: #111;
-  line-height: 1.2;
 }
 
-/* Controls layout */
+/* Controls */
 .controls {
   display: flex;
   justify-content: center;
@@ -342,12 +385,10 @@ hr {
   align-items: center;
 }
 
-/* Label — subtle but clear */
 .controls label {
   font-size: 1.5rem;
   font-weight: 400;
   color: #444;
-  margin-right: 0.25rem;
 }
 
 /* Dropdown */
@@ -362,6 +403,7 @@ select {
   transition: all 0.25s ease;
   min-width: 180px;
 }
+
 select:hover {
   border-color: #bbb;
   background: #fff;
@@ -369,7 +411,8 @@ select:hover {
 }
 
 /* Buttons */
-.reset-btn, .pick-btn {
+.reset-btn,
+.pick-btn {
   padding: 1rem 2.25rem;
   font-size: 1.25rem;
   border-radius: 12px;
@@ -379,40 +422,39 @@ select:hover {
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
 
-/* Reset button — soft neutral */
+/* Reset */
 .reset-btn {
   background: #f1f3f5;
   color: #444;
 }
+
 .reset-btn:hover {
   background: #e2e6ea;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
 }
 
-/* Pick button — strong primary */
+/* Pick */
 .pick-btn {
   background: #111;
   color: #fff;
 }
+
 .pick-btn:hover {
   background: #cc0000;
   transform: translateY(-3px) scale(1.04);
   box-shadow: 0 6px 14px rgba(0,0,0,0.12);
 }
 
-/* Result display */
+/* Result */
 #result {
   font-size: 2.5rem;
   font-weight: 700;
   margin-top: 3rem;
   min-height: 90px;
   color: #111;
-  line-height: 1.3;
-  letter-spacing: -0.5px;
 }
 
-/* Result animation */
 .highlight {
   animation: popColor 0.6s cubic-bezier(.25,.8,.25,1) forwards;
   color: #cc0000;
@@ -424,30 +466,30 @@ select:hover {
   100% { transform: scale(1); }
 }
 
-/* ---------- Student Grid: 5 rows x 4 columns ---------- */
+/* -------------------------------------- */
+/* 9. STUDENT GRID + CARDS                */
+/* -------------------------------------- */
+
 .student-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns per row */
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
-/* ---------- Student Card ---------- */
 .student-card {
   text-align: center;
   background: #f9f9f9;
   padding: 0.75rem;
   border-radius: 12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  width: 240px;      /* slightly bigger */
-  height: 200px;     /* taller card */
+  width: 240px;
+  height: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
 }
 
-/* ---------- Link ---------- */
 .student-card a {
   color: #111;
   text-decoration: none;
@@ -457,9 +499,8 @@ select:hover {
   flex-grow: 1;
 }
 
-/* ---------- Image container ---------- */
 .student-card .placeholder {
-  width: 240px;         /* bigger container for image */
+  width: 240px;
   border-radius: 8px;
   margin-bottom: 0.6rem;
   display: flex;
@@ -469,52 +510,74 @@ select:hover {
   background-color: #fff;
 }
 
-/* ---------- Image ---------- */
 .placeholder img {
   max-width: 100%;
   max-height: 100%;
-  object-fit: contain; /* no stretch, keep ratio */
+  object-fit: contain;
   border-radius: 8px;
-  display: block;
-  margin: 0 auto;
 }
 
-/* ---------- Name text ---------- */
 .student-card p {
   font-weight: 600;
   font-size: 1rem;
   margin: 0;
-  line-height: 1.2;
 }
 
-/* ---------- Hover effect ---------- */
 .student-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-/* ---------- Section spacing ---------- */
-section {
-  margin-bottom: 5rem;
+/* -------------------------------------- */
+/* 10. FOOTER                             */
+/* -------------------------------------- */
+
+footer {
+  text-align: left;
+  margin-top: 5rem;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
 }
 
-/* ---------- Mobile Responsive Layout ---------- */
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  margin: 3rem 0;
+}
+
+/* -------------------------------------- */
+/* 11. RESPONSIVE BREAKPOINTS             */
+/* -------------------------------------- */
+
+/* Courses → 1 column */
+@media (max-width: 700px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+    row-gap: 2.5rem;
+  }
+}
+
+/* Student grid → 1 column */
 @media (max-width: 480px) {
   .student-grid {
-    grid-template-columns: 1fr; /* 1 card per row */
-    justify-items: center; /* centers each card */
+    grid-template-columns: 1fr;
+    justify-items: center;
     gap: 1.5rem;
   }
 
   .student-card {
-    width: 240px;  /* keep same size */
-    height: 200px; /* maintain consistent card height */
+    width: 240px;
+    height: 200px;
   }
 
   .student-card .placeholder {
-    width: 240px;  /* match card width */
+    width: 240px;
   }
-/* Mobile Optimization */
+}
+
+/* Mobile global optimizations */
 @media screen and (max-width: 600px) {
   body {
     padding: 1.5rem;
@@ -540,11 +603,8 @@ section {
     margin: 0.75rem 0;
   }
 
-  /* Remove bullets for stacked mobile links */
   .resource-links a:not(:last-child)::after {
     content: "";
     position: static;
-    right: auto;
   }
-  
 }
