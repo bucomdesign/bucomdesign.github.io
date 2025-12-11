@@ -175,6 +175,104 @@ a:hover {
   color: #CC0000;
 }
 
+/* -------- Pill Link Style -------- */
+.pill-link {
+  display: inline-block;
+  padding: 4px 14px;
+  background: #f5f5f5;
+  border-radius: 999px;
+  font-weight: 500;
+  color: #111;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid #ddd;
+}
+
+.pill-link:hover {
+  background: #cc0000;
+  color: #fff;
+  border-color: #cc0000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+/* Make each course into a card */
+.course-item {
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  padding: 1.75rem;
+  transition: all 0.25s ease;
+  display: block;
+}
+
+/* Card hover effect */
+.course-item:hover {
+  background: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border-color: #ccc;
+}
+
+/* Remove underline from course links */
+.course-grid a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.course-grid {
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 4rem;
+  row-gap: 1rem;
+}
+
+.course-grid h2 {
+  grid-column: 1 / -1;
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.course-grid h3 {
+  grid-column: 1 / -1;
+  margin: 0 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.course-item h4 {
+  grid-column: 1 / -1;
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.course-item p {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.course-item .coming {
+  font-weight: 400;
+  font-size: 0.95rem;
+  color: #777;
+}
+
+/* Mobile responsive (stack the two columns) */
+@media (max-width: 700px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+    row-gap: 2.5rem;
+  }
+
 .intro-item {
   margin-bottom: 3rem;
 }
