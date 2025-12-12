@@ -3,113 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boston University - Design Strategy</title>
+  <title>COM CM 501 - Intro</title>
   <link rel="icon" type="image/png" href="https://bucomdesign.github.io/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-<script type="importmap">
-{
-  "imports": {
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "canvas-confetti": "https://esm.sh/canvas-confetti@^1.9.4"
-  }
-}
-</script>
 </head>
 <body>
 
   <div class="page-container">
-  
-    <!-- HEADER -->
-    <header class="landing-header">
-      <div class="landing-header-content">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Boston_University_wordmark.svg/2560px-Boston_University_wordmark.svg.png" alt="Boston University" class="bu-logo">
-        <div class="header-divider"></div>
-        <div class="header-text">
-          Boston University College of Communication courses taught by <br>
-          <a href="https://www.bu.edu/com/profile/jen-jiun-choi/" target="_blank" class="text-link">Prof. Jen Jiun Choi</a>
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="nav-container">
+        <a href="index.html" class="nav-brand">BU COM DESIGN</a>
+        <div class="nav-divider"></div>
+        <a href="intro.html" class="nav-link active">INTRO</a>
+        <a href="weeks.html" class="nav-link">WEEKLY SCHEDULE</a>
+        <div class="nav-dropdown">
+          <button class="dropdown-trigger">OUR CLASS ▾</button>
+          <div class="dropdown-content">
+            <a href="fall2025.html">Fall 2025</a>
+            <a href="#" class="disabled">Spring 2026</a>
+            <a href="roulette.html">Class Roulette</a>
+          </div>
         </div>
       </div>
-      <hr style="border: 0; border-top: 1px solid var(--bu-border);">
-    </header>
+    </nav>
 
     <main>
-      <!-- UNDERGRADUATE SECTION -->
-      <section style="margin-bottom: 4rem;">
-        <h2 class="section-title">Undergraduate Courses: Visual Graphic Design</h2>
-        <p class="section-desc">These courses introduce visual design fundamentals to students with little to no prior design experience.</p>
-        
-      <div class="grid-2">
-          <!-- CM501 -->
-          <a href="https://bucomdesign.github.io/cm501/index.html" class="card">
-            <h2>
-              CM501 • Design Strategy & Software 1
-            </h2>
-            <p>
-              Provides a comprehensive introduction to the design process, creative mindset, and design ethics. Students learn core static design principles such as typography, color theory, hierarchy, and layout while building essential creative software skills.<span class="go-to-site">Go to course site →</span>
-            </p>
-            
-            <div class="card-footer">Projects: <span>Visual Identity, Campaign Design</span></div>
-          </a>
+      <h1 class="page-title">COM CM501 • Design Strategy & Software 1</h1>
+      <h3 class="page-subtitle">
+        Taught by<a href="https://www.bu.edu/com/profile/jen-jiun-choi/" target="_blank" class="text-link">Prof. Jen Jiun Choi</a>
+      </h3>
 
-           <!-- CM529 (Disabled) -->
-          <div class="card disabled">
-            <h2>CM529 • Design Strategy & Software 2</h2>
-            <p>
-              Expands on CM501 by introducing motion and interactivity. Students learn foundational principles of moving images and apply static design concepts to dynamic environments, with an emphasis on interface design.
-              <br><br><em class="coming-soon">Coming Spring 2026</em>
-            </p>
-            <div class="card-footer">Projects: <span>Motion Design, Interactive Prototype</span></div>
-          </div>
+      <div style="max-width: 1400px; font-size: 1.125rem; line-height: 1.8; color: var(--text-body); margin-bottom: 3rem;">
+        <p>
+          Provides a comprehensive introduction to the design process, creative mindset, and design ethics. Students learn core static design principles such as typography, color theory, hierarchy, and layout while building essential creative software skills.
+        </p>
+      </div>
+
+      <!-- CORE COMPETENCIES (No Icons) -->
+      <div class="competency-grid">
+        <div class="competency-item">
+          <h4>Design Foundation</h4>
+          <p>Understand core design principles and apply them strategically in communication.</p>
         </div>
-
-
-        <div style="margin-top: 2rem;">
-          <a href="https://bucomdesign.github.io/cm501/fall2025.html" class="resource-pill">CM 501 Student Project Samples • Fall 25 →</a>
+        <div class="competency-item">
+          <h4>Visual Communication</h4>
+          <p>Translate ideas into compelling visuals across print, digital, and multimedia formats.</p>
         </div>
-      </section>
-
-      <hr style="border: 0; border-top: 1px solid var(--bu-border); margin-bottom: 4rem;">
-
-      <!-- GRADUATE SECTION -->
-      <section>
-        <h2 class="section-title">Graduate Courses: Product Strategy & User Experience</h2>
-        <p class="section-desc">Part of the <a href="#" class="text-link">Master of Science in Human-Centered Design program</a>, these courses teach the holistic product-development cycle to an interdisciplinary student body.</p>
-        
-       <div class="grid-2">
-          <!-- UX -->
-          <div class="card disabled">
-            <h2>CM7XX • Human-Centered Design 1 (UX)</h2>
-            <p>
-              Guides students through the end-to-end solution development process using a strategic, human-centered approach. Students conduct user research, synthesize insights, frame problems, and generate and validate design concepts.
-              <br><br><em class="coming-soon">Coming Fall 2026</em>
-            </p>
-            <div class="card-footer">Project: <span>UX Research & Product Case Study</span></div>
-          </div>
-
-          <!-- Product Management -->
-          <div class="card disabled">
-            <h2>CM7XX • Product Management & Leadership</h2>
-            <p>
-              Prepares students to drive product vision, create lasting value, and influence organizational culture. Covers feature prioritization, roadmap planning, Agile methodology, and stakeholder management.
-              <br><br><em class="coming-soon">Coming Spring 2027</em>
-            </p>
-            <div class="card-footer">Project: <span>Product Strategy & Roadmap</span></div>
-          </div>
+        <div class="competency-item">
+          <h4>Strategic Thinking</h4>
+          <p>Align design decisions with audience needs, messaging goals, and brand objectives.</p>
         </div>
-      </section>
+        <div class="competency-item">
+          <h4>Creative Software Literacy</h4>
+          <p>Confidently use beginner-friendly tools such as Adobe Creative Apps and Figma.</p>
+        </div>
+        <div class="competency-item">
+          <h4>Collaboration & Workflow</h4>
+          <p>Work effectively in teams and manage creative projects from concept to delivery.</p>
+        </div>
+        <div class="competency-item">
+          <h4>Storytelling & Presentation</h4>
+          <p>Present, explain, and justify design concepts persuasively.</p>
+        </div>
+      </div>
+
+      <!-- RESOURCES -->
+      <div class="resource-bar">
+        <a href="https://docs.google.com/document/d/14V-ZwaLDH0EQays5B_ZsVaqF5Cd71ZOzOSVmFeEa2Ts/edit?usp=sharing" target="_blank" class="resource-pill">Syllabus</a>
+        <a href="https://drive.google.com/drive/u/1/folders/1LcgtJnYw6AQMa10I-0-JHFjPsIcIgpRn" target="_blank" class="resource-pill">Class Drive</a>
+        <a href="https://www.figma.com/education/" target="_blank" class="resource-pill">Figma</a>
+        <a href="https://www.bu.edu/tech/services/teaching/digital-multimedia-production/adobe-creative-cloud/request/" target="_blank" class="resource-pill">Adobe Creative Cloud</a>
+      </div>
     </main>
 
     <footer>
-      <span class="footer">MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS  |  
-      BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
-      &copy; 2025. Jen Jiun Choi. All rights reserved.
-    </footer>
+  <p>
+    MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS | BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
+    &copy; 2025. Jen Jiun Choi. All rights reserved.
+  </p>
+</footer>
   </div>
+
 </body>
 </html>
