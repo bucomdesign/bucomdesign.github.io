@@ -32,36 +32,32 @@
     </nav>
 
  <main>
-<!-- DASHBOARD SECTION (Music Player + Roulette Widget) -->
+    <!-- DASHBOARD SECTION (Spotify + Roulette) -->
       <section class="dashboard-grid">
-         
-         <!-- Custom Music Player -->
-         <div class="music-player" id="musicPlayer">
-            <div class="music-info">
-               <div class="music-title">BU COM Design Activity Jam</div>
-               <div class="marquee-container">
-                 <div class="marquee-text" id="marqueeText">
-                   Welcome to Class • Click Play to Start • 
-                 </div>
-               </div>
-            </div>
-            <div class="music-controls">
-               <button class="play-btn" id="playBtn" onclick="toggleMusic()">
-                  ▶
-               </button>
-               <a href="https://open.spotify.com/playlist/0T4kprX9eGEqUk0ygY5jmV?si=05a108b356dc4e7a" target="_blank" class="spotify-link-btn">
-                  <span>Open Spotify</span> ↗
-               </a>
-            </div>
+         <!-- Spotify Embed -->
+         <div class="spotify-wrapper">
+           <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0T4kprX9eGEqUk0ygY5jmV?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
          </div>
 
-         <!-- Roulette Trigger Widget -->
-         <div class="roulette-trigger-card" onclick="openRouletteModal()">
-            <span class="roulette-icon">🎲</span>
-            <div class="roulette-trigger-title">Class Roulette</div>
-            <div class="roulette-trigger-desc">Pick a student randomly</div>
-         </div>
+         <!-- Embedded Mini Roulette -->
+         <div class="roulette-mini">
+            <div class="roulette-mini-header">
+               <h3>Class Roulette</h3>
+               <select id="section" class="form-select" onchange="updateSectionInfo()">
+                <option value="1">K1</option>
+                <option value="2">H1</option>
+                <option value="3">G1</option>
+              </select>
+            </div>
+            
+            <div id="result" class="result-display">?</div>
 
+            <div class="controls-row">
+              <button id="spinBtn" class="btn-primary" onclick="startRoulette()">Pick Student</button>
+              <button id="resetBtn" class="btn-secondary" title="Reset" onclick="resetSection()">↻</button>
+            </div>
+            <div id="status-msg" style="margin-top: 0.5rem; font-size: 0.75rem; color: #9ca3af;"></div>
+         </div>
       </section>
    
       <!-- GROUP PROJECTS SECTION -->
@@ -400,90 +396,6 @@
       if (event.key === "Escape") {
         closeLightbox();
       }
-    });
-
-  <!-- Roulette Modal -->
-  <div id="rouletteModal" class="lightbox-overlay" onclick="closeRouletteModal()">
-     <div class="roulette-modal-content" onclick="event.stopPropagation()">
-        <button class="lightbox-close" style="position:absolute; top:1rem; right:1rem; color: #374151; background: #f3f4f6;" onclick="closeRouletteModal()">×</button>
-        <div class="roulette-box" style="box-shadow: none; border: none; max-width: 100%;">
-          <div class="roulette-top-bar"></div>
-          <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Class Roulette</h2>
-          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Who is the lucky student?</p>
-          
-          <div class="control-group">
-            <select id="section" class="form-select" onchange="updateSectionInfo()">
-              <option value="1">Section K1</option>
-              <option value="2">Section H1</option>
-              <option value="3">Section G1</option>
-            </select>
-          </div>
-
-          <div id="roulette-result-area" style="min-height: 200px; display:flex; align-items:center; justify-content:center; flex-direction: column;">
-             <div id="result" class="result-display">?</div>
-             <img id="win-gif" src="" style="display:none; max-height: 150px; border-radius: 8px; margin-top: 1rem;" />
-          </div>
-
-          <div class="controls-row">
-            <button id="spinBtn" class="btn-primary" onclick="startRoulette()">Pick Student</button>
-            <button id="resetBtn" class="btn-secondary" title="Reset" onclick="resetSection()">↻</button>
-          </div>
-          <div id="status-msg" style="margin-top: 0.5rem; font-size: 0.75rem; color: #9ca3af;"></div>
-       </div>
-     </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script src="roulette.js"></script>
-  
-  <script>
-    /* Roulette Modal Logic */
-    function openRouletteModal() {
-       const modal = document.getElementById('rouletteModal');
-       modal.classList.add('active');
-       document.body.style.overflow = 'hidden';
-       // Re-initialize logic if needed
-       if(typeof updateSectionInfo === 'function') updateSectionInfo();
-    }
-
-    function closeRouletteModal() {
-       const modal = document.getElementById('rouletteModal');
-       modal.classList.remove('active');
-       document.body.style.overflow = '';
-    }
-
-    /* Music Player Logic */
-    let isPlaying = false;
-    const songs = [
-       "Welcome to Class • Click Play to Start",
-       "Espresso - Sabrina Carpenter - Submitted by Teresa",
-       "Birds of a Feather - Billie Eilish - Submitted by Kaylin",
-       "Good Luck, Babe! - Chappell Roan - Submitted by Zoe",
-       "Not Like Us - Kendrick Lamar - Submitted by Lance",
-       "Pink Pony Club - Chappell Roan - Submitted by Scarlett"
-    ];
-    let songIndex = 0;
-    
-    function toggleMusic() {
-       const player = document.getElementById('musicPlayer');
-       const btn = document.getElementById('playBtn');
-       const text = document.getElementById('marqueeText');
-       
-       isPlaying = !isPlaying;
-       
-       if(isPlaying) {
-          player.classList.add('playing');
-          btn.classList.add('paused');
-          btn.innerHTML = '❚❚';
-          // Start cycling actual song names
-          songIndex = 1;
-          text.innerText = songs[songIndex] + " • ";
-       } else {
-          player.classList.remove('playing');
-          btn.classList.remove('paused');
-          btn.innerHTML = '▶';
-          text.innerText = songs[0] + " • ";
-       }
     });
   </script>
 </body>
