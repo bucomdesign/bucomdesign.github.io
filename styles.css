@@ -573,6 +573,7 @@ h1, h2, h3, h4 {
   width: auto;
   height: 80%;
   object-fit: cover;
+   transform: translateY(12px);
 }
 
 .student-name {
