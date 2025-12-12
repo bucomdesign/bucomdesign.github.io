@@ -7,69 +7,104 @@ const sections = {
       "Crystal","Ziyi","Ava","Nikki","Annie","Lincoln","Erik","Jessica","Sanyu","Claudia"]
 };
 
+const emojis = ["🎯", "✨", "🎉", "🔥", "🌟", "💥", "🏆", "💫", "🎶", "🥳"];
+
+// Initialize picked lists from localStorage
 const picked = {
   1: JSON.parse(localStorage.getItem('picked1')) || [],
   2: JSON.parse(localStorage.getItem('picked2')) || [],
   3: JSON.parse(localStorage.getItem('picked3')) || []
 };
 
-// emoji pool for random results
-const emojis = ["🎯", "✨", "🎉", "🔥", "🌟", "💥", "🏆", "💫", "🎶", "🥳"];
-
+const resultEl = document.getElementById('result');
+const spinBtn = document.getElementById('spinBtn');
+const resetBtn = document.getElementById('resetBtn');
+const statusMsg = document.getElementById('status-msg');
+let isSpinning = false;
 let rouletteInterval;
 
+function updateSectionInfo() {
+  const section = document.getElementById("section").value;
+  const count = picked[section].length;
+  const total = sections[section].length;
+  statusMsg.innerText = `Picked: ${count} / ${total}`;
+  resultEl.innerText = "?";
+  resultEl.style.opacity = "1";
+  resultEl.style.transform = "scale(1)";
+}
+
 function startRoulette() {
+  if(isSpinning) return;
+  
   const section = document.getElementById("section").value;
   const available = sections[section].filter(s => !picked[section].includes(s));
-  const title = document.querySelector(".roulette-container h2");
-
+  
   if (available.length === 0) {
-    title.innerText = "✅ All students picked! Reset to start again.";
+    resultEl.innerText = "✅ Done!";
+    statusMsg.innerText = "All students picked! Click ↻ to reset.";
     return;
   }
 
-  let i = 0;
+  isSpinning = true;
+  spinBtn.innerText = "Spinning...";
+  spinBtn.style.opacity = "0.7";
+  spinBtn.disabled = true;
+  statusMsg.innerText = "";
+  
+  let counter = 0;
+  const maxSpins = 25;
+  
   rouletteInterval = setInterval(() => {
-    title.innerText = available[i % available.length]; // rotating names
-    title.classList.remove("highlight");
-    i++;
-  }, 100);
+    resultEl.innerText = available[Math.floor(Math.random() * available.length)];
+    resultEl.style.opacity = 0.5;
+    resultEl.style.transform = "scale(0.9)";
+    counter++;
+    
+    if (counter > maxSpins) {
+      clearInterval(rouletteInterval);
+      finalizeSpin(available, section);
+    }
+  }, 80);
+}
 
-  setTimeout(() => {
-    clearInterval(rouletteInterval);
-    const student = available[Math.floor(Math.random() * available.length)];
-    picked[section].push(student);
-    localStorage.setItem(`picked${section}`, JSON.stringify(picked[section]));
+function finalizeSpin(available, section) {
+  const winner = available[Math.floor(Math.random() * available.length)];
+  
+  // Update data
+  picked[section].push(winner);
+  localStorage.setItem(`picked${section}`, JSON.stringify(picked[section]));
+  
+  // Update UI
+  const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+  resultEl.innerText = `${winner}`; // Keeping clean without emoji inside text for better spacing
+  resultEl.style.opacity = 1;
+  resultEl.style.transform = "scale(1.1)";
+  
+  spinBtn.innerText = "Pick Student";
+  spinBtn.style.opacity = "1";
+  spinBtn.disabled = false;
+  isSpinning = false;
+  
+  updateSectionInfo(); // Update counts
+  statusMsg.innerText = `${randomEmoji} Winner!`;
 
-    // pick random emoji for the winner
-    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-
-    title.innerText = `${randomEmoji} ${student}`;
-    title.classList.add("highlight");
-
-    fireConfetti();
-  }, 3000);
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 },
+    colors: ['#CC0000', '#000000', '#ffffff']
+  });
 }
 
 function resetSection() {
-  const section = document.getElementById("section").value;
-  picked[section] = [];
-  localStorage.setItem(`picked${section}`, JSON.stringify([]));
-
-  const title = document.querySelector(".roulette-container h2");
-  title.innerText = "CM501 Class Roulette"; // restore original title
-
-  const resultDiv = document.getElementById("result");
-  resultDiv.classList.remove("highlight");
+  if(confirm("Are you sure you want to reset the history for this section?")) {
+    const section = document.getElementById("section").value;
+    picked[section] = [];
+    localStorage.setItem(`picked${section}`, JSON.stringify([]));
+    resultEl.innerText = "?";
+    updateSectionInfo();
+  }
 }
 
-function fireConfetti() {
-  const duration = 2 * 1000;
-  const end = Date.now() + duration;
-
-  (function frame() {
-    confetti({ particleCount: 6, angle: 60, spread: 55, origin: { x: 0 } });
-    confetti({ particleCount: 6, angle: 120, spread: 55, origin: { x: 1 } });
-    if (Date.now() < end) requestAnimationFrame(frame);
-  })();
-}
+// Initial Load
+updateSectionInfo();
