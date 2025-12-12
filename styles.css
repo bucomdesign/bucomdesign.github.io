@@ -509,15 +509,22 @@ h1, h2, h3, h4 {
    STUDENT PROJECTS
 ----------------------------------------------------------------- */
 .project-group-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 3rem;
+  /* Switched to CSS Columns (Masonry-like) layout */
+  column-width: 380px; 
+  column-gap: 3rem;
   margin-bottom: 4rem;
-  align-items: start; /* Ensures items align to top if they have different heights */
+  display: block;
+}
+
+.project-group-grid > div {
+  break-inside: avoid;
+  margin-bottom: 3rem; /* Ensures consistent vertical spacing between items in a column */
+  display: inline-block; /* Helps prevent break issues in some browsers */
+  width: 100%;
 }
 
 .project-media {
-  /* Removed fixed aspect ratio to allow images to display at their natural individual height/width ratios */
+  /* Natural height (no fixed aspect ratio) */
   background-color: var(--bu-gray-light);
   border-radius: 1rem;
   overflow: hidden;
@@ -526,7 +533,7 @@ h1, h2, h3, h4 {
 }
 
 .project-media a {
-  display: block; /* Ensure anchor wraps the image properly */
+  display: block; 
 }
 
 .project-media img {
