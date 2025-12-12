@@ -217,13 +217,14 @@ h1, h2, h3, h4 {
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem; /* Reduced spacing */
 }
 
 .section-desc {
   color: var(--text-muted);
-  margin-bottom: 2rem;
-  max-width: 120ch;
+  margin-top: 0;
+  margin-bottom: 3rem;    /* Increased spacing */
+  max-width: 65ch;
 }
 
 /* -----------------------------------------------------------------
