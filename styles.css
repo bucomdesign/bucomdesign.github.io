@@ -537,7 +537,7 @@ h1, h2, h3, h4 {
 }
 
 .project-media img {
-  width: 90%;
+  width: 100%;
   height: auto; /* Natural height based on width */
   display: block;
   object-fit: contain;
@@ -545,7 +545,7 @@ h1, h2, h3, h4 {
 }
 
 .project-media:hover img {
-  transform: scale(1.02);
+  transform: scale(1.01);
 }
 
 .student-grid {
@@ -580,7 +580,7 @@ h1, h2, h3, h4 {
   width: auto;
   height: 80%;
   object-fit: cover;
-   transform: translateY(-12px);
+   transform: translateY(-4px);
 }
 
 .student-name {
