@@ -3,105 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>COM CM 501</title>
+  <title>Boston University - Design Strategy</title>
   <link rel="icon" type="image/png" href="https://bucomdesign.github.io/favicon.png">
-  <link rel="stylesheet" href="https://bucomdesign.github.io/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+<script type="importmap">
+{
+  "imports": {
+    "react-router-dom": "https://esm.sh/react-router-dom@^7.10.1",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "canvas-confetti": "https://esm.sh/canvas-confetti@^1.9.4"
+  }
+}
+</script>
 </head>
-
 <body>
 
-<main>
-<div class="bu-header">
-  <img src="bulogo.png" alt="Boston University Logo" class="bu-logo">
-  <h3>
-    Boston University College of Communication courses taught by
-    <a href="https://www.bu.edu/com/profile/jen-jiun-choi/" 
-       target="_blank"
-       class="pill-link">Prof. Jen Jiun Choi</a>
-  </h3>
-</div>
-<hr>
-
-<!-- ========================================================= -->
-<!-- ================== UNDERGRADUATE COURSES ================= -->
-<!-- ========================================================= -->
-
-<h3><b>Undergraduate Courses: Visual Graphic Design</b><br>
-These courses introduce visual design fundamentals to students with little to no prior design experience</h3>
-
-<section class="course-grid">
-
-  <!-- ---------- CM501 CARD ---------- -->
-  <a href="https://bucomdesign.github.io/cm501/index.html" target="_blank" class="course-item" style="text-decoration:none; color:inherit;">
-    <h2>CM501 • Design Strategy & Software 1</h2>
-    <p>
-     Provides a comprehensive introduction to the design process, creative mindset, and design ethics. Students learn core static design principles such as typography, color theory, hierarchy, and layout while building essential creative software skills.<br><br>
-      <strong>Projects:</strong> Visual Identity, Campaign Design
-    </p>
-  </a>
-
-  <!-- ---------- CM529 CARD ---------- -->
-<div class="course-item disabled">
-    <h2>CM529 • Design Strategy & Software 2<br>
-      <span class="coming">Coming Spring 2026</span></h2>
-    <p>
-     Expands on CM501 by introducing motion and interactivity. Students learn foundational principles of moving images and apply static design concepts to dynamic environments, with an emphasis on interface design<br><br>
-      <strong>Projects:</strong> Motion Design, Interactive Prototype
-    </p>
-  </a>
-  </div>
+  <div class="page-container">
   
-   <a href="https://bucomdesign.github.io/cm501/fall2025.html" target="_blank"
-     class="pill-link">CM 501 Student Project Samples • Fall 25</a>
+    <!-- HEADER -->
+    <header class="landing-header">
+      <div class="landing-header-content">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Boston_University_wordmark.svg/2560px-Boston_University_wordmark.svg.png" alt="Boston University" class="bu-logo">
+        <div class="header-divider"></div>
+        <div class="header-text">
+          Boston University College of Communication courses taught by <br>
+          <a href="https://www.bu.edu/com/profile/jen-jiun-choi/" target="_blank" class="text-link">Prof. Jen Jiun Choi</a>
+        </div>
+      </div>
+      <hr style="border: 0; border-top: 1px solid var(--bu-border);">
+    </header>
 
-</section>
+    <main>
+      <!-- UNDERGRADUATE SECTION -->
+      <section style="margin-bottom: 4rem;">
+        <h2 class="section-title">Undergraduate Courses: Visual Graphic Design</h2>
+        <p class="section-desc">These courses introduce visual design fundamentals to students with little to no prior design experience.</p>
+        
+      <div class="grid-2">
+          <!-- CM501 -->
+          <a href="https://bucomdesign.github.io/cm501/index.html" class="card">
+            <h2>
+              CM501 • Design Strategy & Software 1
+            </h2>
+            <p>
+              Provides a comprehensive introduction to the design process, creative mindset, and design ethics. Students learn core static design principles such as typography, color theory, hierarchy, and layout while building essential creative software skills.<span class="go-to-site">Go to course site →</span>
+            </p>
+            
+            <div class="card-footer">Projects: <span>Visual Identity, Campaign Design</span></div>
+          </a>
 
-<hr>
+           <!-- CM529 (Disabled) -->
+          <div class="card disabled">
+            <h2>CM529 • Design Strategy & Software 2</h2>
+            <p>
+              Expands on CM501 by introducing motion and interactivity. Students learn foundational principles of moving images and apply static design concepts to dynamic environments, with an emphasis on interface design.
+              <br><br><em class="coming-soon">Coming Spring 2026</em>
+            </p>
+            <div class="card-footer">Projects: <span>Motion Design, Interactive Prototype</span></div>
+          </div>
+        </div>
 
-<!-- ========================================================= -->
-<!-- ====================== GRADUATE COURSES ================= -->
-<!-- ========================================================= -->
 
-<h3><b>Graduate Courses: Product Development & User Experience</b><br>
-Part of the <a href="https://www.bu.edu/com/academics/media-science/master-of-science-in-human-centered-design/" 
-     target="_blank"
-     class="pill-link">Master of Science in Human-Centered Design program</a> these courses teach the holistic product-development cycle to an interdisciplinary student body.
-</h3>
+        <div style="margin-top: 2rem;">
+          <a href="https://bucomdesign.github.io/cm501/fall2025.html" class="resource-pill">CM 501 Student Project Samples • Fall 25 →</a>
+        </div>
+      </section>
 
-<section class="course-grid">
+      <hr style="border: 0; border-top: 1px solid var(--bu-border); margin-bottom: 4rem;">
 
-  <!-- ---------- HCD1 CARD ---------- -->
-  <a href="hcd1.html" class="course-item" style="text-decoration:none; color:inherit;">
-    <h2>CM7XX • Human-Centered Design 1 (UX)<br>
-      <span class="coming">Coming Fall 2026</span>
-    </h2>
-    <p>
-     Guides students through the end-to-end solution development process using a strategic, human-centered approach. Students conduct user research, synthesize insights, frame problems, and generate and validate design concepts that prioritize empathy, inclusivity, and real-world impact.<br><br>
-      <strong>Project:</strong> UX Research & Product Case Study
-    </p>
-  </a>
+      <!-- GRADUATE SECTION -->
+      <section>
+        <h2 class="section-title">Graduate Courses: Product Strategy & User Experience</h2>
+        <p class="section-desc">Part of the <a href="#" class="text-link">Master of Science in Human-Centered Design program</a>, these courses teach the holistic product-development cycle to an interdisciplinary student body.</p>
+        
+       <div class="grid-2">
+          <!-- UX -->
+          <div class="card disabled">
+            <h2>CM7XX • Human-Centered Design 1 (UX)</h2>
+            <p>
+              Guides students through the end-to-end solution development process using a strategic, human-centered approach. Students conduct user research, synthesize insights, frame problems, and generate and validate design concepts.
+              <br><br><em class="coming-soon">Coming Fall 2026</em>
+            </p>
+            <div class="card-footer">Project: <span>UX Research & Product Case Study</span></div>
+          </div>
 
-  <!-- ---------- PRODUCT MGMT CARD ---------- -->
-  <a href="product-management.html" class="course-item" style="text-decoration:none; color:inherit;">
-    <h2>CM7XX • Product Management & Leadership<br>
-      <span class="coming">Coming Spring 2027</span>
-    </h2>
-    <p>
-      Prepares students to drive product vision, create lasting value, and influence organizational culture. The course covers core competencies such as feature prioritization, roadmap planning, Agile methodology, and stakeholder management. Through case studies and role-play, students learn to lead human-centered teams, measure impact, and align design vision with business objectives.<br><br>
-      <strong>Project:</strong> Product Strategy & Roadmap
-    </p>
-  </a>
+          <!-- Product Management -->
+          <div class="card disabled">
+            <h2>CM7XX • Product Management & Leadership</h2>
+            <p>
+              Prepares students to drive product vision, create lasting value, and influence organizational culture. Covers feature prioritization, roadmap planning, Agile methodology, and stakeholder management.
+              <br><br><em class="coming-soon">Coming Spring 2027</em>
+            </p>
+            <div class="card-footer">Project: <span>Product Strategy & Roadmap</span></div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-</section>
-
-</main>
-
-<footer>
-  <p>
-    MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS | BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
-    &copy; 2025. Jen Jiun Choi. All rights reserved.
-  </p>
-</footer>
-
+    <footer>
+      <span class="footer">MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS  |  
+      BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
+      &copy; 2025. Jen Jiun Choi. All rights reserved.
+    </footer>
+  </div>
 </body>
 </html>
