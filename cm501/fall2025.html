@@ -32,6 +32,34 @@
     </nav>
 
  <main>
+    <!-- DASHBOARD SECTION (Spotify + Roulette) -->
+      <section class="dashboard-grid">
+         <!-- Spotify Embed -->
+         <div class="spotify-wrapper">
+           <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0T4kprX9eGEqUk0ygY5jmV?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+         </div>
+
+         <!-- Embedded Mini Roulette -->
+         <div class="roulette-mini">
+            <div class="roulette-mini-header">
+               <h3>Class Roulette</h3>
+               <select id="section" class="form-select" onchange="updateSectionInfo()">
+                <option value="1">K1</option>
+                <option value="2">H1</option>
+                <option value="3">G1</option>
+              </select>
+            </div>
+            
+            <div id="result" class="result-display">?</div>
+
+            <div class="controls-row">
+              <button id="spinBtn" class="btn-primary" onclick="startRoulette()">Pick Student</button>
+              <button id="resetBtn" class="btn-secondary" title="Reset" onclick="resetSection()">↻</button>
+            </div>
+            <div id="status-msg" style="margin-top: 0.5rem; font-size: 0.75rem; color: #9ca3af;"></div>
+         </div>
+      </section>
+   
       <!-- GROUP PROJECTS SECTION -->
       <section style="margin-bottom: 5rem;">
         <h2 class="section-title" style="border-bottom: 1px solid var(--bu-border); padding-bottom: 1rem; margin-bottom: 2rem;">
