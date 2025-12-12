@@ -712,13 +712,17 @@ h1, h2, h3, h4 {
 }
 
 .lightbox-image {
-  max-width: 95vw;
-  max-height: 95vh;
+  /* Using viewport units for width/height with object-fit: contain forces scaling up */
+  width: 90vw;
+  height: 90vh;
   object-fit: contain;
+  
   transform: scale(0.95);
   transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   border-radius: 4px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Use filter for shadow on transparent/fitted images */
+  filter: drop-shadow(0 25px 25px rgba(0, 0, 0, 0.5));
 }
 
 .lightbox-overlay.active .lightbox-image {
