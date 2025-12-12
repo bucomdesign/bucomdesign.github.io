@@ -79,14 +79,9 @@ main {
 }
 
 .nav-brand {
-  font-family: var(--font-sans);
-  font-size: 1.5rem;      /* Larger size for standout */
-  font-weight: 800;       /* Extra Bold */
-  color: var(--bu-red);   /* Brand Color */
-  letter-spacing: -0.03em;
+  color: var(--bu-dark);
   position: relative;
-  line-height: 1;
-  margin-right: 0.5rem;
+  padding-bottom: 2px;
 }
 
 .nav-brand:hover {
