@@ -78,14 +78,32 @@ main {
   letter-spacing: 0.02em;
 }
 
+/* BRAND LOGO STYLES */
 .nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between dot and text */
+  font-family: var(--font-sans);
+  font-size: 1.5rem;      
+  font-weight: 800;       
   color: var(--bu-dark);
-  position: relative;
-  padding-bottom: 2px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-right: 0.5rem;
 }
 
 .nav-brand:hover {
-  color: var(--bu-dark);
+  opacity: 0.8;
+}
+
+.brand-dot {
+  width: 14px;
+  height: 14px;
+  background-color: var(--bu-red);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  transform: translateY(2px);
 }
 
 .nav-divider {
