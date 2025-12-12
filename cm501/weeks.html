@@ -3,265 +3,451 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>COM CM 501 – Weekly Schedule</title>
+  <title>COM CM 501 - Schedule</title>
+  <link rel="icon" type="image/png" href="https://bucomdesign.github.io/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://bucomdesign.github.io/favicon.png">
   <link rel="stylesheet" href="https://bucomdesign.github.io/styles.css" />
+  <style>
+    html { scroll-behavior: smooth; }
+    /* Utility to dim inactive sidebar links */
+    .week-list-link.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html">INTRO</a>
-    <a href="weeks.html" class="active">WEEKLY SCHEDULE</a>
-  <div class="nav-dropdown">
-      <a href="">OUR CLASS</a>
-      <div class="dropdown-content">
-        <a href="fall2025.html">Fall 2025</a>
-        <a href="spring2026.html">Spring 2026</a>
-        <a href="roulette.html">Class Roulette</a>
-        <a href="game.html">Last Class Activity</a>
-  </nav>
 
-  <main>
-    <section>
-      <h2>Weekly Schedule – 13 Week Process</h2>
-
-      <!-- Foundations -->
-      <p class="section-subtitle">Foundations of Design Strategy – <i>Getting Started with Design Thinking</i></p>
-      <ul class="week-list">
-        <li class="active"><a href="#week1"><b>Week 1 — Introduction to Design Strategy</b></a><br>What is design strategy? Why it matters in media and communications</li>
-        <li class="disabled"><a href="#week2"><b>Week 2 — Design Thinking & Audience Insight</b></a><br>Empathy maps, defining audience, problem framing</li>
-      </ul>
-
-      <!-- Core Visual Communication Skills -->
-      <p class="section-subtitle disabled">Core Visual Communication Skills – <i>Building Your Creative Toolkit</i></p>
-      <ul class="week-list">
-        <li class="disabled"><a href="#week3"><b>Week 3 — Gestalt Principles & Color Theory</b></a><br>Visual Harmony, Psychology, Relativity</li>
-        <li class="disabled"><a href="#week4"><b>Week 4 — Logo Marks & Typography</b></a><br>Core principles of visual identity and type design</li>
-        <li class="disabled"><a href="#week5"><b>Week 5 — Giving & Receiving Feedback</b></a><br>Key approaches to critique and constructive communication</li>
-        <li class="disabled"><a href="#week6"><b>Week 6 — Midterm Milestone</b></a><br>Individual Project Showcase</li>
-        <li class="disabled"><a href="#week7"><b>Week 7 — Design Ethics & Creative Ownership</b></a><br>Copyrights, Trademarks, and AI in Design</li>
-      </ul>
-
-      <!-- Design Collaboration -->
-      <p class="section-subtitle disabled">Design Collaboration – From Ideas to Multi-Platform Execution</p>
-      <ul class="week-list">
-        <li class="disabled"><a href="#week8"><b>Week 8 — Design Collaboration & Workflow</b></a><br>Creative team roles, collaborative process and mindset</li>
-        <li class="disabled"><a href="#week9"><b>Week 9 — Concept Development</b></a><br>HMW, Brainstorming and Conceptual Thinking</li>
-        <li class="disabled"><a href="#week10"><b>Week 10 — Grids & Visual Hierarchy</b></a><br>Structure, alignment, and visual order in composition</li>
-        <li class="disabled"><a href="#week11"><b>Week 11 — Creative Asset Gathering & Visual Direction</b></a><br>Images, Photos, and Assets for Final Execution</li>
-      </ul>
-
-      <!-- Final Presentation -->
-      <p class="section-subtitle disabled">Final Presentation & Reflection – Showcasing Your Work</p>
-      <ul class="week-list">
-        <li class="disabled"><a href="#week12"><b>Week 12 — Final Presentation Prep</b></a><br>Presenting to your audience</li>
-        <li class="disabled"><a href="#week13"><b>Week 13 — Final Group Presentation</b></a><br>Full campaign with brand guidelines</li>
-      </ul>
-
-      <hr />
-
-      <!-- Example Week 1 content -->
-      <div class="news-item" id="week1"> 
-        <h3><b>Week 1 — Introduction to Design Strategy</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Get to know your classmates</li>
-          <li>Class Expectation/Syllabus</li>
-          <li>Lecture: Introduction to Design Strategy</li>
-          <li>Install Figma</li>
-          <li>Activity: Worst Possible Idea</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Submit <a href="https://forms.gle/tR7N8FbdHGrCHSR76" target="_blank">Start Workshop Survey ↗</a></li>
-          <li>Add your name, email address, and link to your process website (Medium, Github, Wordpress) in our <a href="https://docs.google.com/spreadsheets/d/1PQrWTnrU7mbWiQ9vR5vz8B3veQBRODhEvrnQZm2q9ck/edit?usp=sharing" target="_blank">Student Project Directory ↗</a></li>
-          <li>Use your BU email to sign up for a Figma account, if you haven’t done so</li>
-          <li>Read <a href="https://monteiro.medium.com/what-is-a-designer-94ac32ff92d0" target="_blank">What is a Designer ↗</a></li>
-          <li>Bring three different ideas for your individual project and be prepared to discuss them in class next week. Post it on your process website before the class start</li>
-         </ul>
+  <div class="page-container">
+    <!-- NAVIGATION -->
+    <nav class="main-nav">
+      <div class="nav-container">
+        <a href="https://bucomdesign.github.io" class="nav-brand">BU COM DESIGN</a>
+        <div class="nav-divider"></div>
+        <a href="intro.html" class="nav-link active">INTRO</a>
+        <a href="weeks.html" class="nav-link">WEEKLY SCHEDULE</a>
+        <div class="nav-dropdown">
+          <button class="dropdown-trigger">OUR CLASS ▾</button>
+          <div class="dropdown-content">
+            <a href="fall2025.html">Fall 2025</a>
+            <a href="#" class="disabled">Spring 2026</a>
+            <a href="roulette.html">Class Roulette</a>
+          </div>
+        </div>
       </div>
+    </nav>
 
-<main style="display: none;">
-<!-- All your content here will be hidden. When you want to show it again, you can remove the style or set it to display: block; or none; -->
-   
-      <!-- Example Week 2 content -->
-      <div class="news-item" id="week2"> 
-        <h3><b>Week 2 — Design Thinking & Audience Insight</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your 3 topics</li>
-          <li>Lecture: Design Thinking & Audience Insight</li>
-          <li>Activity: Brand a Bite</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Read <a href="https://www.nicolefenton.com/words-as-material/" target="_blank">Words as Material ↗</a></li>
-          <li><a href="https://docs.google.com/presentation/d/1EUZUspjThR3RX0bdUkdW5dBax6_yRTa7wpJrw-_TBO4/edit?slide=id.g37c27ff2da9_0_578#slide=id.g37c27ff2da9_0_578" target="_blank">Define your topic ↗</a> (1. Target Audience 2. Competition 3. Guiding Principles) for your individual project and be prepared to discuss them in class next week. Post it on your process website before the class start	</li>
-         </ul>
-      </div>
+    <main class="weeks-layout">
       
-         <!-- Example Week 3 content -->
-      <div class="news-item" id="week3"> 
-        <h3><b>Week 3 — Gestalt Principles & Color Theory</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your assignment</li>
-          <li>Lecture: Gestalt Principles & Color Theory</li>
-          <li>Activity: Say What You See</li>
-          <li>Activity: Color Method Game</li>
-        </ul>
+      <!-- SIDEBAR NAV -->
+      <aside class="weeks-sidebar">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Schedule</h2>
+        
+        <div class="week-group-title">Foundations of Design – Getting Started</div>
+        <a href="#week1" class="week-list-link active">Week 1 — Introduction</a>
+        <a href="#week2" class="week-list-link disabled">Week 2 — Audience Insight</a>
 
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Install <a href="http://bu.edu/tech/services/teaching/digital-multimedia-production/adobe-creative-cloud/request/" target="_blank">Adobe Creative Suite ↗</a>Photoshop & Illustrator</li>
-          <li>Read <a href="https://drive.google.com/file/d/1YoO9hawToM1OoA0xAO445ZBAYa4edZfH/view?usp=sharing" target="_blank">A Primer of Visual Literacy, ch. 2-3 Donis A. Dondis ↗</a> 
-            <a href="https://drive.google.com/file/d/1O5Sa-yVGgDshHfW0rrS5zah5WNtPrBHn/view?usp=sharing" target="_blank">The Triangle, Bruno Munari ↗</a>
-            <a href="https://ebookcentral.proquest.com/lib/bu/reader.action?c=RVBVQg&docID=4518455&ppg=46" target="_blank">Graphic Design: the New Basics, ch. Color Ellen Lupton ↗</a></li>
-          <li><a href="https://docs.google.com/presentation/d/1AS0IpQWrjmFhbIFlYl5A1uMNV-JZnDWDS7wKcqzuDEw/edit?slide=id.g348ecc71fb8_0_339#slide=id.g348ecc71fb8_0_339 target="_blank">Conceptualize your ideas ↗</a> (1. A Moodboard, 2. Logo Sketches, 3. Color Palette) and be prepared to discuss them in class next week. Post it on your process website before the class start</li>
-         </ul>
+        <div class="week-group-title">Core Visual Communication Skills</div>
+        <a href="#week3" class="week-list-link disabled">Week 3 — Gestalt & Color</a>
+        <a href="#week4" class="week-list-link disabled">Week 4 — Logo & Type</a>
+        <a href="#week5" class="week-list-link disabled">Week 5 — Feedback</a>
+        <a href="#week6" class="week-list-link disabled">Week 6 — Midterm</a>
+        <a href="#week7" class="week-list-link disabled">Week 7 — Creative Ownership</a>
+
+        <div class="week-group-title">Design Collaboration</div>
+        <a href="#week8" class="week-list-link disabled">Week 8 — Workflow</a>
+        <a href="#week9" class="week-list-link disabled">Week 9 — Concept</a>
+        <a href="#week10" class="week-list-link disabled">Week 10 — Grids</a>
+        <a href="#week11" class="week-list-link disabled">Week 11 — Assets</a>
+
+        <div class="week-group-title">Final</div>
+        <a href="#week12" class="week-list-link disabled">Week 12 — Prep</a>
+        <a href="#week13" class="week-list-link disabled">Week 13 — Presentation</a>
+      </aside>
+
+      <!-- CONTENT AREA -->
+      <div class="week-content-area">
+
+        <!-- WEEK 1 (Active) -->
+        <div id="week1" class="week-detail-card">
+          <span class="week-tag">Foundations</span>
+          <h3 class="week-detail-title">Week 1 — Introduction to Design Strategy</h3>
+          <p class="week-detail-subtitle">What is design strategy? Why it matters in media and communications</p>
+          
+          <div class="content-section">
+            <div class="content-header">
+              <div class="content-marker"></div> In Class
+            </div>
+            <ul class="content-list">
+              <li><span class="bullet">›</span> Get to know your classmates</li>
+              <li><span class="bullet">›</span> Class Expectation/Syllabus</li>
+              <li><span class="bullet">›</span> Lecture: Introduction to Design Strategy</li>
+              <li><span class="bullet">›</span> Install Figma</li>
+              <li><span class="bullet">›</span> Activity: Worst Possible Idea</li>
+            </ul>
+          </div>
+
+          <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+            <div class="content-header">
+              <div class="content-marker gray"></div> Assignments
+            </div>
+            <ul class="content-list">
+              <li><span class="bullet">•</span>Submit<a href="https://forms.gle/tR7N8FbdHGrCHSR76" target="_blank" class="text-link">Start Workshop Survey</a></li>
+              <li><span class="bullet">•</span> Add your name to<a href="https://docs.google.com/spreadsheets/d/1PQrWTnrU7mbWiQ9vR5vz8B3veQBRODhEvrnQZm2q9ck/edit?usp=sharing" target="_blank" class="text-link">Student Project Directory</a></li>
+              <li><span class="bullet">•</span> Sign up for a Figma account</li>
+              <li><span class="bullet">•</span> Read<a href="https://monteiro.medium.com/what-is-a-designer-94ac32ff92d0" target="_blank" class="text-link">What is a Designer</a></li>
+              <li><span class="bullet">•</span> Bring three different ideas for your individual project</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- WEEK 2 (Disabled) -->
+        <div id="week2" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Foundations</span>
+          <h3 class="week-detail-title">Week 2 — Design Thinking & Audience Insight</h3>
+          <p class="week-detail-subtitle">Empathy maps, defining audience, problem framing</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+          
+          <!-- Remove style="display: none;" below to enable this week -->
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Share your 3 topics</li>
+                <li><span class="bullet">›</span> Lecture: Design Thinking & Audience Insight</li>
+                <li><span class="bullet">›</span> Activity: Brand a Bite</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Read <a href="https://www.nicolefenton.com/words-as-material/" target="_blank" class="text-link">Words as Material ↗</a></li>
+                <li><span class="bullet">•</span> <a href="https://docs.google.com/presentation/d/1EUZUspjThR3RX0bdUkdW5dBax6_yRTa7wpJrw-_TBO4/edit?slide=id.g37c27ff2da9_0_578#slide=id.g37c27ff2da9_0_578" target="_blank" class="text-link">Define your topic ↗</a> (1. Target Audience 2. Competition 3. Guiding Principles)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 3 (Disabled) -->
+        <div id="week3" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Core Skills</span>
+          <h3 class="week-detail-title">Week 3 — Gestalt Principles & Color Theory</h3>
+          <p class="week-detail-subtitle">Visual Harmony, Psychology, Relativity</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Share your assignment</li>
+                <li><span class="bullet">›</span> Lecture: Gestalt Principles & Color Theory</li>
+                <li><span class="bullet">›</span> Activity: Say What You See</li>
+                <li><span class="bullet">›</span> Activity: Color Method Game</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Install <a href="http://bu.edu/tech/services/teaching/digital-multimedia-production/adobe-creative-cloud/request/" target="_blank" class="text-link">Adobe Creative Suite ↗</a> (Photoshop & Illustrator)</li>
+                <li><span class="bullet">•</span> Read <a href="https://drive.google.com/file/d/1YoO9hawToM1OoA0xAO445ZBAYa4edZfH/view?usp=sharing" target="_blank" class="text-link">A Primer of Visual Literacy ↗</a></li>
+                <li><span class="bullet">•</span> <a href="https://docs.google.com/presentation/d/1AS0IpQWrjmFhbIFlYl5A1uMNV-JZnDWDS7wKcqzuDEw/edit?slide=id.g348ecc71fb8_0_339#slide=id.g348ecc71fb8_0_339" target="_blank" class="text-link">Conceptualize your ideas ↗</a> (1. Moodboard, 2. Logo Sketches, 3. Color Palette)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 4 (Disabled) -->
+        <div id="week4" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Core Skills</span>
+          <h3 class="week-detail-title">Week 4 — Logo Marks & Typography</h3>
+          <p class="week-detail-subtitle">Core principles of visual identity and type design</p>
+
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Vector vs Raster</li>
+                <li><span class="bullet">›</span> Activity: My Color Flag</li>
+                <li><span class="bullet">›</span> Lecture: Logo Marks & Typography</li>
+                <li><span class="bullet">›</span> Activity: Kerning & Shape Type</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Watch <a href="https://www.youtube.com/watch?v=LCfBYE97rFk" target="_blank" class="text-link">Abstract: The Art of Design | Paula Scher ↗</a></li>
+                <li><span class="bullet">•</span> Read <a href="https://medium.com/sketch-app/mastering-the-bezier-curve-in-sketch-4da8fdf0dbbb" target="_blank" class="text-link">Mastering the Bézier Curve ↗</a></li>
+                <li><span class="bullet">•</span> <a href="https://docs.google.com/presentation/d/1YoWIe5MnQ7tKks8sMM5t_gFfjrE8NAU9E7y6VnyZIOI/edit?slide=id.g381691edf5f_0_380#slide=id.g381691edf5f_0_380" target="_blank" class="text-link">Visualize your brand ↗</a> (Create 5 variations of 4 types: 20 total)</li>
+                <li><span class="bullet">•</span> 300–500 word write-up of <a href="https://docs.google.com/presentation/d/1YoWIe5MnQ7tKks8sMM5t_gFfjrE8NAU9E7y6VnyZIOI/edit?slide=id.g381691edf5f_0_457#slide=id.g381691edf5f_0_457" target="_blank" class="text-link">Logo Case Study ↗</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 5 (Disabled) -->
+        <div id="week5" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Core Skills</span>
+          <h3 class="week-detail-title">Week 5 — Giving & Receiving Feedback</h3>
+          <p class="week-detail-subtitle">Key approaches to critique and constructive communication</p>
+
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Logo Design Tips & Tricks</li>
+                <li><span class="bullet">›</span> Activity: Typography & Pathfinder</li>
+                <li><span class="bullet">›</span> Lecture: Giving & Receiving Feedback</li>
+                <li><span class="bullet">›</span> Activity: Group Critique Session</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Select your 3 strongest directions and create 5 color iterations each (15 total)</li>
+                <li><span class="bullet">•</span> Review <a href="https://docs.google.com/document/d/137WPJuwh5lDrUpFgOAWcdqOTzFXf-_vmWdeU7Exavdw/edit?usp=sharing" target="_blank" class="text-link">Project 1 submission details ↗</a></li>
+                <li><span class="bullet">•</span> Watch <a href="https://youtu.be/SggjK0Gm3I4?si=LZgW0_FqGau1BiQz" target="_blank" class="text-link">Thanks for the Feedback ↗</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 6 (Disabled) -->
+        <div id="week6" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Core Skills</span>
+          <h3 class="week-detail-title">Week 6 — Midterm Milestone</h3>
+          <p class="week-detail-subtitle">Individual Project Showcase</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Group Critique / 1:1s</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> <a href="https://docs.google.com/presentation/d/1i8IGV3fRPczcVk4bvh6RvsiyXYpD2Zsrd6-RfVWVy40/edit?slide=id.g368b014592c_0_126#slide=id.g368b014592c_0_126" target="_blank" class="text-link">Finalize your logo ↗</a></li>
+                <li><span class="bullet">•</span> Create <a href="https://docs.google.com/presentation/d/1i8IGV3fRPczcVk4bvh6RvsiyXYpD2Zsrd6-RfVWVy40/edit?slide=id.g368b014592c_0_277#slide=id.g368b014592c_0_277" target="_blank" class="text-link">In-Situ Mock-up ↗</a></li>
+                <li><span class="bullet">•</span> Review <a href="https://docs.google.com/document/d/137WPJuwh5lDrUpFgOAWcdqOTzFXf-_vmWdeU7Exavdw/edit?usp=sharing" target="_blank" class="text-link">Project 1 submission details ↗</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 7 (Disabled) -->
+        <div id="week7" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Core Skills</span>
+          <h3 class="week-detail-title">Week 7 — Design Ethics & Creative Ownership</h3>
+          <p class="week-detail-subtitle">Copyrights, Trademarks, and AI in Design</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Design Ethics & Creative Ownership</li>
+                <li><span class="bullet">›</span> Discussion: Copyright, Trademark, and AI</li>
+                <li><span class="bullet">›</span> Case Study: Allbirds Purpose-Driven Design as Strategy</li>
+                <li><span class="bullet">›</span> Project 1 Lightning Round</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 8 (Disabled) -->
+        <div id="week8" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Collaboration</span>
+          <h3 class="week-detail-title">Week 8 — Design Collaboration & Workflow</h3>
+          <p class="week-detail-subtitle">Creative team roles, collaborative process and mindset</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Share your Logo Lab Assignment</li>
+                <li><span class="bullet">›</span> Design Collaboration & Workflow</li>
+                <li><span class="bullet">›</span> Project 2: Group Project</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Read <a href="https://review.firstround.com/how-design-thinking-transformed-airbnb-from-failing-startup-to-billion-dollar-business/" target="_blank" class="text-link">How Design Thinking Transformed Airbnb ↗</a></li>
+                <li><span class="bullet">•</span> <a href="https://docs.google.com/presentation/d/1mhoE4weUeTnktlfgW6dMwFGc3KiGIIsXLzu9I2E0Cl0/edit?slide=id.g39b231c2ec5_0_54#slide=id.g39b231c2ec5_0_54" target="_blank" class="text-link">Defining Your Team’s Mission ↗</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 9 (Disabled) -->
+        <div id="week9" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Collaboration</span>
+          <h3 class="week-detail-title">Week 9 — Concept Development</h3>
+          <p class="week-detail-subtitle">HMW, Brainstorming and Conceptual Thinking</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Share your team's mission statement</li>
+                <li><span class="bullet">›</span> Concept Development</li>
+                <li><span class="bullet">›</span> Project 2: Group Project</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Developing Your Concept (1. HMW + Brainstorming 2. 3 concept sketches)</li>
+                <li><span class="bullet">•</span> Bring one example of creative brand messaging, advertising, or packaging</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 10 (Disabled) -->
+        <div id="week10" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Collaboration</span>
+          <h3 class="week-detail-title">Week 10 — Grids & Visual Hierarchy</h3>
+          <p class="week-detail-subtitle">Structure, alignment, and visual order in composition</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Share your inspiration assignment</li>
+                <li><span class="bullet">›</span> Team project check in</li>
+                <li><span class="bullet">›</span> Grids & Visual Hierarchy</li>
+                <li><span class="bullet">›</span> Project 2: Group Project</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Execute your chosen direction and create three medium-fidelity sketches</li>
+                <li><span class="bullet">•</span> Read 2 chapters (Hierarchy, Grids) from Graphic Design: the New Basics</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 11 (Disabled) -->
+        <div id="week11" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Collaboration</span>
+          <h3 class="week-detail-title">Week 11 — Creative Asset Gathering & Visual Direction</h3>
+          <p class="week-detail-subtitle">Images, Photos, and Assets for Final Execution</p>
+          
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+
+          <div style="display: none;">
+            <div class="content-section">
+              <div class="content-header">
+                <div class="content-marker"></div> In Class
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">›</span> Check in: Group work progress</li>
+                <li><span class="bullet">›</span> Creative Asset Gathering & Visual Direction</li>
+                <li><span class="bullet">›</span> Tutorial: Photoshop</li>
+                <li><span class="bullet">›</span> Project 2: Group Project</li>
+              </ul>
+            </div>
+
+            <div class="content-section" style="background: #f9fafb; padding: 1.5rem; border-radius: 0.5rem;">
+              <div class="content-header">
+                <div class="content-marker gray"></div> Assignments
+              </div>
+              <ul class="content-list">
+                <li><span class="bullet">•</span> Review <a href="https://docs.google.com/document/d/101B-YZTNWXXcGSE6mhYcQRQ1Pgx5oXhhIKEm0gyj97A/edit?usp=sharing" target="_blank" class="text-link">Project 2 Requirements ↗</a></li>
+                <li><span class="bullet">•</span> Continue developing and executing your concept</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEEK 12 (Disabled) -->
+        <div id="week12" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Final Presentation</span>
+          <h3 class="week-detail-title">Week 12 — Final Presentation Prep</h3>
+          <p class="week-detail-subtitle">Presenting to your audience</p>
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+        </div>
+
+        <!-- WEEK 13 (Disabled) -->
+        <div id="week13" class="week-detail-card" style="opacity: 0.6;">
+          <span class="week-tag">Final Presentation</span>
+          <h3 class="week-detail-title">Week 13 — Final Group Presentation</h3>
+          <p class="week-detail-subtitle">Full campaign with brand guidelines</p>
+          <em class="coming-soon" style="color: var(--bu-red); font-weight: 700;">Coming Soon</em>
+        </div>
+
       </div>
-       <!-- Example Week 4 content -->
-      <div class="news-item" id="week4"> 
-        <h3><b>Week 4 — Logo Marks & Typography</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your assignment</li>
-          <li>Vector vs Raster</li>
-          <li>Activity: My Color Flag</li>
-          <li>Lecture: Logo Marks & Typography</li>
-          <li>Activity: Kerning & Shape Type</li>
-        </ul>
+    </main>
 
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Watch <a href="https://www.youtube.com/watch?v=LCfBYE97rFk" target="_blank">Abstract: The Art of Design | Paula Scher: Graphic Design ↗</a></li>
-          <li>Read <a href="https://medium.com/sketch-app/mastering-the-bezier-curve-in-sketch-4da8fdf0dbbb" target="_blank">Mastering the Bézier Curve in Sketch ↗</a> 
-          <li><a href="https://docs.google.com/presentation/d/1YoWIe5MnQ7tKks8sMM5t_gFfjrE8NAU9E7y6VnyZIOI/edit?slide=id.g381691edf5f_0_380#slide=id.g381691edf5f_0_380 target="_blank">Visualize your brand ↗</a> Create 5 variations each of: Hand-Drawn, Word Marks, Graphic Marks, and Combined Marks (20 total)</li>
-          <li>300–500 word write-up of <a href="https://docs.google.com/presentation/d/1YoWIe5MnQ7tKks8sMM5t_gFfjrE8NAU9E7y6VnyZIOI/edit?slide=id.g381691edf5f_0_457#slide=id.g381691edf5f_0_457" target="_blank">Logo Case Study & Analysis ↗</a> of your choice</li>
-          <li>[Optional] Complete Adobe Learn Illustrator Tutorial for your technical skills - 1. Build your logo with basic shapes 2. Enhance your logo 3. Add text to your logo</li>
-         </ul>
-      </div>
-        <!-- Example Week 5 content -->
-      <div class="news-item" id="week5"> 
-        <h3><b>Week 5 — Giving & Receiving Feedback</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your case study</li>
-          <li>Logo Design Tips & Tricks</li>
-          <li>Activity: Typography & Pathfinder</li>
-          <li>Lecture: Giving & Receiving Feedback</li>
-          <li>Activity: Group Critique Session</li>
-        </ul>
+    <footer>
+  <p>
+    MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS | BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
+    &copy; 2025. Jen Jiun Choi. All rights reserved.
+  </p>
+</footer>
+  </div>
 
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Select your 3 strongest directions from critique and create 5 color iterations of each (15 total) in Adobe Illustrator</li>
-          <li>Review <a href="https://docs.google.com/document/d/137WPJuwh5lDrUpFgOAWcdqOTzFXf-_vmWdeU7Exavdw/edit?usp=sharing" target="_blank">Project 1 submission details ↗</a> </li>
-          <li>Watch <a href="https://youtu.be/SggjK0Gm3I4?si=LZgW0_FqGau1BiQz" target="_blank">Thanks for the Feedback | Doug Stone & Sheila Heen ↗</a> </li>
-         </ul>
-      </div>
-       <!-- Example Week 6 content -->
-      <div class="news-item" id="week6"> 
-        <h3><b>Week 6 - Midterm Milestone</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Group Critique / 1:1s</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li><a href="https://docs.google.com/presentation/d/1i8IGV3fRPczcVk4bvh6RvsiyXYpD2Zsrd6-RfVWVy40/edit?slide=id.g368b014592c_0_126#slide=id.g368b014592c_0_126" target="_blank">Fanalize your logo ↗ </a>Based on the feedback you’ve received, choose one final direction and refine your graphic with precision and attention to detail</li>
-          <li>Create <a href="https://docs.google.com/presentation/d/1i8IGV3fRPczcVk4bvh6RvsiyXYpD2Zsrd6-RfVWVy40/edit?slide=id.g368b014592c_0_277#slide=id.g368b014592c_0_277" target="_blank">In-Situ Mock-up ↗</a> 
-          <li>Review <a href="https://docs.google.com/document/d/137WPJuwh5lDrUpFgOAWcdqOTzFXf-_vmWdeU7Exavdw/edit?usp=sharing" target="_blank">Project 1 submission details ↗</a> 
-         </ul>
-      </div>
-       <!-- Example Week 7 content -->
-      <div class="news-item" id="week7"> 
-        <h3><b>Week 7 - Design Ethics & Creative Ownership</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Design Ethics & Creative Ownership</li>
-          <li>Discussion : Copyright, Trademark, and AI</li>
-          <li>Case Study: Allbirds Purpose-Driven Design as Strategy</li>
-          <li>Project 1 Lightning Round</li>
-        </ul>
-      </div>
-         <!-- Example Week 8 content -->
-      <div class="news-item" id="week8"> 
-        <h3><b>Week 8 - Design Collaboration & Workflow</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your Logo Lab Assignment</li>
-          <li>Design Collaboration & Workflow</li>
-          <li>Project 2: Group Project</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Read <a href="https://review.firstround.com/how-design-thinking-transformed-airbnb-from-failing-startup-to-billion-dollar-business/" target="_blank">How Design Thinking Transformed Airbnb ↗ </a></li>
-          <li><a href="https://docs.google.com/presentation/d/1mhoE4weUeTnktlfgW6dMwFGc3KiGIIsXLzu9I2E0Cl0/edit?slide=id.g39b231c2ec5_0_54#slide=id.g39b231c2ec5_0_54" target="_blank">Defining Your Team’s Mission ↗</a> (1. Mission Statement + 5 Whys activity 2. Target Audience + Competition) and be prepared to discuss them in class next week. Post it on your (Team Lead) process website before the class start 
-         </ul>
-      </div>
-       <!-- Example Week 9 content -->
-      <div class="news-item" id="week9"> 
-        <h3><b>Week 9 - Concept Development</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your team's mission statement</li>
-          <li>Concept Development</li>
-          <li>Project 2: Group Project</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Developing Your Concept (1. HMW + Idea Brainstorming  2. 3 concept sketches) and be prepared to discuss them in class next week. Post the summary of your work on your (Team Lead) process website before the class start</li>
-          <li>Bring one example of creative brand messaging, advertising, a poster, or packaging. Be ready to discuss what’s working well and why you like it.</li>
-      </div>
-      
-       <!-- Example Week 10 content -->
-      <div class="news-item" id="week10"> 
-        <h3><b>Week 10 - Grids & Visual Hierarchy</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Share your inspiration assignment</li>
-          <li>Team project check in</li>
-          <li>Grids & Visual Hierarchy</li>
-          <li>Project 2: Group Project</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Execute your chosen direction and create three medium-fidelity sketches based on the feedback you received today. All sketches should be in black and white. Use the grid system to organize your contents. Post them below your initial sketches on your team’s Figma ideation board</li>
-          <li>Read 2 chapters (<a href="https://ebookcentral.proquest.com/lib/bu/reader.action?c=RVBVQg&docID=4518455&ppg=68" target="_blank">Hierarchy ↗ </a>, <a href="https://ebookcentral.proquest.com/lib/bu/reader.action?c=RVBVQg&docID=4518455&ppg=90" target="_blank">Grids ↗ </a>) from Graphic Design: the New Basics, Ellen Lupton and write a summary on your process post</li>
-      </div>
-
-       <!-- Example Week 11 content -->
-      <div class="news-item" id="week11"> 
-        <h3><b>Week 11 - Creative Asset Gathering & Visual Direction</b></h3> 
-        <p class="section-subtitle"><i>In Class</i></p> 
-        <ul>
-          <li>Check in: Group work progress</li>
-          <li>Creative Asset Gathering & Visual Direction</li>
-          <li>Tutorial: Photoshop</li>
-          <li>Project 2: Group Project</li>
-        </ul>
-
-        <p class="section-subtitle"><i>Assignments for next week</i></p> 
-         <ul>
-          <li>Review <a href="https://docs.google.com/document/d/101B-YZTNWXXcGSE6mhYcQRQ1Pgx5oXhhIKEm0gyj97A/edit?usp=sharing">Project 2 Requirements ↗ </a> as a group and plan your design/presentation for the final</li>
-          <li>Continue developing and executing your concept. Revisit your original logo and brand to ensure your new designs remain consistent with the established identity. If needed, update or rebrand your initial logo for the final graphic treatment, color palette, typography, and visual elements</li>
-      </div>
-      <hr />
-    </section>
-  </main>
-
-  <footer>
-    <p>
-      MASS COMMUNICATION, ADVERTISING & PUBLIC RELATIONS | BOSTON UNIVERSITY COLLEGE OF COMMUNICATION<br>
-      &copy; 2025. Jen Jiun Choi. All rights reserved.
-    </p>
-  </footer>
 </body>
 </html>
