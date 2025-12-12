@@ -32,32 +32,36 @@
     </nav>
 
  <main>
-    <!-- DASHBOARD SECTION (Spotify + Roulette) -->
+<!-- DASHBOARD SECTION (Music Player + Roulette Widget) -->
       <section class="dashboard-grid">
-         <!-- Spotify Embed -->
-         <div class="spotify-wrapper">
-           <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0T4kprX9eGEqUk0ygY5jmV?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+         
+         <!-- Custom Music Player -->
+         <div class="music-player" id="musicPlayer">
+            <div class="music-info">
+               <div class="music-title">BU COM Design Activity Jam</div>
+               <div class="marquee-container">
+                 <div class="marquee-text" id="marqueeText">
+                   Welcome to Class • Click Play to Start • 
+                 </div>
+               </div>
+            </div>
+            <div class="music-controls">
+               <button class="play-btn" id="playBtn" onclick="toggleMusic()">
+                  ▶
+               </button>
+               <a href="https://open.spotify.com/playlist/0T4kprX9eGEqUk0ygY5jmV?si=05a108b356dc4e7a" target="_blank" class="spotify-link-btn">
+                  <span>Open Spotify</span> ↗
+               </a>
+            </div>
          </div>
 
-         <!-- Embedded Mini Roulette -->
-         <div class="roulette-mini">
-            <div class="roulette-mini-header">
-               <h3>Class Roulette</h3>
-               <select id="section" class="form-select" onchange="updateSectionInfo()">
-                <option value="1">K1</option>
-                <option value="2">H1</option>
-                <option value="3">G1</option>
-              </select>
-            </div>
-            
-            <div id="result" class="result-display">?</div>
-
-            <div class="controls-row">
-              <button id="spinBtn" class="btn-primary" onclick="startRoulette()">Pick Student</button>
-              <button id="resetBtn" class="btn-secondary" title="Reset" onclick="resetSection()">↻</button>
-            </div>
-            <div id="status-msg" style="margin-top: 0.5rem; font-size: 0.75rem; color: #9ca3af;"></div>
+         <!-- Roulette Trigger Widget -->
+         <div class="roulette-trigger-card" onclick="openRouletteModal()">
+            <span class="roulette-icon">🎲</span>
+            <div class="roulette-trigger-title">Class Roulette</div>
+            <div class="roulette-trigger-desc">Pick a student randomly</div>
          </div>
+
       </section>
    
       <!-- GROUP PROJECTS SECTION -->
