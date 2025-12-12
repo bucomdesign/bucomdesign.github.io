@@ -553,7 +553,7 @@ h1, h2, h3, h4 {
 }
 
 .student-avatar {
-  aspect-ratio: 6/4;
+  aspect-ratio: 8/7;
   background-color: #f9fafb;
   border: 1px solid var(--bu-border);
   border-radius: 1rem;
@@ -565,7 +565,7 @@ h1, h2, h3, h4 {
 }
 
 .student-avatar img {
-  width: 100%;
+  width: auto;
   height: 100%;
   object-fit: cover;
 }
