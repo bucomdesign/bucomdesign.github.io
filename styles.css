@@ -224,7 +224,7 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
   margin-top: 0;
   margin-bottom: 3rem;    /* Increased spacing */
-  max-width: 65ch;
+  max-width: 120ch;
 }
 
 /* -----------------------------------------------------------------
