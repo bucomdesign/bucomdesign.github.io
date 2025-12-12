@@ -513,11 +513,11 @@ h1, h2, h3, h4 {
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 3rem;
   margin-bottom: 4rem;
+  align-items: start; /* Ensures items align to top if they have different heights */
 }
 
 .project-media {
-  /* Adjusted for taller aspect ratio (approx 3x height of previous 16/9, essentially 9/16) */
-  aspect-ratio: 9/16;
+  /* Removed fixed aspect ratio to allow images to display at their natural individual height/width ratios */
   background-color: var(--bu-gray-light);
   border-radius: 1rem;
   overflow: hidden;
@@ -525,10 +525,15 @@ h1, h2, h3, h4 {
   border: 1px solid var(--bu-border);
 }
 
+.project-media a {
+  display: block; /* Ensure anchor wraps the image properly */
+}
+
 .project-media img {
   width: 100%;
-  height: auto;
-  object-fit: cover;
+  height: auto; /* Natural height based on width */
+  display: block;
+  object-fit: contain;
   transition: transform 0.5s ease;
 }
 
