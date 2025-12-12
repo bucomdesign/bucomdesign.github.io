@@ -516,7 +516,8 @@ h1, h2, h3, h4 {
 }
 
 .project-media {
-  aspect-ratio: 16/9;
+  /* Adjusted for taller aspect ratio (approx 3x height of previous 16/9, essentially 9/16) */
+  aspect-ratio: 9/16;
   background-color: var(--bu-gray-light);
   border-radius: 1rem;
   overflow: hidden;
@@ -537,7 +538,8 @@ h1, h2, h3, h4 {
 
 .student-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  /* Increased minimum width from 140px to 210px (1.5x wider) */
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 1.5rem;
 }
 
