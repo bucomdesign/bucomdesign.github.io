@@ -79,18 +79,23 @@ main {
 }
 
 .nav-brand {
-  color: var(--bu-dark);
+  font-family: var(--font-sans);
+  font-size: 1.5rem;      /* Larger size for standout */
+  font-weight: 800;       /* Extra Bold */
+  color: var(--bu-red);   /* Brand Color */
+  letter-spacing: -0.03em;
   position: relative;
-  padding-bottom: 2px;
+  line-height: 1;
+  margin-right: 0.5rem;
 }
 
-.nav-brand:hover, .nav-link:hover, .dropdown-trigger:hover {
-  color: var(--bu-red);
+.nav-brand:hover {
+  color: var(--bu-dark);
 }
 
 .nav-divider {
   width: 1px;
-  height: 16px;
+  height: 24px; /* Increased height to match new brand size */
   background-color: var(--bu-border);
 }
 
@@ -100,12 +105,16 @@ main {
   padding-bottom: 2px;
 }
 
-/* Active State styling */
-.nav-link.active, .nav-brand.active {
+.nav-link:hover, .dropdown-trigger:hover {
   color: var(--bu-red);
 }
 
-.nav-link.active::after, .nav-brand.active::after {
+/* Active State styling (Links only) */
+.nav-link.active {
+  color: var(--bu-red);
+}
+
+.nav-link.active::after {
   content: '';
   position: absolute;
   left: 0;
@@ -148,6 +157,17 @@ main {
   padding: 0.5rem 0;
 }
 
+/* FIX: Transparent bridge to fill the margin gap so hover doesn't break */
+.dropdown-content::before {
+  content: '';
+  position: absolute;
+  top: -0.5rem; /* Height of the margin-top */
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  background: transparent;
+}
+
 .nav-dropdown:hover .dropdown-content {
   display: block;
 }
@@ -168,6 +188,7 @@ main {
   color: #d1d5db;
   pointer-events: none;
 }
+
 
 /* -----------------------------------------------------------------
    TYPOGRAPHY
