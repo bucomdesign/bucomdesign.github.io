@@ -612,8 +612,8 @@ h1, h2, h3, h4 {
 }
 
 .student-avatar {
-  aspect-ratio: 1/1;
-  background-color: #f9fafb;
+  aspect-ratio: 6/4;
+  background-color: white;
   border: 1px solid var(--bu-border);
   border-radius: 1rem;
   margin-bottom: 0.75rem;
@@ -624,9 +624,10 @@ h1, h2, h3, h4 {
 }
 
 .student-avatar img {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: 80%;
   object-fit: cover;
+   transform: translateY(-4px);
 }
 
 .student-name {
@@ -637,7 +638,6 @@ h1, h2, h3, h4 {
 .student-card-mini:hover .student-name {
   color: var(--bu-red);
 }
-
 /* -----------------------------------------------------------------
    ROULETTE STYLES (Page & Modal)
 ----------------------------------------------------------------- */
