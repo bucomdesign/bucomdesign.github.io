@@ -292,8 +292,8 @@ h1, h2, h3, h4 {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; }
-.card p { font-size: 0.95rem; color: var(--text-body); margin-bottom: 1.5rem; flex-grow: 1; }
+.card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; }
+.card p { font-size: 0.95rem; color: var(--text-body); margin-bottom: .5rem; flex-grow: 1; }
 .card-footer { font-size: 0.875rem; font-weight: 600; color: var(--bu-dark); }
 .card-footer span { font-weight: 400; color: var(--text-muted); }
 
@@ -309,7 +309,6 @@ h1, h2, h3, h4 {
 
 .card.disabled:hover .coming-soon {
   color: var(--bu-red);
-  font-weight: 700;
 }
 
 /* Go To Site Text Highlight (Active Cards) */
