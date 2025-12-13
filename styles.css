@@ -467,7 +467,6 @@ h1, h2, h3, h4 {
   padding: 0.5rem 0;
   color: var(--text-muted);
   border-left: 2px solid transparent;
-  padding-left: 1rem;
   margin-bottom: 0.5rem;
 }
 
