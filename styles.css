@@ -381,8 +381,13 @@ h1, h2, h3, h4 {
   padding: 1.5rem;
   border: 1px solid var(--bu-border);
   border-radius: 0.75rem;
-  background-color: white;
+  background-color: #f9fafb;
   transition: background-color 0.2s;
+}
+
+.competency-item:hover {
+  background-color: white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .competency-item h4 {
@@ -415,12 +420,36 @@ h1, h2, h3, h4 {
   font-weight: 600;
   color: var(--text-body);
   transition: all 0.2s;
+  /* Removed margin-top: 1rem; to let containers control spacing via gap/margin */
 }
 
 .resource-pill:hover {
   background-color: var(--bu-red);
   color: white;
   border-color: var(--bu-red);
+}
+
+/* Project Samples Grouping */
+.project-samples-wrapper {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-samples-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem; /* Optical alignment */
+}
+
+.project-samples-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 /* -----------------------------------------------------------------
