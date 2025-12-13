@@ -1025,6 +1025,12 @@ footer {
   }
   
   /* Navigation */
+   /* Layout */
+  .page-container {
+    padding: 2rem 1rem;
+  }
+  
+  /* Navigation */
   .main-nav {
     margin-bottom: 2rem;
   }
