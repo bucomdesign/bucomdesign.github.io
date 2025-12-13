@@ -293,7 +293,7 @@ h1, h2, h3, h4 {
 }
 
 .card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; }
-.card p { font-size: 0.95rem; color: var(--text-body); margin-bottom: .02rem; flex-grow: 1; }
+.card p { font-size: 0.95rem; color: var(--text-body); margin-bottom: .01rem; flex-grow: 1; }
 .card-footer { font-size: 0.875rem; font-weight: 600; color: var(--bu-dark); }
 .card-footer span { font-weight: 400; color: var(--text-muted); }
 
