@@ -131,3 +131,4 @@ function resetSection() {
 
 // Initial Load
 document.addEventListener('DOMContentLoaded', updateSectionInfo);
+
