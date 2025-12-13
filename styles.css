@@ -394,13 +394,8 @@ h1, h2, h3, h4 {
   padding: 1.5rem;
   border: 1px solid var(--bu-border);
   border-radius: 0.75rem;
-  background-color: #f9fafb;
-  transition: background-color 0.2s;
-}
-
-.competency-item:hover {
   background-color: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
 }
 
 .competency-item h4 {
