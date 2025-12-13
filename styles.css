@@ -317,9 +317,8 @@ h1, h2, h3, h4 {
   font-size: 0.875rem;
   font-weight: 400;
   margin-top: 0.25rem;
-  color: var(--bu-red);
-  opacity: 0;
-  transform: translateX(-4px);
+  color: #6b7280;
+  opacity: 1;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
