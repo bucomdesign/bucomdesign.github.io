@@ -1066,8 +1066,8 @@ footer {
     gap: 1rem;
   }
   
-  .bu-logo {
-    width: 100px;
+   .bu-logo {
+    display: none; /* Hidden on mobile per request */
   }
   
   .header-divider {
