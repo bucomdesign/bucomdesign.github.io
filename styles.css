@@ -293,7 +293,7 @@ h1, h2, h3, h4 {
 }
 
 .card h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: .5rem; }
-.card p { font-size: 0.95rem; color: var(--text-body); margin-bottom: .1rem; flex-grow: 1; }
+.card p { font-size: 0.95rem; color: var(--text-body); margin-bottom: .02rem; flex-grow: 1; }
 .card-footer { font-size: 0.875rem; font-weight: 600; color: var(--bu-dark); }
 .card-footer span { font-weight: 400; color: var(--text-muted); }
 
@@ -319,13 +319,14 @@ h1, h2, h3, h4 {
   margin-top: 0.25rem;
   color: var(--bu-red);
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-4px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover .go-to-site {
   opacity: 1;
   transform: translateX(0);
+  color: var(--bu-red);
 }
 
 
