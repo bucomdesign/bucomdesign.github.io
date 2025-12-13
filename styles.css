@@ -1072,17 +1072,7 @@ footer {
   
   .competency-grid {
     grid-template-columns: 1fr;
-  }
-  
-  /* Student Grid - Allow 2 columns on mobile for density */
-  .student-grid {
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 1rem;
-  }
-  
-  .student-avatar {
-    aspect-ratio: 1/1; /* Square usually looks better on mobile small cards */
-  }
+  }  
 
   /* Weeks Sidebar */
   .weeks-layout {
