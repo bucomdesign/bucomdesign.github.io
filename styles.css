@@ -320,13 +320,12 @@ h1, h2, h3, h4 {
   margin-top: 0.25rem;
   color: var(--bu-red);
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateY(-20px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover .go-to-site {
   opacity: 1;
-  transform: translateX(0);
 }
 
 /* -----------------------------------------------------------------
