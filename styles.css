@@ -105,6 +105,15 @@ main {
   flex-shrink: 0;
 }
 
+.brand-dot-large {
+  width: 18px;
+  height: 18px;
+  background-color: var(--bu-red);
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
 .nav-divider {
   width: 1px;
   height: 24px; 
