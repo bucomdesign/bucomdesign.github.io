@@ -34,19 +34,22 @@ const gifEl = document.getElementById('win-gif');
 let isSpinning = false;
 let rouletteInterval;
 
-function updateSectionInfo() {
+function updateSectionInfo(resetResult = true) {
   const section = document.getElementById("section").value;
   if (!picked[section]) picked[section] = []; // Safety check
   const count = picked[section].length;
   const total = sections[section].length;
   
   if (statusMsg) statusMsg.innerText = `Picked: ${count} / ${total}`;
-  if (resultEl) {
-      resultEl.innerText = "?";
-      resultEl.style.opacity = "1";
-      resultEl.style.transform = "scale(1)";
+  
+  if (resetResult) {
+    if (resultEl) {
+        resultEl.innerText = "?";
+        resultEl.style.opacity = "1";
+        resultEl.style.transform = "scale(1)";
+    }
+    if (gifEl) gifEl.style.display = "none";
   }
-  if (gifEl) gifEl.style.display = "none";
 }
 
 function startRoulette() {
@@ -108,8 +111,8 @@ function finalizeSpin(available, section) {
   spinBtn.disabled = false;
   isSpinning = false;
   
-  updateSectionInfo(); // Update counts
-  statusMsg.innerText = `Winner!`;
+  updateSectionInfo(false); // Update stats without resetting result
+  statusMsg.innerText += ` Winner!`;
 
   confetti({
     particleCount: 150,
@@ -125,10 +128,10 @@ function resetSection() {
     const section = document.getElementById("section").value;
     picked[section] = [];
     localStorage.setItem(`picked${section}`, JSON.stringify([]));
-    updateSectionInfo();
+    updateSectionInfo(true);
   }
 }
 
 // Initial Load
-document.addEventListener('DOMContentLoaded', updateSectionInfo);
+document.addEventListener('DOMContentLoaded', () => updateSectionInfo(true));
 
