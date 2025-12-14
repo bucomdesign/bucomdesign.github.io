@@ -161,6 +161,7 @@ main {
   display: flex;
   align-items: center;
   gap: 4px;
+  -webkit-tap-highlight-color: transparent
 }
 
 .dropdown-content {
