@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HCD Admission Rubric Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+      .rubric-cell { transition: all 0.2s ease; cursor: pointer; border: 2px solid transparent; }
+      .rubric-cell:hover { transform: translateY(-2px); border-color: #cbd5e1; }
+      .rubric-cell.selected { border-color: #ef4444; background-color: #fef2f2; }
+      .sticky-verdict { position: sticky; bottom: 2rem; z-index: 50; }
+      .item-checkbox:checked + label { color: #b91c1c; font-weight: 600; }
+    </style>
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19.0.0",
+        "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+        "lucide-react": "https://esm.sh/lucide-react@0.469.0"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module" data-presets="typescript,react">
+      import React, { useState, useEffect, useMemo } from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { 
+        ClipboardCheck, GraduationCap, Briefcase, PenTool, 
+        Video, Compass, Target, FolderCode, Save, 
+        Trash2, AlertCircle, CheckCircle2, ChevronRight,
+        XCircle, Info, CloudUpload, FileText, CheckSquare,
+        Layers, BookOpen, PenLine, Mail, Folder, Briefcase as ResumeIcon
+      } from 'lucide-react';
+
+      /**
+       * =========================================================================
+       * CONFIGURATION
+       * =========================================================================
+       */
+      const GOOGLE_SCRIPT_URL = ""; 
+
+      const MATERIAL_CONFIG = {
+        academic: { icon: GraduationCap, label: 'Academic History', color: 'text-blue-600', bg: 'bg-blue-50' },
+        resume: { icon: ResumeIcon, label: 'Resume', color: 'text-slate-600', bg: 'bg-slate-50' },
+        statement: { icon: PenLine, label: 'Personal Statement', color: 'text-purple-600', bg: 'bg-purple-50' },
+        references: { icon: Mail, label: 'Reference Letters', color: 'text-amber-600', bg: 'bg-amber-50' },
+        video: { icon: Video, label: 'Written & Video Questions', color: 'text-red-600', bg: 'bg-red-50' },
+        portfolio: { icon: Folder, label: 'Sample Projects', color: 'text-emerald-600', bg: 'bg-emerald-50' }
+      };
+
+      const RUBRIC_DATA = [
+        {
+          id: 'academic',
+          title: '1. Academic Preparation',
+          icon: <GraduationCap size={20} />,
+          sources: ['academic', 'resume', 'references'],
+          items: [
+            { text: "Undergraduate GPA approx 3.7+ (Academic History)", source: 'academic' },
+            { text: "A- or better in HCD related classes (Academic History)", source: 'academic' },
+            { text: "Other grades consistently above B+ (Academic History)", source: 'academic' },
+            { text: "Letters suggest competence OR 5+ yrs HCD Pro experience (Resume/References)", source: 'references' }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'Meets 4 criteria. GPA 3.7+. Strong samples bonus.' },
+            { score: 4, label: 'Strong', desc: 'Meets 4-5 of extended criteria. Strong foundation.' },
+            { score: 3, label: 'Admit', desc: 'Solid candidate meeting 4 or fewer criteria.' },
+            { score: 2, label: 'Low Admit', desc: 'GPA 3.0-3.5. Some grade explanation provided.' },
+            { score: 1, label: 'Waitlist', desc: 'Meets fewer than 3 criteria. Significant gaps.' },
+            { score: 0, label: 'Reject', desc: 'GPA < 2.7. Multiple weak grades. No explanation.' }
+          ]
+        },
+        {
+          id: 'experience',
+          title: '2. Experience/Extracurricular',
+          icon: <Briefcase size={20} />,
+          sources: ['resume'],
+          items: [
+            { text: "Two or more relevant professional experiences (Resume)", source: 'resume' },
+            { text: "Regional or national recognition (Resume)", source: 'resume' },
+            { text: "Meaningful extracurricular involvement with positive impact (Resume)", source: 'resume' }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'High professional impact and clear recognition.' },
+            { score: 4, label: 'Strong', desc: 'Relevant experience with demonstrated growth.' },
+            { score: 3, label: 'Admit', desc: 'Experience may be tangentially related.' },
+            { score: 2, label: 'Low Admit', desc: 'Depth or relevance is modest.' },
+            { score: 1, label: 'Waitlist', desc: 'Minimal field engagement.' },
+            { score: 0, label: 'Reject', desc: 'No relevant field experience found.' }
+          ]
+        },
+        {
+          id: 'written',
+          title: '3. Written Preparation',
+          icon: <PenTool size={20} />,
+          sources: ['statement'],
+          items: [
+            { text: "Clear, insightful response to the prompt (Personal Statement)", source: 'statement' },
+            { text: "No spelling or grammar errors (Personal Statement)", source: 'statement' },
+            { text: "Logical, coherent organization (Personal Statement)", source: 'statement' },
+            { text: "Engaging to read (Personal Statement)", source: 'statement' },
+            { text: "Appropriate vocabulary for graduate study (Personal Statement)", source: 'statement' }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'Insightful, logical, engaging, and error-free.' },
+            { score: 4, label: 'Strong', desc: 'Solid submission, minor flow/engagement polish.' },
+            { score: 3, label: 'Admit', desc: 'Generally on topic but misses one key element.' },
+            { score: 2, label: 'Low Admit', desc: 'Needs improvement for clarity or flow.' },
+            { score: 1, label: 'Waitlist', desc: 'Poor comprehension or significant grammar issues.' },
+            { score: 0, label: 'Reject', desc: 'Incoherent or demonstrates lack of effort.' }
+          ]
+        },
+        {
+          id: 'verbal',
+          title: '4. Verbal Communication',
+          icon: <Video size={20} />,
+          sources: ['video'],
+          items: [
+            { text: "Thoughtful, coherent response fully addressing prompt (Video Questions)", source: 'video' },
+            { text: "Fluent, natural delivery, unscripted (not reading) (Video Questions)", source: 'video' }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'Natural delivery, fully addresses prompt.' },
+            { score: 4, label: 'Strong', desc: 'Understands main points, fluent delivery.' },
+            { score: 3, label: 'Admit', desc: 'Meaning is clear despite limited polish.' },
+            { score: 2, label: 'Low Admit', desc: 'Average skills; some aspects underdeveloped.' },
+            { score: 1, label: 'Waitlist', desc: 'Response is scripted or lacks clarity.' },
+            { score: 0, label: 'Reject', desc: 'Incoherent or incomprehensible verbal response.' }
+          ]
+        },
+        {
+          id: 'understanding',
+          title: '5. Understanding of Program',
+          icon: <Compass size={20} />,
+          sources: ['statement', 'video'],
+          items: [
+            { text: "References specific courses or aligns with career goals (Statement/Video)", source: 'statement' },
+            { text: "Clear understanding of HCD profession* (Statement/Video)", source: 'video' },
+            { text: "Demonstrates initiative, persistence, and motivation (Statement/Video)", source: 'statement' },
+            { text: "Explains how program supports specific goals (Statement/Video)", source: 'video' }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'Strong, informed interest in specific aspects.' },
+            { score: 4, label: 'Strong', desc: 'Solid awareness of field expectations.' },
+            { score: 3, label: 'Admit', desc: 'Articulation is vague or incomplete.' },
+            { score: 2, label: 'Low Admit', desc: 'Limited ability to connect program to goals.' },
+            { score: 1, label: 'Waitlist', desc: 'Average understanding of the HCD profession.' },
+            { score: 0, label: 'Reject', desc: 'No understanding of HCD or suggests wrong program.' }
+          ]
+        },
+        {
+          id: 'fit',
+          title: '6. Future Goals/Fit',
+          icon: <Target size={20} />,
+          sources: ['statement', 'video', 'references', 'resume'],
+          items: [
+            { text: "Brings unique or diverse perspectives (Statement/Video)", source: 'statement' },
+            { text: "Strong letters citing relevant skills/qualities (References)", source: 'references' },
+            { text: "Strong transferable skills: leadership, teamwork, resilience (All Materials)", source: 'resume' }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'Unique perspectives and clear relevance.' },
+            { score: 4, label: 'Strong', desc: 'Good evidence of persistence and initiative.' },
+            { score: 3, label: 'Admit', desc: 'Connection to program is not fully explained.' },
+            { score: 2, label: 'Low Admit', desc: 'Demonstrates average transferable skills.' },
+            { score: 1, label: 'Waitlist', desc: 'Weak letters or incompatible goals.' },
+            { score: 0, label: 'Reject', desc: 'Career goals absent or incompatible.' }
+          ]
+        },
+        {
+          id: 'bonus',
+          title: '7. Optional Sample Projects [Bonus]',
+          icon: <FolderCode size={20} />,
+          sources: ['portfolio'],
+          items: [
+            { text: "Relevant sample projects demonstrating skills/expertise (Portfolio)", source: 'portfolio' },
+            { text: "Showcases creativity and analytical thinking (Portfolio)", source: 'portfolio' },
+            { text: "Showcases technical ability (Portfolio)", source: 'portfolio' }
+          ],
+          levels: [
+            { score: 2, label: 'High Bonus', desc: 'Projects show significant rigor and expertise.' },
+            { score: 1, label: 'Bonus', desc: 'Projects show potential but lack depth.' },
+            { score: 0, label: 'None', desc: 'No projects or irrelevant work.' }
+          ]
+        }
+      ];
+
+      const App = () => {
+        const [applicant, setApplicant] = useState({ name: '', id: '', reviewer: '' });
+        const [scores, setScores] = useState({});
+        const [checkedItems, setCheckedItems] = useState({});
+        const [notes, setNotes] = useState({});
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const [success, setSuccess] = useState(false);
+
+        const totalScore = useMemo(() => {
+          return Object.values(scores).reduce((a, b) => a + b, 0);
+        }, [scores]);
+
+        const recommendation = useMemo(() => {
+          const hasReject = Object.values(scores).some(s => s === 0);
+          
+          if (hasReject) return { text: 'Recommend Reject', color: 'text-red-600', bg: 'bg-red-50' };
+          if (totalScore >= 28) return { text: 'Admit (Max Scholarship)', color: 'text-yellow-600', bg: 'bg-yellow-50' };
+          if (totalScore >= 24) return { text: 'Strong Admit (Mid Scholarship)', color: 'text-green-600', bg: 'bg-green-50' };
+          if (totalScore >= 18) return { text: 'Admit', color: 'text-blue-600', bg: 'bg-blue-50' };
+          if (totalScore >= 12) return { text: 'Low Admit', color: 'text-orange-600', bg: 'bg-orange-50' };
+          if (totalScore >= 6) return { text: 'Waitlist', color: 'text-gray-600', bg: 'bg-gray-50' };
+          return { text: 'Recommend Reject', color: 'text-red-600', bg: 'bg-red-50' };
+        }, [totalScore, scores]);
+
+        const toggleItem = (sectionId, itemText) => {
+          setCheckedItems(prev => {
+            const sectionItems = prev[sectionId] || [];
+            if (sectionItems.includes(itemText)) {
+              return { ...prev, [sectionId]: sectionItems.filter(i => i !== itemText) };
+            } else {
+              return { ...prev, [sectionId]: [...sectionItems, itemText] };
+            }
+          });
+        };
+
+        const handleSubmit = async () => {
+          if (!applicant.name) return alert('Please enter applicant name.');
+          setIsSubmitting(true);
+
+          const submission = {
+            ...applicant,
+            scores,
+            checkedItems,
+            notes,
+            totalScore,
+            recommendation: recommendation.text,
+            timestamp: new Date().toISOString(),
+            type: 'ADMISSION_REVIEW'
+          };
+
+          if (GOOGLE_SCRIPT_URL) {
+            try {
+              await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(submission)
+              });
+            } catch (e) { console.error(e); }
+          }
+          
+          const history = JSON.parse(localStorage.getItem('admission_reviews') || '[]');
+          history.push(submission);
+          localStorage.setItem('admission_reviews', JSON.stringify(history));
+
+          setIsSubmitting(false);
+          setSuccess(true);
+        };
+
+        if (success) {
+          return (
+            <div className="min-h-screen flex items-center justify-center p-4 text-center">
+              <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-10">
+                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle2 size={40} />
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">Review Submitted</h2>
+                <p className="text-gray-500 mb-8">Decision for {applicant.name} has been recorded.</p>
+                <button onClick={() => window.location.reload()} className="w-full py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg">Start New Review</button>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div className="max-w-6xl mx-auto px-4 py-12">
+            <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div>
+                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">HCD Admission Rubric</h1>
+                <p className="text-gray-500 mt-2 text-lg">Master of Science in Human Centered Design</p>
+              </div>
+              <div className="flex gap-4">
+                 {GOOGLE_SCRIPT_URL ? (
+                   <span className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium border border-green-100"><CloudUpload size={14} /> Cloud Active</span>
+                 ) : (
+                   <span className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-50 text-yellow-700 rounded-lg text-xs font-medium border border-yellow-100"><AlertCircle size={14} /> Offline Mode</span>
+                 )}
+              </div>
+            </header>
+
+            {/* Applicant Information Card */}
+            <section className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-12">
+              <div className="flex items-center gap-3 mb-6">
+                 <FileText className="text-red-600" />
+                 <h2 className="text-xl font-bold text-gray-800">Applicant Information</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Applicant Name</label>
+                  <input type="text" placeholder="Jane Doe" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" value={applicant.name} onChange={(e) => setApplicant({...applicant, name: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">ID / Email</label>
+                  <input type="text" placeholder="BU-12345" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" value={applicant.id} onChange={(e) => setApplicant({...applicant, id: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Reviewer Name</label>
+                  <input type="text" placeholder="Prof. Smith" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:outline-none" value={applicant.reviewer} onChange={(e) => setApplicant({...applicant, reviewer: e.target.value})} />
+                </div>
+              </div>
+            </section>
+
+            {/* Materials Legend */}
+            <div className="bg-white rounded-2xl p-8 mb-12 border border-gray-200 shadow-sm">
+               <div className="flex items-center gap-2 mb-6">
+                 <Layers size={20} className="text-red-600" />
+                 <h3 className="text-sm font-bold text-gray-700 uppercase tracking-widest">Reference Materials</h3>
+               </div>
+               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+                  {Object.entries(MATERIAL_CONFIG).map(([key, config]) => (
+                    <div key={key} className="flex flex-col gap-2 p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white transition-colors">
+                      <div className={`${config.bg} ${config.color} p-2 rounded-lg w-fit`}>
+                        <config.icon size={18} />
+                      </div>
+                      <span className="text-xs font-semibold text-gray-600 leading-tight">{config.label}</span>
+                    </div>
+                  ))}
+               </div>
+               <div className="bg-red-50/50 border-l-4 border-red-500 p-4 rounded-r-xl">
+                 <p className="text-xs text-red-800 italic font-medium">
+                   *HCD profession refers to areas related to product design, product management, and UX/UI design and research.
+                 </p>
+               </div>
+            </div>
+
+            <div className="space-y-20">
+              {RUBRIC_DATA.map((section) => (
+                <div key={section.id} className="relative">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div className="flex items-center gap-3">
+                      <span className="p-2 bg-red-50 text-red-600 rounded-lg">{section.icon}</span>
+                      <h3 className="text-2xl font-bold text-gray-900">{section.title}</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                       {section.sources.map(s => {
+                         const config = MATERIAL_CONFIG[s];
+                         return (
+                           <span key={s} className={`px-2 py-1.5 bg-white border border-gray-200 rounded-lg text-[10px] font-bold text-gray-700 flex items-center gap-1.5 shadow-sm`}>
+                             <config.icon size={14} className={config.color} />
+                             {config.label.replace(' (Optional)', '')}
+                           </span>
+                         );
+                       })}
+                    </div>
+                  </div>
+
+                  {/* Checklist Section */}
+                  <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                       <CheckSquare size={14} /> Diagnostic Checklist
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-3">
+                      {section.items.map((item, idx) => {
+                        const isChecked = (checkedItems[section.id] || []).includes(item.text);
+                        const sourceConfig = MATERIAL_CONFIG[item.source];
+                        return (
+                          <div key={idx} className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                            <input type="checkbox" id={`${section.id}-${idx}`} className="item-checkbox mt-1 w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500" checked={isChecked} onChange={() => toggleItem(section.id, item.text)} />
+                            <div className="flex flex-col gap-1">
+                              <label htmlFor={`${section.id}-${idx}`} className={`text-sm cursor-pointer select-none transition-colors ${isChecked ? 'text-red-800' : 'text-gray-600'}`}>
+                                {item.text}
+                              </label>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  
+                  {/* Scores Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-4">
+                    {section.levels.map((level) => (
+                      <div key={level.score} onClick={() => setScores({...scores, [section.id]: level.score})} className={`rubric-cell p-4 rounded-2xl flex flex-col justify-between h-full ${scores[section.id] === level.score ? 'selected ring-2 ring-red-500 bg-red-50' : 'bg-white shadow-sm border border-gray-200'}`}>
+                        <div>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full mb-2 inline-block ${level.score >= 4 ? 'bg-green-100 text-green-700' : level.score >= 2 ? 'bg-yellow-100 text-yellow-700' : level.score === 0 ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'}`}>
+                            Score: {level.score}
+                          </span>
+                          <p className="font-bold text-gray-800 text-xs mb-2 leading-tight">{level.label}</p>
+                          <p className="text-[10px] text-gray-500 leading-relaxed">{level.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <textarea placeholder={`Notes for ${section.title.split('. ')[1]}...`} className="w-full p-3 bg-transparent border-b border-gray-200 focus:border-red-500 focus:outline-none text-sm italic" rows={1} value={notes[section.id] || ''} onChange={(e) => setNotes({...notes, [section.id]: e.target.value})} />
+                </div>
+              ))}
+            </div>
+
+            <div className="sticky-verdict mt-20">
+              <div className={`p-8 rounded-3xl shadow-2xl border flex flex-col md:flex-row items-center justify-between gap-6 transition-colors ${recommendation.bg}`}>
+                <div className="flex items-center gap-6">
+                  <div className="text-center md:text-left">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Rubric Total</p>
+                    <p className="text-5xl font-black text-gray-900">{totalScore}</p>
+                  </div>
+                  <div className="h-12 w-px bg-gray-200 hidden md:block" />
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-1">Decision</p>
+                    <p className={`text-2xl font-black ${recommendation.color}`}>{recommendation.text}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                   <button onClick={() => {if(confirm('Reset current review?')) window.location.reload()}} className="p-4 bg-white text-gray-400 hover:text-red-600 rounded-2xl border border-gray-100 shadow-sm transition-colors"><Trash2 size={24} /></button>
+                   <button onClick={handleSubmit} disabled={isSubmitting || !applicant.name} className="flex-grow md:flex-grow-0 px-10 py-4 bg-red-600 text-white rounded-2xl font-bold text-lg hover:bg-red-700 shadow-lg disabled:bg-gray-300 flex items-center justify-center gap-2">
+                     {isSubmitting ? 'Submitting...' : <><Save size={20} /> Record Decision</>}
+                   </button>
+                </div>
+              </div>
+            </div>
+            
+            <footer className="mt-12 text-center text-gray-400 text-sm pb-12">
+              <p>© 2025 HCD Graduate Admissions Tool</p>
+            </footer>
+          </div>
+        );
+      };
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
