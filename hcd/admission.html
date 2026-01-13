@@ -76,29 +76,29 @@
           diagnosticGroups: [
             {
               id: 'pos',
-              title: 'Top Admit Indicators (Score 5)',
+              title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
                 { text: "Undergraduate GPA of approx. 3.7 equivalent or above", source: 'academic' },
                 { text: "If not a 'career changer': A- or better in HCD related classes, particularly in last 2 years of school", source: 'academic' },
                 { text: "Other grades are consistently above B+", source: 'academic' },
-                { text: "Letters of recommendation speak to competence OR Has 5+ years of experience", source: 'references' }
+                { text: "Letters of recommendation speak to competence in HCD/academic performance OR Has 5+ years of experience as a HCD professional", source: 'references' }
               ]
             },
             {
               id: 'low',
-              title: 'Low Admit Factors (Score 2-3)',
+              title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
                 { text: "Undergraduate GPA approx. 3.0–3.5 equivalent", source: 'academic' },
                 { text: "B+ or better in HCD-related courses (if taken)", source: 'academic' },
-                { text: "1–2 lower grades in relevant coursework with reasonable explanation", source: 'academic' },
-                { text: "Letters suggest developing readiness with some gaps", source: 'references' }
+                { text: "May have 1–2 lower grades in relevant coursework (concerning grades have reasonable explanation)", source: 'academic' },
+                { text: "Letters suggest developing academic or field readiness, with some gaps in preparation", source: 'references' }
               ]
             },
             {
               id: 'rej',
-              title: 'Reject Indicators (Score 0)',
+              title: 'Reject (Meets any ONE of the following)',
               icon: <Skull size={14} className="text-red-600" />,
               items: [
                 { text: "GPA well below 2.7 with no reasonable explanation", source: 'academic' },
@@ -108,10 +108,10 @@
           ],
           levels: [
             { score: 5, label: 'Top Admit', desc: 'Max Scholarship. GPA 3.7+. Exceptional Prep.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong candidate meeting most Top criteria.' },
-            { score: 3, label: 'Admit', desc: 'Solid candidate meeting standard requirements.' },
-            { score: 2, label: 'Low Admit', desc: 'Preparation gaps; GPA 3.0-3.5 or some concern.' },
-            { score: 1, label: 'Waitlist', desc: 'Below-average candidate; meets few criteria.' },
+            { score: 4, label: 'Strong Admit', desc: 'Meeting 4–5 of the 6 criteria.' },
+            { score: 3, label: 'Admit', desc: 'Solid candidate meeting 4 or fewer criteria.' },
+            { score: 2, label: 'Low Admit', desc: 'GPA 3.0-3.5 or some concern.' },
+            { score: 1, label: 'Waitlist', desc: 'Below-average candidate; meets fewer than 3 criteria.' },
             { score: 0, label: 'Reject', desc: 'Meets any ONE major Reject indicator.' }
           ]
         },
@@ -124,7 +124,7 @@
           diagnosticGroups: [
             {
               id: 'pos',
-              title: 'Top Admit Indicators (Score 5)',
+              title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
                 { text: "Two or more relevant professional experiences", source: 'resume' },
@@ -134,12 +134,12 @@
             },
             {
               id: 'low',
-              title: 'Low Admit Factors (Score 2-3)',
+              title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Limited or tangentially related professional experience", source: 'resume' },
+                { text: "Limited professional experience, experience may be tangentially related to the field", source: 'resume' },
                 { text: "Shows potential, though depth or relevance is modest", source: 'resume' },
-                { text: "Average extracurricular involvement; limited impact", source: 'resume' }
+                { text: "Average extracurricular involvement with some engagement, but limited impact", source: 'resume' }
               ]
             }
           ],
@@ -161,28 +161,31 @@
           diagnosticGroups: [
             {
               id: 'pos',
-              title: 'Top Admit Indicators (Score 5)',
+              title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
                 { text: "Clear, insightful response to the prompt", source: 'statement' },
                 { text: "No spelling or grammar errors", source: 'statement' },
                 { text: "Logical, coherent organization", source: 'statement' },
-                { text: "Engaging to read", source: 'statement' }
+                { text: "Engaging to read", source: 'statement' },
+                { text: "Strong submission, appropriate vocabulary", source: 'statement' }
               ]
             },
             {
               id: 'low',
-              title: 'Low Admit Factors (Score 2-3)',
+              title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Generally on topic but misses one key element", source: 'statement' },
+                { text: "Generally on topic but misses one key element of the prompt", source: 'statement' },
                 { text: "1–3 spelling or grammatical errors", source: 'statement' },
-                { text: "Needs improvement for clarity or flow", source: 'statement' }
+                { text: "Needs improvement for clarity or flow", source: 'statement' },
+                { text: "Writing is fine but lacks engagement or depth", source: 'statement' },
+                { text: "Solid submission, weaker than Score 3–5", source: 'statement' }
               ]
             },
             {
               id: 'rej',
-              title: 'Reject Indicators (Score 0)',
+              title: 'Reject (Meets any ONE of the following)',
               icon: <Skull size={14} className="text-red-600" />,
               items: [
                 { text: "Essay or video demonstrates poor comprehension or effort", source: 'statement' }
@@ -207,28 +210,28 @@
           diagnosticGroups: [
             {
               id: 'pos',
-              title: 'Top Admit Indicators (Score 5)',
+              title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Thoughtful, coherent response; addresses prompt", source: 'video' },
-                { text: "Fluent, natural, unscripted delivery", source: 'video' }
+                { text: "Thoughtful, coherent response that fully addresses the prompt", source: 'video' },
+                { text: "Fluent, natural delivery, speaks unscripted (not reading from notes)", source: 'video' }
               ]
             },
             {
               id: 'low',
-              title: 'Low Admit Factors (Score 2-3)',
+              title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Demonstrates understanding but misses some aspects", source: 'video' },
-                { text: "Average skills; understandable despite limited polish", source: 'video' }
+                { text: "Video response demonstrates understanding of main points, but misses or underdevelops some aspects", source: 'video' },
+                { text: "Average communication skills; meaning remains understandable despite limited polish", source: 'video' }
               ]
             },
             {
               id: 'rej',
-              title: 'Reject Indicators (Score 0)',
+              title: 'Reject (Meets any ONE of the following)',
               icon: <Skull size={14} className="text-red-600" />,
               items: [
-                { text: "Verbal response is scripted or incoherent", source: 'video' }
+                { text: "Verbal response is scripted, incoherent, or incomprehensible", source: 'video' }
               ]
             }
           ],
@@ -250,21 +253,32 @@
           diagnosticGroups: [
             {
               id: 'pos',
-              title: 'Top Admit Indicators (Score 5)',
+              title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Demonstrates strong understanding and alignment", source: 'statement' },
-                { text: "Clear understanding of the HCD profession", source: 'video' },
-                { text: "Demonstrates initiative and motivation", source: 'video' }
+                { text: "Demonstrates a strong understanding of the program (e.g., references specific courses, aligns program elements with career goals)", source: 'statement' },
+                { text: "Clear understanding of the HCD profession and long-term goals", source: 'video' },
+                { text: "Demonstrates initiative, persistence, and motivation", source: 'video' },
+                { text: "Clearly explains how the program supports career goals", source: 'statement' }
               ]
             },
             {
               id: 'low',
-              title: 'Low Admit Factors (Score 2-3)',
+              title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Average understanding of program and profession", source: 'video' },
-                { text: "Some awareness but articulation is vague", source: 'statement' }
+                { text: "Average understanding of the program and HCD profession", source: 'video' },
+                { text: "Some awareness of field expectations, but articulation is vague or incomplete", source: 'statement' },
+                { text: "Limited ability to clearly connect program elements to career goals", source: 'video' }
+              ]
+            },
+            {
+              id: 'rej',
+              title: 'Reject (Meets any ONE of the following)',
+              icon: <Skull size={14} className="text-red-600" />,
+              items: [
+                { text: "No demonstrated understanding of HCD or the program", source: 'video' },
+                { text: "Application suggests the wrong program entirely", source: 'statement' }
               ]
             }
           ],
@@ -286,21 +300,31 @@
           diagnosticGroups: [
             {
               id: 'pos',
-              title: 'Top Admit Indicators (Score 5)',
+              title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Brings unique or diverse perspectives", source: 'video' },
-                { text: "Strong letters citing relevant qualities", source: 'references' },
-                { text: "Demonstrates strong transferable skills", source: 'resume' }
+                { text: "Brings unique or diverse perspectives with clear relevance to the field and program goals", source: 'video' },
+                { text: "Strong letters of recommendation citing relevant skills and qualities", source: 'references' },
+                { text: "Demonstrates strong transferable skills (e.g., leadership, teamwork, resilience)", source: 'resume' }
               ]
             },
             {
               id: 'low',
-              title: 'Low Admit Factors (Score 2-3)',
+              title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Unique perspective but connection is vague", source: 'video' },
-                { text: "Average transferable skills", source: 'resume' }
+                { text: "May bring unique or diverse perspectives, though connection to the program is not fully explained", source: 'video' },
+                { text: "Some evidence of persistence or initiative, but relevance is unclear", source: 'statement' },
+                { text: "Demonstrates average transferable skills", source: 'resume' }
+              ]
+            },
+            {
+              id: 'rej',
+              title: 'Reject (Meets any ONE of the following)',
+              icon: <Skull size={14} className="text-red-600" />,
+              items: [
+                { text: "Career goals absent or incompatible with program outcomes", source: 'statement' },
+                { text: "Weak letters with explicit reservations", source: 'references' }
               ]
             }
           ],
@@ -325,17 +349,17 @@
               title: 'Bonus Indicators (Score 5)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Relevant sample projects demonstrating expertise", source: 'portfolio' },
-                { text: "Showcases creativity and problem-solving", source: 'portfolio' },
+                { text: "Relevant sample projects demonstrating skills and expertise", source: 'portfolio' },
+                { text: "Showcases creativity, problem-solving and analytical thinking", source: 'portfolio' },
                 { text: "Showcases technical ability", source: 'portfolio' }
               ]
             },
             {
               id: 'low',
-              title: 'Modest Indicators (Score 2-3)',
+              title: 'Modest Indicators (Score 2)',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Projects have limited depth or relevance", source: 'portfolio' }
+                { text: "Projects are limited depth, rigor, or relevance", source: 'portfolio' }
               ]
             }
           ],
@@ -434,7 +458,6 @@
         }, [scores]);
 
         const getDecision = (score, currentScores) => {
-          // Rule: Reject only if a MANDATORY section has Score 0. Bonus N/A does not reject.
           const hasMandatoryReject = Object.entries(currentScores).some(([id, s]) => {
             const section = RUBRIC_DATA.find(r => r.id === id);
             return s === 0 && section && !section.isBonus;
@@ -443,7 +466,6 @@
           if (hasMandatoryReject) return { text: 'Reject', color: 'text-red-600', bg: 'bg-red-50', full: 'Recommend Reject' };
           
           const maxMandatory = 30; // 6 mandatory sections * 5
-          // Decision is based on mandatory thresholds, bonus points are purely additive advantage.
           if (score >= maxMandatory * 0.85) return { text: 'Admit', color: 'text-green-700', bg: 'bg-green-50', full: 'Top Admit' };
           if (score >= maxMandatory * 0.70) return { text: 'Admit', color: 'text-green-700', bg: 'bg-green-50', full: 'Strong Admit' };
           if (score >= maxMandatory * 0.50) return { text: 'Admit', color: 'text-yellow-700', bg: 'bg-yellow-50', full: 'Admit' };
@@ -485,6 +507,14 @@
           localStorage.setItem('admission_reviews', JSON.stringify(localHistory));
           setIsSubmitting(false);
           setSuccess(true);
+        };
+
+        const deleteReview = (timestamp) => {
+          if (confirm("Delete this evaluation permanently?")) {
+            const updated = history.filter(h => h.timestamp !== timestamp);
+            localStorage.setItem('admission_reviews', JSON.stringify(updated));
+            setHistory(updated);
+          }
         };
 
         const generateCSV = (format = 'csv') => {
@@ -605,9 +635,7 @@
                               {section.levels.map((level) => {
                                 const isSelected = scores[section.id] === level.score;
                                 const getScoreHighlight = () => {
-                                  // Rule: Score 0 in a BONUS section is NEUTRAL (Gray).
                                   if (level.score === 0 && section.isBonus) return { border: 'border-slate-300', bg: 'bg-slate-50', badge: 'bg-slate-200 text-slate-700' };
-                                  
                                   if (level.score >= 4) return { border: 'border-green-600', bg: 'bg-green-50', badge: 'bg-green-100 text-green-800' };
                                   if (level.score === 2 || level.score === 3) return { border: 'border-yellow-600', bg: 'bg-yellow-50', badge: 'bg-yellow-100 text-yellow-800' };
                                   if (level.score === 1) return { border: 'border-orange-600', bg: 'bg-orange-50', badge: 'bg-orange-100 text-orange-800' };
@@ -643,7 +671,7 @@
                       </div>
                       <div className="h-12 w-px bg-gray-300 hidden lg:block" />
                       <div className="text-center lg:text-left">
-                        <p className={`font-bold text-gray-600 uppercase tracking-widest mb-1 ${isComplete ? 'text-[10px]' : 'text-[8px]'}`}>Weighted Final</p>
+                        <p className={`font-bold text-gray-600 uppercase tracking-widest mb-1 ${isComplete ? 'text-[10px]' : 'text-[8px]'}`}>Final Weighted</p>
                         <p className={`font-bold text-gray-900 leading-none transition-all ${isComplete ? 'text-4xl' : 'text-xl'}`}>{totalScore}</p>
                       </div>
                       <div className="h-12 w-px bg-gray-300 hidden lg:block" />
@@ -687,16 +715,16 @@
 
                 <section className="bg-white rounded-[2rem] shadow-sm border border-gray-200 overflow-hidden">
                   <div className="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="relative w-full max-sm mb-4 md:mb-0">
+                    <div className="relative w-full md:w-72 mb-4 md:mb-0">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
-                      <input type="text" placeholder="Search archive..." className="w-full pl-12 pr-6 py-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500 text-sm font-medium" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                      <input type="text" placeholder="Search archive..." className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500 text-sm font-medium" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                     </div>
-                    <div className="flex gap-3">
-                       <button onClick={handleCopy} className="flex items-center gap-2 px-6 py-3 bg-slate-100 text-slate-700 rounded-2xl font-bold text-xs hover:bg-slate-200 transition-all">
-                         {copySuccess ? <Check size={14}/> : <Copy size={14}/>} {copySuccess ? 'Copied' : 'Copy for Sheet'}
+                    <div className="flex gap-4 w-full md:w-auto flex-shrink-0">
+                       <button onClick={handleCopy} className="flex-1 md:flex-none flex items-center justify-center gap-3 px-10 py-4 bg-slate-100 text-slate-700 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all shadow-sm">
+                         {copySuccess ? <Check size={18}/> : <Copy size={18}/>} {copySuccess ? 'Copied' : 'Copy for Sheet'}
                        </button>
-                       <button onClick={handleDownload} className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-xs hover:bg-black transition-all">
-                         <Download size={14}/> Export CSV
+                       <button onClick={handleDownload} className="flex-1 md:flex-none flex items-center justify-center gap-3 px-10 py-4 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-black transition-all shadow-md">
+                         <Download size={18}/> Export CSV
                        </button>
                     </div>
                   </div>
@@ -709,19 +737,19 @@
                           <th className="px-8 py-6 text-center">Avg</th>
                           <th className="px-8 py-6 text-center">Final</th>
                           <th className="px-8 py-6">Reviewer</th>
-                          <th className="px-8 py-6 text-right">Action</th>
+                          <th className="px-8 py-6 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
                         {history.filter(h => h.name.toLowerCase().includes(searchTerm.toLowerCase())).map((review, i) => {
                           const decision = getDecision(review.totalScore, review.scores);
                           return (
-                            <tr key={i} className="hover:bg-gray-50 transition-all group cursor-pointer" onClick={() => setSelectedReview(review)}>
-                              <td className="px-8 py-6">
+                            <tr key={review.timestamp} className="hover:bg-gray-50 transition-all group">
+                              <td className="px-8 py-6 cursor-pointer" onClick={() => setSelectedReview(review)}>
                                 <p className="font-bold text-gray-900 text-base mb-1">{review.name}</p>
                                 <p className="text-[10px] font-bold text-gray-600 uppercase tracking-tight">ID: {review.id}</p>
                               </td>
-                              <td className="px-8 py-6">
+                              <td className="px-8 py-6 cursor-pointer" onClick={() => setSelectedReview(review)}>
                                 <span className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border ${decision.bg} ${decision.color} border-current`}>
                                   {review.recommendation}
                                 </span>
@@ -730,7 +758,10 @@
                               <td className="px-8 py-6 text-center font-bold text-gray-900 text-lg">{review.totalScore}</td>
                               <td className="px-8 py-6 text-[11px] font-bold text-gray-600 uppercase tracking-widest">{review.reviewer}</td>
                               <td className="px-8 py-6 text-right">
-                                <button className="p-3 text-gray-500 hover:text-red-600 transition-colors"><Eye size={24} /></button>
+                                <div className="flex items-center justify-end gap-2">
+                                  <button onClick={() => setSelectedReview(review)} className="p-2 text-gray-400 hover:text-red-600 transition-colors" title="View Details"><Eye size={20} /></button>
+                                  <button onClick={() => deleteReview(review.timestamp)} className="p-2 text-gray-400 hover:text-red-600 transition-colors" title="Delete Review"><Trash2 size={20} /></button>
+                                </div>
                               </td>
                             </tr>
                           );
