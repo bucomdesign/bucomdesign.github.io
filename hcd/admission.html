@@ -62,7 +62,7 @@
         resume: { icon: Briefcase, label: 'Resume', color: 'text-slate-700', bg: 'bg-slate-50' },
         statement: { icon: PenLine, label: 'Personal Statement', color: 'text-purple-700', bg: 'bg-purple-50' },
         references: { icon: Mail, label: 'Reference Letters', color: 'text-amber-700', bg: 'bg-amber-50' },
-        video: { icon: Video, label: 'Written & Video Questions', color: 'text-red-700', bg: 'bg-red-50' },
+        video: { icon: Video, label: 'Video Questions', color: 'text-red-700', bg: 'bg-red-50' },
         portfolio: { icon: Folder, label: 'Sample Projects', color: 'text-emerald-700', bg: 'bg-emerald-50' }
       };
 
@@ -150,53 +150,8 @@
           ]
         },
         {
-          id: 'written',
-          title: '3. Written Preparation',
-          icon: <PenTool size={20} />,
-          sources: ['statement'],
-          diagnosticGroups: [
-            {
-              id: 'pos',
-              title: 'Positive Indicators (Scores 3-5)',
-              icon: <TrendingUp size={14} className="text-green-600" />,
-              items: [
-                { text: "Clear, insightful logic", source: 'statement' },
-                { text: "No spelling/grammar errors", source: 'statement' },
-                { text: "Highly engaging narrative", source: 'statement' }
-              ]
-            },
-            {
-              id: 'wait',
-              title: 'Waitlist Factors (Score 1-2)',
-              icon: <AlertTriangle size={14} className="text-orange-600" />,
-              items: [
-                { text: "Formulaic or dry response", source: 'statement' },
-                { text: "Minor flow/engagement issues", source: 'statement' }
-              ]
-            },
-            {
-              id: 'rej',
-              title: 'Reject Indicators (Score 0)',
-              icon: <Skull size={14} className="text-red-600" />,
-              items: [
-                { text: "Poor comprehension of prompt", source: 'statement' },
-                { text: "Major organization failures", source: 'statement' },
-                { text: "Multiple spelling/grammar errors", source: 'statement' }
-              ]
-            }
-          ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: 'Exceptional writing and logic.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong, clear goals; minor polish needed.' },
-            { score: 3, label: 'Admit', desc: 'Functional but standard submission.' },
-            { score: 2, label: 'Low Admit', desc: 'Lacks engagement or flow.' },
-            { score: 1, label: 'Waitlist', desc: 'Significant writing issues.' },
-            { score: 0, label: 'Reject', desc: 'Incoherent or demonstrates low effort.' }
-          ]
-        },
-        {
-          id: 'verbal',
-          title: '4. Verbal Communication',
+          id: 'video_prep',
+          title: '3. Video Preparation',
           icon: <Video size={20} />,
           sources: ['video'],
           diagnosticGroups: [
@@ -205,9 +160,9 @@
               title: 'Positive Indicators (Scores 3-5)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Natural, unscripted delivery", source: 'video' },
-                { text: "Nuanced addressing of prompt", source: 'video' },
-                { text: "High persuasive impact", source: 'video' }
+                { text: "Clear, insightful logic", source: 'video' },
+                { text: "Natural, engaging narrative", source: 'video' },
+                { text: "Strong persuasive presence", source: 'video' }
               ]
             },
             {
@@ -216,7 +171,7 @@
               icon: <AlertTriangle size={14} className="text-orange-600" />,
               items: [
                 { text: "Reads from notes occasionally", source: 'video' },
-                { text: "Understandable but lacks polish", source: 'video' }
+                { text: "Minor flow/engagement issues", source: 'video' }
               ]
             },
             {
@@ -224,18 +179,64 @@
               title: 'Reject Indicators (Score 0)',
               icon: <Skull size={14} className="text-red-600" />,
               items: [
+                { text: "Poor comprehension of prompt", source: 'video' },
                 { text: "Clearly scripted/robotic delivery", source: 'video' },
-                { text: "Incomprehensible verbal response", source: 'video' }
+                { text: "Incomprehensible response", source: 'video' }
+              ]
+            }
+          ],
+          levels: [
+            { score: 5, label: 'Top Admit', desc: 'Exceptional video presentation and logic.' },
+            { score: 4, label: 'Strong Admit', desc: 'Strong, clear goals; minor polish needed.' },
+            { score: 3, label: 'Admit', desc: 'Functional but standard submission.' },
+            { score: 2, label: 'Low Admit', desc: 'Lacks engagement or flow.' },
+            { score: 1, label: 'Waitlist', desc: 'Significant delivery issues.' },
+            { score: 0, label: 'Reject', desc: 'Incoherent or demonstrates low effort.' }
+          ]
+        },
+        {
+          id: 'verbal',
+          title: '4. Communication Effectiveness',
+          icon: <PenTool size={20} />,
+          sources: ['statement'],
+          diagnosticGroups: [
+            {
+              id: 'pos',
+              title: 'Positive Indicators (Scores 3-5)',
+              icon: <TrendingUp size={14} className="text-green-600" />,
+              items: [
+                { text: "No spelling/grammar errors", source: 'statement' },
+                { text: "Nuanced addressing of prompt", source: 'statement' },
+                { text: "High narrative impact", source: 'statement' }
+              ]
+            },
+            {
+              id: 'wait',
+              title: 'Waitlist Factors (Score 1-2)',
+              icon: <AlertTriangle size={14} className="text-orange-600" />,
+              items: [
+                { text: "Understandable but lacks polish", source: 'statement' },
+                { text: "Minor flow issues", source: 'statement' }
+              ]
+            },
+            {
+              id: 'rej',
+              title: 'Reject Indicators (Score 0)',
+              icon: <Skull size={14} className="text-red-600" />,
+              items: [
+                { text: "Major organization failures", source: 'statement' },
+                { text: "Multiple spelling/grammar errors", source: 'statement' },
+                { text: "Failure to communicate meaning", source: 'statement' }
               ]
             }
           ],
           levels: [
             { score: 5, label: 'Top Admit', desc: 'Captivating and articulate.' },
             { score: 4, label: 'Strong Admit', desc: 'Clear and well-prepared.' },
-            { score: 3, label: 'Admit', desc: 'Standard verbal skills.' },
+            { score: 3, label: 'Admit', desc: 'Standard communication skills.' },
             { score: 2, label: 'Low Admit', desc: 'Underdeveloped response.' },
-            { score: 1, label: 'Waitlist', desc: 'Notable delivery issues.' },
-            { score: 0, label: 'Reject', desc: 'Failure to communicate meaning.' }
+            { score: 1, label: 'Waitlist', desc: 'Notable writing issues.' },
+            { score: 0, label: 'Reject', desc: 'Failure to convey clear goals.' }
           ]
         },
         {
@@ -295,7 +296,7 @@
             >
               <div className="flex items-center gap-3">
                 {group.icon}
-                <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">{group.title}</span>
+                <span className="text-[10px] font-bold text-gray-700 uppercase tracking-widest">{group.title}</span>
               </div>
               <ChevronDown className={`chevron-icon text-gray-500 ${isOpen ? 'open' : ''}`} size={16} />
             </button>
@@ -426,9 +427,9 @@
             <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-gray-200 pb-6">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 tracking-tight">HCD Admission Hub</h1>
-                <p className="text-gray-600 mt-1 font-bold uppercase tracking-widest text-[10px]">Diagnostic Review Protocol</p>
+                <p className="text-gray-700 mt-2 font-bold uppercase tracking-widest text-sm">Master of Science in Human Centered Design</p>
               </div>
-              <nav className="flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-gray-600">
+              <nav className="flex items-center gap-8 text-sm font-bold uppercase tracking-widest text-gray-700">
                 <button onClick={() => setView('FORM')} className={`pb-2 transition-all ${view === 'FORM' ? 'tab-active' : 'hover:text-gray-900'}`}>New Form</button>
                 <button onClick={() => setView('HISTORY')} className={`pb-2 transition-all ${view === 'HISTORY' ? 'tab-active' : 'hover:text-gray-900'}`}>Review Archive</button>
               </nav>
