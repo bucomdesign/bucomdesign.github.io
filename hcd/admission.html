@@ -66,6 +66,15 @@
         portfolio: { icon: Folder, label: 'Sample Projects', color: 'text-emerald-700', bg: 'bg-emerald-50' }
       };
 
+      const STANDARD_LEVELS = [
+        { score: 5, label: 'Top Admit', desc: 'Max Scholarship. Clear HCD readiness.' },
+        { score: 4, label: 'Strong Admit', desc: 'Mid-Range Scholarship. Meeting 4-5 criteria.' },
+        { score: 3, label: 'Admit', desc: 'Solid candidate meeting 4 or fewer criteria.' },
+        { score: 2, label: 'Low Admit', desc: 'Some evidence of potential but notable gaps.' },
+        { score: 1, label: 'Waitlist', desc: 'Below-average candidate; meets fewer than 3 criteria.' },
+        { score: 0, label: 'Reject', desc: 'Meets any ONE major Reject indicator.' }
+      ];
+
       const RUBRIC_DATA = [
         {
           id: 'academic',
@@ -79,10 +88,10 @@
               title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Undergraduate GPA of approx. 3.7 equivalent or above", source: 'academic' },
+                { text: "Undergraduate GPA of above 3.5", source: 'academic' },
                 { text: "If not a 'career changer': A- or better in HCD related classes, particularly in last 2 years of school", source: 'academic' },
                 { text: "Other grades are consistently above B+", source: 'academic' },
-                { text: "Letters of recommendation speak to competence in HCD/academic performance OR Has 5+ years of experience as a HCD professional", source: 'references' }
+                { text: "Letters of recommendation that speak to competence in HCD/academic performance OR Has an experience in HCD", source: 'references' }
               ]
             },
             {
@@ -90,10 +99,10 @@
               title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Undergraduate GPA approx. 3.0–3.5 equivalent", source: 'academic' },
+                { text: "Undergraduate GPA above 3.0", source: 'academic' },
                 { text: "B+ or better in HCD-related courses (if taken)", source: 'academic' },
-                { text: "May have 1–2 lower grades in relevant coursework (concerning grades have reasonable explanation)", source: 'academic' },
-                { text: "Letters suggest developing academic or field readiness, with some gaps in preparation", source: 'references' }
+                { text: "May have 1–2 lower grades in relevant coursework (Any concerning grades have a reasonable explanation)", source: 'academic' },
+                { text: "Letters of recommendation suggest developing academic or field readiness, with some gaps in preparation or understanding", source: 'references' }
               ]
             },
             {
@@ -102,18 +111,11 @@
               icon: <Skull size={14} className="text-red-600" />,
               items: [
                 { text: "GPA well below 2.7 with no reasonable explanation", source: 'academic' },
-                { text: "Multiple weak under B grades in HCD-related coursework", source: 'academic' }
+                { text: "Multiple weak grades (C or lower) in HCD-related coursework", source: 'academic' }
               ]
             }
           ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: 'Max Scholarship. GPA 3.7+. Exceptional Prep.' },
-            { score: 4, label: 'Strong Admit', desc: 'Meeting 4–5 of the 6 criteria.' },
-            { score: 3, label: 'Admit', desc: 'Solid candidate meeting 4 or fewer criteria.' },
-            { score: 2, label: 'Low Admit', desc: 'GPA 3.0-3.5 or some concern.' },
-            { score: 1, label: 'Waitlist', desc: 'Below-average candidate; meets fewer than 3 criteria.' },
-            { score: 0, label: 'Reject', desc: 'Meets any ONE major Reject indicator.' }
-          ]
+          levels: STANDARD_LEVELS
         },
         {
           id: 'experience',
@@ -127,8 +129,8 @@
               title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Two or more relevant professional experiences", source: 'resume' },
-                { text: "Regional or national recognition", source: 'resume' },
+                { text: "Relevant professional experiences and internship", source: 'resume' },
+                { text: "Recognition or awards (i.e scholarship, deans list, student awards)", source: 'resume' },
                 { text: "Meaningful extracurricular involvement with positive impact", source: 'resume' }
               ]
             },
@@ -137,20 +139,13 @@
               title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Limited professional experience, experience may be tangentially related to the field", source: 'resume' },
+                { text: "Tangential professional experience", source: 'resume' },
                 { text: "Shows potential, though depth or relevance is modest", source: 'resume' },
                 { text: "Average extracurricular involvement with some engagement, but limited impact", source: 'resume' }
               ]
             }
           ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: '2+ relevant roles, national/regional recognition.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong background; high impact involvement.' },
-            { score: 3, label: 'Admit', desc: 'Standard relevant background and engagement.' },
-            { score: 2, label: 'Low Admit', desc: 'Tangential or modest professional depth.' },
-            { score: 1, label: 'Waitlist', desc: 'Meets fewer than 3 criteria.' },
-            { score: 0, label: 'Reject', desc: 'No relevant experience or involvement.' }
-          ]
+          levels: STANDARD_LEVELS
         },
         {
           id: 'written',
@@ -192,14 +187,7 @@
               ]
             }
           ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: 'Insightful, engaging, flawless organization.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong submission, good vocabulary.' },
-            { score: 3, label: 'Admit', desc: 'Solid and standard logic/organization.' },
-            { score: 2, label: 'Low Admit', desc: 'Minor errors; lacks engagement or depth.' },
-            { score: 1, label: 'Waitlist', desc: 'Underdeveloped flow or clarity.' },
-            { score: 0, label: 'Reject', desc: 'Poor comprehension or effort shown.' }
-          ]
+          levels: STANDARD_LEVELS
         },
         {
           id: 'verbal',
@@ -223,7 +211,7 @@
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
                 { text: "Video response demonstrates understanding of main points, but misses or underdevelops some aspects", source: 'video' },
-                { text: "Average communication skills; meaning remains understandable despite limited polish", source: 'video' }
+                { text: "Communication skills remain understandable despite slight struggles", source: 'video' }
               ]
             },
             {
@@ -231,18 +219,11 @@
               title: 'Reject (Meets any ONE of the following)',
               icon: <Skull size={14} className="text-red-600" />,
               items: [
-                { text: "Verbal response is scripted, incoherent, or incomprehensible", source: 'video' }
+                { text: "Verbal response appears scripted, incoherent, or incomprehensible", source: 'video' }
               ]
             }
           ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: 'Fluent, natural, unscripted, and thoughtful.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong delivery and coherent response.' },
-            { score: 3, label: 'Admit', desc: 'Solid candidate meeting standard expectations.' },
-            { score: 2, label: 'Low Admit', desc: 'Understandable but limited polish.' },
-            { score: 1, label: 'Waitlist', desc: 'Misses main points or underdeveloped.' },
-            { score: 0, label: 'Reject', desc: 'Scripted or incoherent delivery.' }
-          ]
+          levels: STANDARD_LEVELS
         },
         {
           id: 'understanding',
@@ -256,7 +237,7 @@
               title: '5 Top Admit (Max Scholarship)',
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
-                { text: "Demonstrates a strong understanding of the program (e.g., references specific courses, aligns program elements with career goals)", source: 'statement' },
+                { text: "Demonstrates a strong understanding of the program (e.g., references specific courses, aligns program elements with career goals, or articulates informed interest in particular aspects of the program)", source: 'statement' },
                 { text: "Clear understanding of the HCD profession and long-term goals", source: 'video' },
                 { text: "Demonstrates initiative, persistence, and motivation", source: 'video' },
                 { text: "Clearly explains how the program supports career goals", source: 'statement' }
@@ -267,7 +248,7 @@
               title: '2 Low Admit',
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
-                { text: "Average understanding of the program and HCD profession", source: 'video' },
+                { text: "Some understanding of the program and HCD profession", source: 'video' },
                 { text: "Some awareness of field expectations, but articulation is vague or incomplete", source: 'statement' },
                 { text: "Limited ability to clearly connect program elements to career goals", source: 'video' }
               ]
@@ -282,14 +263,7 @@
               ]
             }
           ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: 'Exceptional program alignment and field awareness.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong initiative and motivation shown.' },
-            { score: 3, label: 'Admit', desc: 'Standard understanding of HCD and program.' },
-            { score: 2, label: 'Low Admit', desc: 'Vague articulation of goals or connections.' },
-            { score: 1, label: 'Waitlist', desc: 'Limited program connection established.' },
-            { score: 0, label: 'Reject', desc: 'Wrong program or no understanding.' }
-          ]
+          levels: STANDARD_LEVELS
         },
         {
           id: 'future',
@@ -304,8 +278,8 @@
               icon: <TrendingUp size={14} className="text-green-600" />,
               items: [
                 { text: "Brings unique or diverse perspectives with clear relevance to the field and program goals", source: 'video' },
-                { text: "Strong letters of recommendation citing relevant skills and qualities", source: 'references' },
-                { text: "Demonstrates strong transferable skills (e.g., leadership, teamwork, resilience)", source: 'resume' }
+                { text: "Strong letters of recommendation citing relevant skills or potentials from qualified sources", source: 'references' },
+                { text: "Demonstrates strong transferable skills (e.g., leadership, teamwork, resilience, cultural competency)", source: 'resume' }
               ]
             },
             {
@@ -314,8 +288,8 @@
               icon: <AlertTriangle size={14} className="text-yellow-600" />,
               items: [
                 { text: "May bring unique or diverse perspectives, though connection to the program is not fully explained", source: 'video' },
-                { text: "Some evidence of persistence or initiative, but relevance is unclear", source: 'statement' },
-                { text: "Demonstrates average transferable skills", source: 'resume' }
+                { text: "Lukewarm recommendation letters", source: 'references' },
+                { text: "Demonstrates limited transferable skills", source: 'resume' }
               ]
             },
             {
@@ -324,18 +298,11 @@
               icon: <Skull size={14} className="text-red-600" />,
               items: [
                 { text: "Career goals absent or incompatible with program outcomes", source: 'statement' },
-                { text: "Weak letters with explicit reservations", source: 'references' }
+                { text: "Letters with explicit reservations", source: 'references' }
               ]
             }
           ],
-          levels: [
-            { score: 5, label: 'Top Admit', desc: 'Unique perspectives, strong skills, great fit.' },
-            { score: 4, label: 'Strong Admit', desc: 'Strong transferable skills and letters.' },
-            { score: 3, label: 'Admit', desc: 'Standard professional trajectory and fit.' },
-            { score: 2, label: 'Low Admit', desc: 'Persistence shown, but relevance is unclear.' },
-            { score: 1, label: 'Waitlist', desc: 'Limited explanatory power on fit.' },
-            { score: 0, label: 'Reject', desc: 'Incompatible goals or weak letters.' }
-          ]
+          levels: STANDARD_LEVELS
         },
         {
           id: 'portfolio',
@@ -715,7 +682,7 @@
 
                 <section className="bg-white rounded-[2rem] shadow-sm border border-gray-200 overflow-hidden">
                   <div className="p-8 border-b border-gray-100 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="relative w-full md:w-72 mb-4 md:mb-0">
+                    <div className="relative w-full md:w-72 mb-4 md:mb-0 flex-shrink-0">
                       <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
                       <input type="text" placeholder="Search archive..." className="w-full pl-12 pr-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500 text-sm font-medium" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                     </div>
