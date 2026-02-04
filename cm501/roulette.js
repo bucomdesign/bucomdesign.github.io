@@ -1,11 +1,11 @@
 
 const sections = {
-  1: ["Michaela","Izzy","Savannah","Tala","Natalie","Ava","HaoYuan","Jocelyn","Sydney","Anna",
-      "Lheyaa","Julie","Alisa","Olivia","Nancy","Blair","Victoria","Nia","Muneeb","Donald"],
-  2: ["Lance","Anna","Kayla","Delia","Keira","Samantha","Erin","Mickie","Kirsten","Ananya",
-      "Amanda","Zoe","Maddy","Kacey","Mily","Mina","Amelia","Nadezhda","Marina","Yiyu"],
-  3: ["Kaylin","Becky","Piper","Olivia","Teresa","Will","Ali","Sidi","Emily","Scarlett",
-      "Crystal","Ziyi","Ava","Nikki","Annie","Lincoln","Erik","Jessica","Sanyu","Claudia"]
+  1: ["Christie","Leah","Ruixi","Ericka","Dana","Yeshi","Yuhang","Lauren","Grandee","Amanda",
+      "Nicole","Brennan","Jinran","Siena","Liru","Lucy","Anushka","Sneha","Valentin","Sonya"],
+  2: ["Fadekemi","Sofia","Clara","Isabel","Melissa","Vicky","Hannah","Didi","Amy","Madison",
+      "Palmer","Henry","Yvette","Lauren","Zoe","Nari","Daria","Amie","Emily","Wincy"],
+  3: ["Kate","Nikki","Loren","Mayra","Teresa","Emerson","Kristyn","Evelyn","Matthew","Casey",
+      "Jocelyn","Claudia","Theresa","Jiani","Grace","Kate","Tori","Tala","Weslee","Paige"]
 };
 
 // Fun GIFs for winners
