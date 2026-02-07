@@ -621,26 +621,15 @@ h1, h2, h3, h4 {
 
 .assignment1-grid {
   display: grid;
-  /* Creates as many 190px columns as will fit, distributing extra space */
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   grid-column-gap: 3rem;
-  grid-row-gap: 2rem;
+  grid-row-gap: 4rem;
   margin-bottom: 4rem;
   align-items: start;
 }
 
 .assignment1-grid > div {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Optional: Ensures images inside the divs behave correctly */
-.assignment1-grid > div img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px; /* Matches the soft corners in your example image */
-  margin-bottom: 1rem;
 }
 
 .project-media {
