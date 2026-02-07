@@ -619,6 +619,17 @@ h1, h2, h3, h4 {
   width: 100%;
 }
 
+.assignment1-grid {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+
+  column-width: 380px;
+  column-gap: 3rem;
+  margin-bottom: 4rem;
+  display: block;
+}
+
 .project-media {
   /* Natural height (no fixed aspect ratio) */
   background-color: var(--bu-gray-light);
