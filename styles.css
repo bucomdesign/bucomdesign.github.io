@@ -620,14 +620,14 @@ h1, h2, h3, h4 {
 }
 
 .assignment1-grid {
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-
-  column-width: 380px;
-  column-gap: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
   margin-bottom: 4rem;
-  display: block;
+}
+
+.assignment1-grid > div {
+  width: 100%;
 }
 
 .project-media {
