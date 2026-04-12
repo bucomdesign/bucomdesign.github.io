@@ -20,7 +20,74 @@
     }
     </script>
   </head>
-  <body>
+  <body>const STUDENTS: Student[] = [
+  // =========================
+  // SECTION A1
+  // =========================
+
+  // Group 1 — Social Connection & City Exploration
+  { section: 'A1', group: '1', name: 'Leah Hobeika', email: 'lhobeika@bu.edu' },
+  { section: 'A1', group: '1', name: 'Ruixi Xu', email: 'rxxu0928@bu.edu' },
+  { section: 'A1', group: '1', name: 'Siena Carmona', email: 'carmonas@bu.edu' },
+  { section: 'A1', group: '1', name: 'Sneha Jhabak', email: 'sjhabak@bu.edu' },
+
+  // Group 2 — Trendy Food & Curated Consumption
+  { section: 'A1', group: '2', name: 'Amanda Slud', email: 'aslud@bu.edu' },
+  { section: 'A1', group: '2', name: 'Brennan Ju', email: 'breju@bu.edu' },
+  { section: 'A1', group: '2', name: 'Dana Mansori', email: 'dmansori@bu.edu' },
+  { section: 'A1', group: '2', name: 'Liru Ding', email: 'lirud02@bu.edu' },
+
+  // Group 3 — Niche Food Communities
+  { section: 'A1', group: '3', name: 'Lauren Maslankowski', email: 'laurendm@bu.edu' },
+  { section: 'A1', group: '3', name: 'Valentin Rotondo', email: 'valenr@bu.edu' },
+  { section: 'A1', group: '3', name: 'Ericka Correia', email: 'ecorreia@bu.edu' },
+  { section: 'A1', group: '3', name: 'Grandee Rafael De Guzman', email: 'gdeguz@bu.edu' },
+
+  // Group 4 — Local Discovery & Everyday Rituals
+  { section: 'A1', group: '4', name: 'Nicole Pines', email: 'nicolep5@bu.edu' },
+  { section: 'A1', group: '4', name: 'Jinran Chen', email: 'jchen143@bu.edu' },
+  { section: 'A1', group: '4', name: 'Anushka Sankatala', email: 'anukala1@bu.edu' },
+  { section: 'A1', group: '4', name: 'Sonya Pesselev', email: 'Sp2026@bu.edu' },
+
+  // Group 5 — Culture, Media & Social Insight
+  { section: 'A1', group: '5', name: 'Christie Delanois', email: 'delanois@bu.edu' },
+  { section: 'A1', group: '5', name: 'Yeshi Tsering', email: 'ytsering@bu.edu' },
+  { section: 'A1', group: '5', name: 'Yuhang Liu', email: 'lyhang@bu.edu' },
+
+
+  // =========================
+  // SECTION I1
+  // =========================
+
+  // Group 1 — Fashion Tech & Daily Decision-Making
+  { section: 'I1', group: '1', name: 'Yvette Wu', email: 'yvettewu@bu.edu' },
+  { section: 'I1', group: '1', name: 'Melissa Fishman', email: 'melfish@bu.edu' },
+  { section: 'I1', group: '1', name: 'Amy Noh', email: 'amyynoh@bu.edu' },
+  { section: 'I1', group: '1', name: 'Amie Zhou', email: 'qianyizh@bu.edu' },
+
+  // Group 2 — Beauty Organization & Personal Care
+  { section: 'I1', group: '2', name: 'Hannah Le', email: 'hvle@bu.edu' },
+  { section: 'I1', group: '2', name: 'Lauren Young', email: 'lhy23@bu.edu' },
+  { section: 'I1', group: '2', name: 'Vicky Kao', email: 'vicr0uyn@bu.edu' },
+  { section: 'I1', group: '2', name: 'Zoe Zhang', email: 'zoe317@bu.edu' },
+
+  // Group 3 — Experiential Services & Emotional Value
+  { section: 'I1', group: '3', name: 'Isabel Couceiro', email: 'couceiro@bu.edu' },
+  { section: 'I1', group: '3', name: 'Madison Perkins', email: 'madip@bu.edu' },
+  { section: 'I1', group: '3', name: 'Clara Chakarian', email: 'cchakar@bu.edu' },
+
+  // Group 4 — Food Discovery & Lifestyle Exploration
+  { section: 'I1', group: '4', name: 'Daria Zhang', email: 'daria46@bu.edu' },
+  { section: 'I1', group: '4', name: 'Sofia Albelo', email: 'salbelo@bu.edu' },
+  { section: 'I1', group: '4', name: 'Fadekemi Ademola', email: 'fadekemi@bu.edu' },
+  { section: 'I1', group: '4', name: 'Emily Zhu', email: 'emilyz01@bu.edu' },
+
+  // Group 5 — Emotional Connection & Comfort Services
+  { section: 'I1', group: '5', name: 'Nari Yun', email: 'nyun05@bu.edu' },
+  { section: 'I1', group: '5', name: 'Palmer Wencley', email: 'pwencley@bu.edu' },
+  { section: 'I1', group: '5', name: 'Didi Mahathorn', email: 'dkm@bu.edu' },
+  { section: 'I1', group: '5', name: 'Wincy Yu', email: 'wincyu@bu.edu' },
+];
     <div id="root"></div>
 
     <script type="text/babel" data-type="module" data-presets="typescript,react">
@@ -552,7 +619,7 @@
               <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 border border-gray-100">
                 <div className="text-center mb-8">
                   <h1 className="text-2xl font-bold text-gray-900">Peer Evaluation Login</h1>
-                  <p className="text-gray-500 mt-2">Project 2 - Sections G1, H1, K1</p>
+                  <p className="text-gray-500 mt-2">Project 2 - Sections A1, I1</p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-6">
                   <div>
