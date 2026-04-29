@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Peer Evaluation (Test)</title>
+    <title>Project 2 Peer Evaluation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -27,8 +27,9 @@
       import React, { useState, useEffect } from 'react';
       import { createRoot } from 'react-dom/client';
       import { 
-        LogOut, CheckCircle, ShieldAlert, FileSpreadsheet, 
-        Users, Copy, ExternalLink, Check, Trash2, ArrowLeft, Smile, Shuffle, CloudUpload
+        LogOut, ArrowUp, ArrowDown, CheckCircle, ShieldAlert, 
+        FileSpreadsheet, Users, Copy, ExternalLink, Check, 
+        Trash2, ArrowLeft, AlertCircle, CloudUpload
       } from 'lucide-react';
 
       /**
@@ -53,8 +54,24 @@
       }
 
       interface EvaluationData {
-        emojiRating: string;
-        comments: string;
+        overallContribution: number;
+        completionOfTasks: number;
+        initiative: string;
+        specificContributions: string;
+        communicationEffectiveness: number;
+        feedbackOpenness: number;
+        decisionMakingSupport: string;
+        challenges: string;
+        positiveImpact: string;
+        reliability: number;
+        followThrough: string;
+        workQualityConsistency: number;
+        ideaGeneration: number;
+        strategicUnderstanding: string;
+        creativeInfluenceExample: string;
+        overallPerformance: number;
+        workAgain: string;
+        additionalComments: string;
       }
 
       interface FullSubmission {
@@ -63,10 +80,11 @@
         section: string;
         group: string;
         evaluations: Record<string, EvaluationData>;
+        stackRanking: string[];
         timestamp: string;
       }
 
-      type AppStep = 'LOGIN' | 'EVALUATE' | 'SUCCESS' | 'INSTRUCTOR_DASHBOARD';
+      type AppStep = 'LOGIN' | 'EVALUATE' | 'RANKING' | 'SUCCESS' | 'INSTRUCTOR_DASHBOARD';
 
       /** 
        * ==========================================
@@ -74,68 +92,100 @@
        * ==========================================
        */
       const STUDENTS: Student[] = [
-        // Section G1
-        { section: 'G1', group: '1', name: 'Kaylin McConnell', email: 'klmcconn@bu.edu' },
-        { section: 'G1', group: '1', name: 'Crystal Wu', email: 'cwu21@bu.edu' },
-        { section: 'G1', group: '1', name: 'Lincoln Edwards', email: 'lincred@bu.edu' },
-        { section: 'G1', group: '1', name: 'Olivia Evans', email: 'eolivia@bu.edu' },
-        { section: 'G1', group: '2', name: 'Emily Wyrwa', email: 'evwyrwa@bu.edu' },
-        { section: 'G1', group: '2', name: 'Amber (Nikki) Capinpin', email: 'capinpin@bu.edu' },
-        { section: 'G1', group: '2', name: 'Claudia', email: 'cminacap@bu.edu' },
-        { section: 'G1', group: '2', name: 'Sidi Bello', email: 'sidikatb@bu.edu' },
-        { section: 'G1', group: '3', name: 'Annie Levy', email: 'anlevy@bu.edu' },
-        { section: 'G1', group: '3', name: 'Ali Cook', email: 'alircook@bu.edu' },
-        { section: 'G1', group: '3', name: 'Ava Rheingold', email: 'arheingo@bu.edu' },
-        { section: 'G1', group: '3', name: 'Xiaodong (Will) Will', email: 'xiaodonf@bu.edu' },
-        { section: 'G1', group: '4', name: 'Piper Gilliam', email: 'pipergg@bu.edu' },
-        { section: 'G1', group: '4', name: 'Zitong(Becky) Zheng', email: 'Beckyzzt@bu.edu' },
-        { section: 'G1', group: '4', name: 'Sanyu', email: 'sanyuliu@bu.edu' },
-        { section: 'G1', group: '4', name: 'Jessica Lin', email: 'jess3lin@bu.edu' },
-        { section: 'G1', group: '5', name: 'Teresa Garate', email: 'teresag@bu.edu' },
-        { section: 'G1', group: '5', name: 'Ziyi', email: 'renziyi@bu.edu' },
-        { section: 'G1', group: '5', name: 'Qinjian(Erik) Ran', email: 'qjr2000@bu.edu' },
-        { section: 'G1', group: '5', name: 'Sitong (Scarlett) Jiang', email: 'jstong@bu.edu' },
-        // Section H1
-        { section: 'H1', group: '1', name: 'Keira Shannon', email: 'keiras@bu.edu' },
-        { section: 'H1', group: '1', name: 'Anna McClean', email: 'amcclean@bu.edu' },
-        { section: 'H1', group: '1', name: 'Amelia Edelsberg', email: 'ameliae@bu.edu' },
-        { section: 'H1', group: '1', name: 'Erin Hajian', email: 'ehajian@bu.edu' },
-        { section: 'H1', group: '2', name: 'Marina Berger', email: 'maberger@bu.edu' },
-        { section: 'H1', group: '2', name: 'Amanda Brecher', email: 'ambrec@bu.edu' },
-        { section: 'H1', group: '2', name: 'Yiyang(Kacey) Jin', email: 'jinyy328@bu.edu' },
-        { section: 'H1', group: '2', name: 'Nadezhda Kuznetsova', email: 'nadezhda@bu.edu' },
-        { section: 'H1', group: '3', name: 'Samantha Shorr', email: 'sshorr@bu.edu' },
-        { section: 'H1', group: '3', name: 'Ananya Swaroop', email: 'ananya21@bu.edu' },
-        { section: 'H1', group: '3', name: 'Mily Talgham Cohen', email: 'milytc@bu.edu' },
-        { section: 'H1', group: '3', name: 'Lance Shook', email: 'lshook@bu.edu' },
-        { section: 'H1', group: '4', name: 'Kirsten Foster', email: 'kefoster@bu.edu' },
-        { section: 'H1', group: '4', name: 'Zoe Baumann', email: 'zbaumann@bu.edu' },
-        { section: 'H1', group: '4', name: 'Maddy Oberding', email: 'mgober@bu.edu' },
-        { section: 'H1', group: '4', name: 'Mickie McCool', email: 'mfmccool@bu.edu' },
-        { section: 'H1', group: '5', name: 'Delia Rune', email: 'deliar@bu.edu' },
-        { section: 'H1', group: '5', name: 'Kayla Lok', email: 'kaylalok@bu.edu' },
-        { section: 'H1', group: '5', name: 'Yiyu Zhang', email: 'yiyuzh@bu.edu' },
-        { section: 'H1', group: '5', name: 'Mina Jones', email: 'minacjon@bu.edu' },
-        // Section K1
-        { section: 'K1', group: '1', name: 'Jocelyn Mao', email: 'jocmao@bu.edu' },
-        { section: 'K1', group: '1', name: 'Alisa Hilaly', email: 'alisah@bu.edu' },
-        { section: 'K1', group: '1', name: 'Victoria Shapiro', email: 'tshapiro@bu.edu' },
-        { section: 'K1', group: '1', name: 'Olivia Schnur', email: 'oschnur@bu.edu' },
-        { section: 'K1', group: '2', name: 'Anna Novick', email: 'annayn@bu.edu' },
-        { section: 'K1', group: '2', name: 'Michaela Shunney', email: 'mshunney@bu.edu' },
-        { section: 'K1', group: '2', name: 'Savannah Radisch', email: 'sradisch@bu.edu' },
-        { section: 'K1', group: '2', name: 'Donald Varnerin', email: 'Donnyv@bu.edu' },
-        { section: 'K1', group: '3', name: 'Izzy Anderson', email: 'icanders@bu.edu' },
-        { section: 'K1', group: '3', name: 'HaoYuan Chen', email: 'chyharry@bu.edu' },
-        { section: 'K1', group: '3', name: 'Shree Lheyaa Jayasudha Mathivanan', email: 'lheyaa@bu.edu' },
-        { section: 'K1', group: '3', name: 'Blair LeBlanc', email: 'blairl@bu.edu' },
-        { section: 'K1', group: '4', name: 'Tala Solomon', email: 'talas@bu.edu' },
-        { section: 'K1', group: '4', name: 'Ava Graff', email: 'avagraff@bu.edu' },
-        { section: 'K1', group: '4', name: 'Sydney Wiggins', email: 'swiggins@bu.edu' },
-        { section: 'K1', group: '4', name: 'Julie Liu', email: 'jhliu18@bu.edu' },
-        { section: 'K1', group: '5', name: 'Nia Carrera', email: 'niac@bu.edu' },
-        { section: 'K1', group: '5', name: 'Nancy Liu', email: 'lnanan@bu.edu' },
-        { section: 'K1', group: '5', name: 'Muneeb Mahmood', email: 'muneebm@bu.edu' },
+  // =========================
+  // SECTION A1
+  // =========================
+
+  // Group 1 — Social Connection & City Exploration
+  { section: 'A1', group: '1', name: 'Leah Hobeika', email: 'lhobeika@bu.edu' },
+  { section: 'A1', group: '1', name: 'Ruixi Xu', email: 'rxxu0928@bu.edu' },
+  { section: 'A1', group: '1', name: 'Siena Carmona', email: 'carmonas@bu.edu' },
+  { section: 'A1', group: '1', name: 'Sneha Jhabak', email: 'sjhabak@bu.edu' },
+
+  // Group 2 — Trendy Food & Curated Consumption
+  { section: 'A1', group: '2', name: 'Amanda Slud', email: 'aslud@bu.edu' },
+  { section: 'A1', group: '2', name: 'Brennan Ju', email: 'breju@bu.edu' },
+  { section: 'A1', group: '2', name: 'Dana Mansori', email: 'dmansori@bu.edu' },
+  { section: 'A1', group: '2', name: 'Liru Ding', email: 'lirud02@bu.edu' },
+
+  // Group 3 — Niche Food Communities
+  { section: 'A1', group: '3', name: 'Lauren Maslankowski', email: 'laurendm@bu.edu' },
+  { section: 'A1', group: '3', name: 'Valentin Rotondo', email: 'valenr@bu.edu' },
+  { section: 'A1', group: '3', name: 'Ericka Correia', email: 'ecorreia@bu.edu' },
+  { section: 'A1', group: '3', name: 'Grandee Rafael De Guzman', email: 'gdeguz@bu.edu' },
+
+  // Group 4 — Local Discovery & Everyday Rituals
+  { section: 'A1', group: '4', name: 'Nicole Pines', email: 'nicolep5@bu.edu' },
+  { section: 'A1', group: '4', name: 'Jinran Chen', email: 'jchen143@bu.edu' },
+  { section: 'A1', group: '4', name: 'Anushka Sankatala', email: 'anukala1@bu.edu' },
+  { section: 'A1', group: '4', name: 'Sonya Pesselev', email: 'Sp2026@bu.edu' },
+
+  // Group 5 — Culture, Media & Social Insight
+  { section: 'A1', group: '5', name: 'Christie Delanois', email: 'delanois@bu.edu' },
+  { section: 'A1', group: '5', name: 'Yeshi Tsering', email: 'ytsering@bu.edu' },
+  { section: 'A1', group: '5', name: 'Yuhang Liu', email: 'lyhang@bu.edu' },
+
+
+  // =========================
+  // SECTION I1
+  // =========================
+
+  // Group 1 — Fashion Tech & Daily Decision-Making
+  { section: 'I1', group: '1', name: 'Yvette Wu', email: 'yvettewu@bu.edu' },
+  { section: 'I1', group: '1', name: 'Melissa Fishman', email: 'melfish@bu.edu' },
+  { section: 'I1', group: '1', name: 'Amy Noh', email: 'amyynoh@bu.edu' },
+  { section: 'I1', group: '1', name: 'Amie Zhou', email: 'qianyizh@bu.edu' },
+
+  // Group 2 — Beauty Organization & Personal Care
+  { section: 'I1', group: '2', name: 'Hannah Le', email: 'hvle@bu.edu' },
+  { section: 'I1', group: '2', name: 'Lauren Young', email: 'lhy23@bu.edu' },
+  { section: 'I1', group: '2', name: 'Vicky Kao', email: 'vicr0uyn@bu.edu' },
+  { section: 'I1', group: '2', name: 'Zoe Zhang', email: 'zoe317@bu.edu' },
+
+  // Group 3 — Experiential Services & Emotional Value
+  { section: 'I1', group: '3', name: 'Isabel Couceiro', email: 'couceiro@bu.edu' },
+  { section: 'I1', group: '3', name: 'Madison Perkins', email: 'madip@bu.edu' },
+  { section: 'I1', group: '3', name: 'Clara Chakarian', email: 'cchakar@bu.edu' },
+
+  // Group 4 — Food Discovery & Lifestyle Exploration
+  { section: 'I1', group: '4', name: 'Daria Zhang', email: 'daria46@bu.edu' },
+  { section: 'I1', group: '4', name: 'Sofia Albelo', email: 'salbelo@bu.edu' },
+  { section: 'I1', group: '4', name: 'Fadekemi Ademola', email: 'fadekemi@bu.edu' },
+  { section: 'I1', group: '4', name: 'Emily Zhu', email: 'emilyz01@bu.edu' },
+
+  // Group 5 — Emotional Connection & Comfort Services
+  { section: 'I1', group: '5', name: 'Nari Yun', email: 'nyun05@bu.edu' },
+  { section: 'I1', group: '5', name: 'Palmer Wencley', email: 'pwencley@bu.edu' },
+  { section: 'I1', group: '5', name: 'Didi Mahathorn', email: 'dkm@bu.edu' },
+  { section: 'I1', group: '5', name: 'Wincy Yu', email: 'wincyu@bu.edu' },
+
+  // =========================
+  // SECTION B1
+  // =========================
+        
+        { section: 'B1', group: '1', name: 'Tori Shapiro', email: 'tshapiro@bu.edu' },
+        { section: 'B1', group: '1', name: 'Loren Charron', email: 'lorenc10@bu.edu' },
+        { section: 'B1', group: '1', name: 'Grace Pisciotta', email: 'gipiscio@bu.edu' },
+        { section: 'B1', group: '1', name: 'Jocelyn Mao', email: 'jocmao@bu.edu' },
+
+        { section: 'B1', group: '2', name: 'Emerson Gray', email: 'egray@bu.edu' },
+        { section: 'B1', group: '2', name: 'Theresa Pak', email: 'tpak@bu.edu' },
+        { section: 'B1', group: '2', name: 'Paige Zimmerman', email: 'pvzimm@bu.edu' },
+        { section: 'B1', group: '2', name: 'Casey Lee', email: 'clee05@bu.edu' },
+
+        { section: 'B1', group: '3', name: 'Kate Seo', email: 'kateseo@bu.edu' },
+        { section: 'B1', group: '3', name: 'Kristyn Hee', email: 'kristynh@bu.edu' },
+        { section: 'B1', group: '3', name: 'Jiani Peng', email: 'jnpeng@bu.edu' },
+        { section: 'B1', group: '3', name: 'Claudia Minacapilli', email: 'cminacap@bu.edu' },
+
+        { section: 'B1', group: '4', name: 'Mayra Cordova', email: 'mayraa@bu.edu' },
+        { section: 'B1', group: '4', name: 'Amber (Nikki) Capinpin', email: 'capinpin@bu.edu' },
+        { section: 'B1', group: '4', name: 'Teresa Garate', email: 'teresag@bu.edu' },
+        { section: 'B1', group: '4', name: 'Kate Bramley Simmons', email: 'kbs26@bu.edu' },
+
+        { section: 'B1', group: '5', name: 'Evelyn Jiang', email: 'evejiang@bu.edu' },
+        { section: 'B1', group: '5', name: 'Matthew Jung', email: 'matljung@bu.edu' },
+        { section: 'B1', group: '5', name: 'Tala Solomon', email: 'talas@bu.edu' },
         // Instructor / Testing
         { section: 'Test', group: 'Instructor', name: 'Jen Choi', email: 'choijen@bu.edu' },
         { section: 'Test', group: 'Instructor', name: 'Jen Choi (Gmail)', email: 'choij126@gmail.com' },
@@ -144,14 +194,30 @@
         { section: 'Test', group: 'Instructor', name: 'Test Student B', email: 'test.student.b@bu.edu' },
       ];
 
-      const INITIAL_EVALUATION_STATE: EvaluationData = {
-        emojiRating: '',
-        comments: ''
+      const INITIAL_EVALUATION_STATE = {
+        overallContribution: 0,
+        completionOfTasks: 0,
+        initiative: '',
+        specificContributions: '',
+        communicationEffectiveness: 0,
+        feedbackOpenness: 0,
+        decisionMakingSupport: '',
+        challenges: '',
+        positiveImpact: '',
+        reliability: 0,
+        followThrough: '',
+        workQualityConsistency: 0,
+        ideaGeneration: 0,
+        strategicUnderstanding: '',
+        creativeInfluenceExample: '',
+        overallPerformance: 0,
+        workAgain: '',
+        additionalComments: '',
       };
 
       /** 
        * ==========================================
-       * UTILS: CSV/TSV Helper (Simplified)
+       * UTILS: CSV/TSV Helper
        * ==========================================
        */
       const escapeField = (str, separator) => {
@@ -172,39 +238,74 @@
       const generateMasterData = (students, submissions, format = 'csv') => {
         const sep = format === 'tsv' ? '\t' : ',';
         const headers = [
-          'Section', 'Group', 
-          'Target Name', 'Target Email',
+          'Section', 'Group', 'Target Name', 'Target Email',
           'Evaluator Name', 'Evaluator Email', 
-          'Rating (Emoji)', 'Comments', 'Status'
+          'Overall Contribution', 'Task Completion', 'Initiative', 'Specific Contributions',
+          'Communication', 'Feedback Openness', 'Decision Support', 'Challenges', 'Positive Impact',
+          'Reliability', 'Follow Through', 'Consistency', 
+          'Idea Generation', 'Strategic Understanding', 'Creative Example',
+          'Overall Performance', 'Work Again?', 'Additional Comments', 
+          'Stack Rank Position', 'Avg Peer Rank', 'Calculated Group Rank', 'Status'
         ];
+
+        const studentRanks = {}; 
+        students.forEach(s => studentRanks[s.email] = []);
+
+        students.forEach(target => {
+           const potentialEvaluators = students.filter(s => s.section === target.section && s.group === target.group && s.email !== target.email);
+           potentialEvaluators.forEach(ev => {
+              const sub = submissions[ev.email];
+              if (sub && sub.stackRanking) {
+                const idx = sub.stackRanking.indexOf(target.email);
+                if (idx !== -1) studentRanks[target.email].push(idx + 1);
+              }
+           });
+        });
+
+        const studentStats = {};
+        students.forEach(s => {
+           const ranks = studentRanks[s.email];
+           const avg = ranks.length > 0 ? (ranks.reduce((a,b)=>a+b,0) / ranks.length) : 999;
+           studentStats[s.email] = { avg, ranks };
+        });
 
         const rows = [headers.join(sep)];
 
         const sortedStudents = [...students].sort((a, b) => {
            if (a.section !== b.section) return a.section.localeCompare(b.section);
            if (a.group !== b.group) return a.group.localeCompare(b.group);
-           return a.name.localeCompare(b.name);
+           return studentStats[a.email].avg - studentStats[b.email].avg;
         });
 
-        sortedStudents.forEach((target) => {
+        sortedStudents.forEach((target, index, array) => {
+           const groupMembers = array.filter(s => s.section === target.section && s.group === target.group);
+           const relativeRank = groupMembers.indexOf(target) + 1;
+           const avgRank = studentStats[target.email].avg === 999 ? 'N/A' : studentStats[target.email].avg.toFixed(1);
+
            const potentialEvaluators = students.filter(s => s.section === target.section && s.group === target.group && s.email !== target.email);
+           
            potentialEvaluators.forEach(evaluator => {
               const submission = submissions[evaluator.email];
               let evalData = null;
+              let rank = 'N/A';
               let status = 'Pending';
 
               if (submission && submission.evaluations && submission.evaluations[target.email]) {
                   evalData = submission.evaluations[target.email];
                   status = 'Submitted';
+                  const rankIndex = submission.stackRanking ? submission.stackRanking.indexOf(target.email) : -1;
+                  rank = rankIndex !== -1 ? (rankIndex + 1).toString() : 'N/A';
               }
 
               const row = [
-                escapeField(target.section, sep), escapeField(target.group, sep), 
-                escapeField(target.name, sep), escapeField(target.email, sep),
+                escapeField(target.section, sep), escapeField(target.group, sep), escapeField(target.name, sep), escapeField(target.email, sep),
                 escapeField(evaluator.name, sep), escapeField(evaluator.email, sep),
-                escapeField(evalData?.emojiRating ?? '', sep),
-                escapeField(evalData?.comments ?? '', sep),
-                status
+                evalData?.overallContribution ?? '', evalData?.completionOfTasks ?? '', evalData?.initiative ?? '', escapeField(evalData?.specificContributions ?? '', sep),
+                evalData?.communicationEffectiveness ?? '', evalData?.feedbackOpenness ?? '', evalData?.decisionMakingSupport ?? '', escapeField(evalData?.challenges ?? '', sep), escapeField(evalData?.positiveImpact ?? '', sep),
+                evalData?.reliability ?? '', evalData?.followThrough ?? '', evalData?.workQualityConsistency ?? '',
+                evalData?.ideaGeneration ?? '', evalData?.strategicUnderstanding ?? '', escapeField(evalData?.creativeInfluenceExample ?? '', sep),
+                evalData?.overallPerformance ?? '', evalData?.workAgain ?? '', escapeField(evalData?.additionalComments ?? '', sep),
+                rank, avgRank, relativeRank, status
               ];
               rows.push(row.join(sep));
            });
@@ -215,69 +316,122 @@
 
       /** 
        * ==========================================
-       * COMPONENT: EvaluationForm (Simplified)
+       * COMPONENT: EvaluationForm
        * ==========================================
        */
-      const EMOJI_POOL = [
-        '😀', '🤣', '🙃', '🥰', '🤪', '🧐', '🥳', '😎', 
-        '😭', '😱', '😡', '🤢', '🤠', '👻', '👽', '🤖',
-        '💩', '🦄', '🐝', '🐢', '🦖', '🐙', '🦋', '💐',
-        '🔥', '🌈', '☀️', '⭐', '🍕', '🍔', '🌮', '🍦',
-        '🍩', '🍻', '🏆', '⚽', '🎨', '🚀', '💡', '💎',
-        '💣', '🎈', '🎁', '🧸', '🧶', '❤️', '💯', '🚫'
-      ];
+      const EvaluationForm = ({ targetName, data, onChange, onNext, onBack, isLast }) => {
+        const isFormValid = () => {
+          return (
+            data.overallContribution > 0 && data.completionOfTasks > 0 && data.initiative !== '' &&
+            data.communicationEffectiveness > 0 && data.feedbackOpenness > 0 && data.decisionMakingSupport !== '' &&
+            data.reliability > 0 && data.followThrough !== '' && data.workQualityConsistency > 0 &&
+            data.ideaGeneration > 0 && data.strategicUnderstanding !== '' && data.overallPerformance > 0 && data.workAgain !== ''
+          );
+        };
 
-      const EvaluationForm = ({ targetName, data, onChange, onNext, isLast }) => {
-        const [randomEmojis, setRandomEmojis] = useState([]);
+        const renderRating = (field, label) => (
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">{label} <span className="text-red-500">*</span></label>
+            <div className="flex gap-4">
+              {[1, 2, 3, 4, 5].map((num) => (
+                <button
+                  key={num}
+                  onClick={() => onChange(field, num)}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${
+                    data[field] === num ? 'bg-red-600 text-white shadow-lg ring-2 ring-red-300' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                  }`}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
 
-        useEffect(() => {
-          const shuffled = [...EMOJI_POOL].sort(() => 0.5 - Math.random());
-          setRandomEmojis(shuffled.slice(0, 12));
-        }, [targetName]); 
+        const renderSelect = (field, label, options) => (
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">{label} <span className="text-red-500">*</span></label>
+            <div className="flex flex-wrap gap-2">
+              {options.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => onChange(field, opt)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium border transition-colors ${
+                    data[field] === opt ? 'bg-red-50 border-red-500 text-red-700' : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
 
-        const isValid = data.emojiRating !== '';
+        const renderText = (field, label, placeholder) => (
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium text-gray-700">{label} <span className="text-gray-400 font-normal">(Optional)</span></label>
+            </div>
+            <textarea
+              value={data[field]}
+              onChange={(e) => onChange(field, e.target.value)}
+              rows={3}
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-red-500 focus:border-red-500 text-sm"
+              placeholder={placeholder}
+            />
+          </div>
+        );
+
+        const valid = isFormValid();
 
         return (
-          <div className="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100 text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Evaluate <span className="text-red-600">{targetName}</span></h2>
-            <p className="text-gray-500 mb-6">Pick an emoji that represents your experience.</p>
-
-            <div className="grid grid-cols-4 gap-4 mb-8">
-                {randomEmojis.map((emoji) => (
-                    <button
-                        key={emoji}
-                        onClick={() => onChange('emojiRating', emoji)}
-                        className={`flex items-center justify-center h-16 rounded-xl text-3xl transition-all ${
-                            data.emojiRating === emoji 
-                            ? 'bg-red-50 border-2 border-red-500 transform scale-110 shadow-md' 
-                            : 'bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-sm hover:scale-105'
-                        }`}
-                    >
-                        {emoji}
-                    </button>
-                ))}
+          <div className="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+            <div className="mb-8 border-b pb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Evaluating: <span className="text-red-600">{targetName}</span></h2>
+              <p className="text-gray-500 text-sm mt-1">Fields marked with <span className="text-red-500">*</span> are required.</p>
             </div>
-
-            <div className="mb-8 text-left">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Optional Comments</label>
-                <textarea
-                    value={data.comments}
-                    onChange={(e) => onChange('comments', e.target.value)}
-                    placeholder="Want to explain your choice?"
-                    className="w-full p-3 border border-gray-300 rounded-md text-sm focus:ring-red-500 focus:border-red-500"
-                    rows={3}
-                />
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 bg-gray-50 p-2 rounded">Section 1: Individual Contribution</h3>
+              {renderRating('overallContribution', 'Overall contribution to the project (1-5)')}
+              {renderRating('completionOfTasks', 'Completion of assigned tasks (1-5)')}
+              {renderSelect('initiative', 'Initiative', ['Yes', 'Sometimes', 'No'])}
+              {renderText('specificContributions', 'Specific contributions', 'Describe tasks...')}
             </div>
-
-            <button
-                onClick={onNext}
-                disabled={!isValid}
-                className={`w-full py-3 rounded-lg font-bold text-white transition-all ${
-                    isValid ? 'bg-red-600 hover:bg-red-700 shadow-md' : 'bg-gray-300 cursor-not-allowed'
-                }`}
-            >
-                {isLast ? 'Submit All' : 'Next Student'}
-            </button>
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 bg-gray-50 p-2 rounded">Section 2: Collaboration & Communication</h3>
+              {renderRating('communicationEffectiveness', 'Communication effectiveness (1-5)')}
+              {renderRating('feedbackOpenness', 'Openness to giving/receiving feedback (1-5)')}
+              {renderSelect('decisionMakingSupport', 'Support for collaborative decision-making', ['Yes', 'Sometimes', 'No'])}
+              {renderText('challenges', 'Challenges', 'If applicable...')}
+              {renderText('positiveImpact', 'Positive impact', 'Describe behaviors...')}
+            </div>
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 bg-gray-50 p-2 rounded">Section 3: Reliability & Accountability</h3>
+              {renderRating('reliability', 'Reliability in meeting deadlines (1-5)')}
+              {renderSelect('followThrough', 'Follow-through on responsibilities', ['Always', 'Sometimes', 'Rarely'])}
+              {renderRating('workQualityConsistency', 'Consistency of work quality (1-5)')}
+            </div>
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 bg-gray-50 p-2 rounded">Section 4: Creativity & Strategic Thinking</h3>
+              {renderRating('ideaGeneration', 'Idea generation & brainstorming contribution (1-5)')}
+              {renderSelect('strategicUnderstanding', 'Understanding of strategic storytelling', ['Yes', 'Somewhat', 'No'])}
+              {renderText('creativeInfluenceExample', 'Example of creative influence', 'Describe a moment...')}
+            </div>
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4 bg-gray-50 p-2 rounded">Section 5: Overall Assessment</h3>
+              {renderRating('overallPerformance', 'Overall performance (1-5)')}
+              {renderSelect('workAgain', 'Would you work with this team member again?', ['Yes', 'Maybe', 'No'])}
+              {renderText('additionalComments', 'Additional comments', 'Strengths, improvements...')}
+            </div>
+            <div className="flex justify-between pt-6 border-t items-center">
+              <button onClick={onBack} className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Back</button>
+              <div className="flex items-center gap-4">
+                  {!valid && <span className="text-xs text-red-500 font-medium flex items-center gap-1"><AlertCircle size={14} /> Complete required ratings</span>}
+                  <button onClick={onNext} disabled={!valid} className={`px-6 py-2 rounded-md font-medium shadow-sm transition-all ${valid ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+                  {isLast ? 'Complete & Rank' : 'Next Member'}
+                  </button>
+              </div>
+            </div>
           </div>
         );
       };
@@ -296,6 +450,7 @@
         const [peers, setPeers] = useState([]);
         const [evaluations, setEvaluations] = useState({});
         const [currentPeerIndex, setCurrentPeerIndex] = useState(0);
+        const [rankings, setRankings] = useState([]);
         const [isSubmitting, setIsSubmitting] = useState(false);
 
         const INSTRUCTORS = ['choijen@bu.edu'];
@@ -303,7 +458,7 @@
 
         const getSubmissionsFromStorage = () => {
           try {
-            const stored = localStorage.getItem('peer_eval_test_submissions'); 
+            const stored = localStorage.getItem('peer_eval_submissions');
             return stored ? JSON.parse(stored) : {};
           } catch (e) { return {}; }
         };
@@ -318,7 +473,7 @@
             const groupMembers = STUDENTS.filter(s => s.section === student.section && s.group === student.group);
             const peersToEval = groupMembers.filter(s => s.email !== student.email);
             setPeers(peersToEval);
-            
+            setRankings([...groupMembers]);
             const initialEvals = {};
             peersToEval.forEach(p => initialEvals[p.email] = { ...INITIAL_EVALUATION_STATE });
             setEvaluations(initialEvals);
@@ -342,28 +497,47 @@
             setCurrentPeerIndex(prev => prev + 1);
             window.scrollTo(0, 0);
           } else {
-            handleSubmit();
+            setStep('RANKING');
+            window.scrollTo(0, 0);
           }
+        };
+
+        const handleBackEval = () => {
+          if (currentPeerIndex > 0) {
+            setCurrentPeerIndex(prev => prev - 1);
+            window.scrollTo(0, 0);
+          }
+        };
+
+        const moveRank = (index, direction) => {
+          const newRankings = [...rankings];
+          if (direction === 'up' && index > 0) {
+            [newRankings[index], newRankings[index - 1]] = [newRankings[index - 1], newRankings[index]];
+          } else if (direction === 'down' && index < newRankings.length - 1) {
+            [newRankings[index], newRankings[index + 1]] = [newRankings[index + 1], newRankings[index]];
+          }
+          setRankings(newRankings);
         };
 
         const handleSubmit = async () => {
           if (!currentUser) return;
           setIsSubmitting(true);
-
+          
           const submission = {
             evaluatorEmail: currentUser.email,
             evaluatorName: currentUser.name,
             section: currentUser.section,
             group: currentUser.group,
             evaluations,
+            stackRanking: rankings.map(r => r.email),
             timestamp: new Date().toISOString()
           };
           
-          // 1. Save to Local Storage
+          // 1. Save to Local Storage (Backup)
           const allSubmissions = getSubmissionsFromStorage();
           allSubmissions[currentUser.email] = submission;
-          localStorage.setItem('peer_eval_test_submissions', JSON.stringify(allSubmissions));
-
+          localStorage.setItem('peer_eval_submissions', JSON.stringify(allSubmissions));
+          
           // 2. POST to Google Apps Script (if configured)
           if (GOOGLE_SCRIPT_URL) {
             try {
@@ -395,7 +569,7 @@
 
         const handleClearData = () => {
           if (confirm("Delete all data from this browser?")) {
-            localStorage.removeItem('peer_eval_test_submissions');
+            localStorage.removeItem('peer_eval_submissions');
             window.location.reload();
           }
         };
@@ -405,8 +579,8 @@
             <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
               <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 border border-gray-100">
                 <div className="text-center mb-8">
-                  <h1 className="text-2xl font-bold text-gray-900">Peer Evaluation (Test)</h1>
-                  <p className="text-gray-500 mt-2">Sections G1, H1, K1 - Emoji Version</p>
+                  <h1 className="text-2xl font-bold text-gray-900">Peer Evaluation Login</h1>
+                  <p className="text-gray-500 mt-2">Project 2 - Sections A1, I1</p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-6">
                   <div>
@@ -428,7 +602,7 @@
             <header className="bg-white shadow-sm sticky top-0 z-10">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-gray-900">Peer Eval (Test)</h1>
+                  <h1 className="text-lg font-bold text-gray-900">Project 2 Peer Eval</h1>
                   <p className="text-xs text-gray-500">{currentUser?.name}</p>
                 </div>
                 <div className="flex items-center gap-4">
@@ -470,38 +644,48 @@
                           <span className="text-xs text-gray-500">Local Submissions</span>
                        </div>
                        <div className="bg-gray-50 p-4 rounded text-center">
-                          <span className="block text-2xl font-bold">{STUDENTS.length}</span>
-                          <span className="text-xs text-gray-500">Roster Size</span>
+                          <span className="block text-2xl font-bold">{GOOGLE_SCRIPT_URL ? 'Cloud' : 'Local'}</span>
+                          <span className="text-xs text-gray-500">Storage Mode</span>
                        </div>
                     </div>
 
                     <div className="bg-blue-50 border border-blue-100 rounded-lg p-6 mb-6">
                         <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2"><CloudUpload size={18}/> Google Sheets Access</h3>
                         <p className="text-sm text-blue-700 mb-4">
-                          If configured, all student submissions appear in your Google Sheet automatically.
+                          If configured, all student submissions (from any device) will appear in your connected Google Sheet automatically.
+                          This dashboard only shows data that was submitted <em>on this specific computer</em>.
                         </p>
                     </div>
                     
-                    <button onClick={handleClearData} className="text-red-600 text-xs flex items-center gap-1"><Trash2 size={12}/> Clear Test Data</button>
+                    <button onClick={handleClearData} className="text-red-600 text-xs flex items-center gap-1"><Trash2 size={12}/> Clear Local Data</button>
                 </div>
               )}
 
               {step === 'EVALUATE' && (
-                <div>
-                    <div className="flex justify-center mb-6">
-                        <div className="flex gap-1">
-                            {peers.map((_, idx) => (
-                            <div key={idx} className={`h-2 w-8 rounded-full ${idx === currentPeerIndex ? 'bg-red-600' : idx < currentPeerIndex ? 'bg-green-500' : 'bg-gray-200'}`} />
-                            ))}
-                        </div>
-                    </div>
-                    <EvaluationForm 
-                        targetName={peers[currentPeerIndex].name} 
-                        data={evaluations[peers[currentPeerIndex].email]} 
-                        onChange={handleEvaluationChange} 
-                        onNext={handleNextEval} 
-                        isLast={currentPeerIndex === peers.length - 1} 
-                    />
+                <EvaluationForm targetName={peers[currentPeerIndex].name} data={evaluations[peers[currentPeerIndex].email]} onChange={handleEvaluationChange} onNext={handleNextEval} onBack={handleBackEval} isLast={currentPeerIndex === peers.length - 1} />
+              )}
+
+              {step === 'RANKING' && (
+                <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm">
+                   <h2 className="text-2xl font-bold mb-6">Rank Team Members</h2>
+                   <div className="space-y-3 mb-8">
+                     {rankings.map((student, index) => (
+                       <div key={student.email} className="flex items-center gap-4 bg-gray-50 p-4 rounded-lg">
+                          <div className="w-8 h-8 bg-red-100 text-red-700 rounded-full flex items-center justify-center font-bold">{index + 1}</div>
+                          <div className="flex-grow font-semibold">{student.name}</div>
+                          <div className="flex flex-col gap-1">
+                             <button onClick={() => moveRank(index, 'up')} disabled={index===0}><ArrowUp size={20}/></button>
+                             <button onClick={() => moveRank(index, 'down')} disabled={index===rankings.length-1}><ArrowDown size={20}/></button>
+                          </div>
+                       </div>
+                     ))}
+                   </div>
+                   <div className="flex justify-between">
+                      <button onClick={() => setStep('EVALUATE')} className="px-6 py-2 border rounded">Back</button>
+                      <button onClick={handleSubmit} disabled={isSubmitting} className="px-6 py-2 bg-red-600 text-white rounded flex items-center gap-2 disabled:bg-gray-400">
+                         {isSubmitting ? 'Submitting...' : <><CheckCircle size={18}/> Submit</>}
+                      </button>
+                   </div>
                 </div>
               )}
 
@@ -510,10 +694,10 @@
                    <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"><CheckCircle size={32}/></div>
                    <h2 className="text-2xl font-bold mb-4">Submission Complete</h2>
                    <p className="text-gray-600 mb-8">
-                     {GOOGLE_SCRIPT_URL 
-                        ? "Thank you! Your feedback has been sent to the instructor's Google Sheet." 
-                        : "Your feedback has been recorded locally (Server URL not configured)."
-                     }
+                      {GOOGLE_SCRIPT_URL 
+                        ? "Your peer evaluation has been sent to the instructor's Google Sheet." 
+                        : "Your peer evaluation has been recorded locally (Server URL not configured)."
+                      }
                    </p>
                    
                    {isInstructor(currentUser?.email) && (
