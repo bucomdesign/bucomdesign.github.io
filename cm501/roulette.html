@@ -32,29 +32,64 @@
       </div>
     </nav>
 
-<main class="roulette-wrapper">
-      <div class="roulette-box">
-        <div class="roulette-top-bar"></div>
-        <h2 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Class Roulette</h2>
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Who is the lucky student?</p>
+ <main>
+      <header class="landing-header">
+        <h1 class="page-title">Classroom Toolset</h1>
+        <p class="page-subtitle">Pick a student or generate a creative campaign brief.</p>
+      </header>
+
+      <div class="grid-2">
         
-        <!-- Section Selection -->
-        <div class="control-group">
-          <select id="section" class="form-select" onchange="updateSectionInfo()">
-            <option value="1">CM501 Section A1</option>
-            <option value="2">CM501 Section I1</option>
-            <option value="3">CM529 Section B1</option>
-          </select>
+        <!-- ROULETTE 1: STUDENT PICKER -->
+        <div class="roulette-box" style="padding: 2.5rem 1.5rem;">
+          <div class="roulette-top-bar"></div>
+          <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Student Picker</h2>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Who is the lucky student?</p>
+          
+          <div class="control-group">
+            <select id="section" class="form-select" onchange="updateSectionInfo()" style="width: 100%; min-width: auto;">
+              <option value="1">CM501 Section A1</option>
+              <option value="2">CM501 Section I1</option>
+              <option value="3">CM529 Section B1</option>
+            </select>
+          </div>
+
+          <div id="result" class="result-display" style="font-size: 2.5rem; height: 100px;">?</div>
+
+          <div class="controls-row">
+            <button id="spinBtn" class="btn-primary" onclick="startRoulette()">Pick Student</button>
+            <button id="resetBtn" class="btn-secondary" onclick="resetSection()">↻</button>
+          </div>
+          <div id="status-msg" style="margin-top: 1rem; color: #6b7280; font-size: 0.75rem; min-height: 20px;"></div>
         </div>
 
-        <div id="result" class="result-display">?</div>
+        <!-- ROULETTE 2: CAMPAIGN MASHUP -->
+        <div class="roulette-box" style="padding: 2.5rem 1.5rem;">
+          <div class="roulette-top-bar" style="background: linear-gradient(to right, #000, var(--bu-red));"></div>
+          <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Campaign Mashup</h2>
+          <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Project 2: Strategic Design Thinking</p>
 
-        <div>
-          <button id="spinBtn" class="btn-primary" onclick="startRoulette()">Pick Student</button>
-          <button id="resetBtn" class="btn-secondary" title="Reset History for Section" onclick="resetSection()">↻</button>
+          <div class="slot-machine-container">
+            <div class="slot-unit">
+              <span class="slot-label">Brand Identity</span>
+              <div id="brand-slot" class="slot-value">READY</div>
+            </div>
+            <div class="slot-unit">
+              <span class="slot-label">Product/Service</span>
+              <div id="product-slot" class="slot-value">SET</div>
+            </div>
+          </div>
+
+          <button id="campaignBtn" class="btn-primary" onclick="spinCampaign()" style="width: 100%;">Generate Brief</button>
+          
+          <div id="mission-box" class="mission-box">
+            <div class="content-header" style="font-size: 0.75rem;">
+                <div class="content-marker"></div><strong>MISSION</strong>
+            </div>
+            <p id="mission-text" style="margin: 0.5rem 0 0 0; line-height: 1.4;"></p>
+          </div>
         </div>
-        
-        <div id="status-msg" style="margin-top: 1rem; color: #6b7280; font-size: 0.875rem; min-height: 20px;"></div>
+
       </div>
     </main>
 
