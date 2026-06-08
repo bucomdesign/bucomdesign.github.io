@@ -825,6 +825,70 @@ h1, h2, h3, h4 {
   align-items: center;
 }
 
+ /* ---------------------------------------------------------
+       CAMPAIGN ROULETTE SPECIFIC STYLES
+    --------------------------------------------------------- */
+    @keyframes blur {
+      0% { filter: blur(0px); transform: translateY(-2px); }
+      50% { filter: blur(4px); transform: translateY(2px); }
+      100% { filter: blur(0px); transform: translateY(-2px); }
+    }
+
+    .spinning {
+      animation: blur .1s infinite linear;
+      opacity: 0.6;
+    }
+
+    .slot-machine-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .slot-unit {
+      background: var(--bu-gray-light);
+      border: 1px solid var(--bu-border);
+      border-radius: 0.75rem;
+      padding: 1.5rem 0.5rem;
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .slot-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .slot-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--bu-dark);
+      line-height: 1.2;
+    }
+
+    .slot-value.selected {
+      color: var(--bu-red);
+    }
+
+    .mission-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-left: 3px solid var(--bu-red);
+      background: #fffafa;
+      text-align: left;
+      display: none;
+      font-size: 0.9rem;
+    }
+
 /* -----------------------------------------------------------------
    LIGHTBOX & MODALS
 ----------------------------------------------------------------- */
