@@ -4,26 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project 2 Peer Evaluation</title>
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.2.0",
+        "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?external=react",
+        "lucide-react": "https://esm.sh/lucide-react@0.469.0?external=react"
+      }
+    }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
       body { font-family: 'Inter', sans-serif; }
     </style>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@19.0.0",
-        "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-        "lucide-react": "https://esm.sh/lucide-react@0.469.0"
-      }
-    }
-    </script>
   </head>
   <body>
     <div id="root"></div>
 
-    <script type="text/babel" data-type="module" data-presets="typescript,react">
+    <script type="text/babel" data-type="module" data-presets="react">
       import React, { useState, useEffect } from 'react';
       import { createRoot } from 'react-dom/client';
       import { 
@@ -43,149 +44,22 @@
 
       /** 
        * ==========================================
-       * TYPES
-       * ==========================================
-       */
-      interface Student {
-        name: string;
-        email: string;
-        section: string;
-        group: string;
-      }
-
-      interface EvaluationData {
-        overallContribution: number;
-        completionOfTasks: number;
-        initiative: string;
-        specificContributions: string;
-        communicationEffectiveness: number;
-        feedbackOpenness: number;
-        decisionMakingSupport: string;
-        challenges: string;
-        positiveImpact: string;
-        reliability: number;
-        followThrough: string;
-        workQualityConsistency: number;
-        ideaGeneration: number;
-        strategicUnderstanding: string;
-        creativeInfluenceExample: string;
-        overallPerformance: number;
-        workAgain: string;
-        additionalComments: string;
-      }
-
-      interface FullSubmission {
-        evaluatorEmail: string;
-        evaluatorName: string;
-        section: string;
-        group: string;
-        evaluations: Record<string, EvaluationData>;
-        stackRanking: string[];
-        timestamp: string;
-      }
-
-      type AppStep = 'LOGIN' | 'EVALUATE' | 'RANKING' | 'SUCCESS' | 'INSTRUCTOR_DASHBOARD';
-
-      /** 
-       * ==========================================
        * CONSTANTS
        * ==========================================
        */
-      const STUDENTS: Student[] = [
-  // =========================
-  // SECTION A1
-  // =========================
+      const STUDENTS = [
+  // Summer A1 - Group 1
+  { section: 'A1', group: '1', name: 'Alyson Rees', email: 'aer17@bu.edu' },
+  { section: 'A1', group: '1', name: 'Lucy Zhao', email: 'lucyzhao@bu.edu' },
+  { section: 'A1', group: '1', name: 'Avery Supryka', email: 'asupryka@bu.edu' },
 
-  // Group 1 — Social Connection & City Exploration
-  { section: 'A1', group: '1', name: 'Leah Hobeika', email: 'lhobeika@bu.edu' },
-  { section: 'A1', group: '1', name: 'Ruixi Xu', email: 'rxxu0928@bu.edu' },
-  { section: 'A1', group: '1', name: 'Siena Carmona', email: 'carmonas@bu.edu' },
-  { section: 'A1', group: '1', name: 'Sneha Jhabak', email: 'sjhabak@bu.edu' },
+  // Summer A1 - Group 2
+  { section: 'A1', group: '2', name: 'Murphy Wan', email: 'wyifei@bu.edu' },
+  { section: 'A1', group: '2', name: 'Dasha Um', email: 'shuu@bu.edu' },
 
-  // Group 2 — Trendy Food & Curated Consumption
-  { section: 'A1', group: '2', name: 'Amanda Slud', email: 'aslud@bu.edu' },
-  { section: 'A1', group: '2', name: 'Brennan Ju', email: 'breju@bu.edu' },
-  { section: 'A1', group: '2', name: 'Dana Mansori', email: 'dmansori@bu.edu' },
-  { section: 'A1', group: '2', name: 'Liru Ding', email: 'lirud02@bu.edu' },
-
-  // Group 3 — Niche Food Communities
-  { section: 'A1', group: '3', name: 'Lauren Maslankowski', email: 'laurendm@bu.edu' },
-  { section: 'A1', group: '3', name: 'Valentin Rotondo', email: 'valenr@bu.edu' },
-  { section: 'A1', group: '3', name: 'Ericka Correia', email: 'ecorreia@bu.edu' },
-  { section: 'A1', group: '3', name: 'Grandee Rafael De Guzman', email: 'gdeguz@bu.edu' },
-
-  // Group 4 — Local Discovery & Everyday Rituals
-  { section: 'A1', group: '4', name: 'Nicole Pines', email: 'nicolep5@bu.edu' },
-  { section: 'A1', group: '4', name: 'Jinran Chen', email: 'jchen143@bu.edu' },
-  { section: 'A1', group: '4', name: 'Anushka Sankatala', email: 'anukala1@bu.edu' },
-  { section: 'A1', group: '4', name: 'Sonya Pesselev', email: 'Sp2026@bu.edu' },
-
-  // Group 5 — Culture, Media & Social Insight
-  { section: 'A1', group: '5', name: 'Christie Delanois', email: 'delanois@bu.edu' },
-  { section: 'A1', group: '5', name: 'Yeshi Tsering', email: 'ytsering@bu.edu' },
-  { section: 'A1', group: '5', name: 'Yuhang Liu', email: 'lyhang@bu.edu' },
-
-
-  // =========================
-  // SECTION I1
-  // =========================
-
-  // Group 1 — Fashion Tech & Daily Decision-Making
-  { section: 'I1', group: '1', name: 'Yvette Wu', email: 'yvettewu@bu.edu' },
-  { section: 'I1', group: '1', name: 'Melissa Fishman', email: 'melfish@bu.edu' },
-  { section: 'I1', group: '1', name: 'Amy Noh', email: 'amyynoh@bu.edu' },
-  { section: 'I1', group: '1', name: 'Amie Zhou', email: 'qianyizh@bu.edu' },
-
-  // Group 2 — Beauty Organization & Personal Care
-  { section: 'I1', group: '2', name: 'Hannah Le', email: 'hvle@bu.edu' },
-  { section: 'I1', group: '2', name: 'Lauren Young', email: 'lhy23@bu.edu' },
-  { section: 'I1', group: '2', name: 'Vicky Kao', email: 'vicr0uyn@bu.edu' },
-  { section: 'I1', group: '2', name: 'Zoe Zhang', email: 'zoe317@bu.edu' },
-
-  // Group 3 — Experiential Services & Emotional Value
-  { section: 'I1', group: '3', name: 'Isabel Couceiro', email: 'couceiro@bu.edu' },
-  { section: 'I1', group: '3', name: 'Madison Perkins', email: 'madip@bu.edu' },
-  { section: 'I1', group: '3', name: 'Clara Chakarian', email: 'cchakar@bu.edu' },
-
-  // Group 4 — Food Discovery & Lifestyle Exploration
-  { section: 'I1', group: '4', name: 'Daria Zhang', email: 'daria46@bu.edu' },
-  { section: 'I1', group: '4', name: 'Sofia Albelo', email: 'salbelo@bu.edu' },
-  { section: 'I1', group: '4', name: 'Fadekemi Ademola', email: 'fadekemi@bu.edu' },
-  { section: 'I1', group: '4', name: 'Emily Zhu', email: 'emilyz01@bu.edu' },
-
-  // Group 5 — Emotional Connection & Comfort Services
-  { section: 'I1', group: '5', name: 'Nari Yun', email: 'nyun05@bu.edu' },
-  { section: 'I1', group: '5', name: 'Palmer Wencley', email: 'pwencley@bu.edu' },
-  { section: 'I1', group: '5', name: 'Didi Mahathorn', email: 'dkm@bu.edu' },
-  { section: 'I1', group: '5', name: 'Wincy Yu', email: 'wincyu@bu.edu' },
-
-  // =========================
-  // SECTION B1
-  // =========================
-
-        { section: 'B1', group: '1', name: 'Tori Shapiro', email: 'tshapiro@bu.edu' },
-        { section: 'B1', group: '1', name: 'Loren Charron', email: 'lorenc10@bu.edu' },
-        { section: 'B1', group: '1', name: 'Grace Pisciotta', email: 'gipiscio@bu.edu' },
-        { section: 'B1', group: '1', name: 'Jocelyn Mao', email: 'jocmao@bu.edu' },
-
-        { section: 'B1', group: '2', name: 'Emerson Gray', email: 'egray@bu.edu' },
-        { section: 'B1', group: '2', name: 'Theresa Pak', email: 'tpak@bu.edu' },
-        { section: 'B1', group: '2', name: 'Paige Zimmerman', email: 'pvzimm@bu.edu' },
-        { section: 'B1', group: '2', name: 'Casey Lee', email: 'clee05@bu.edu' },
-
-        { section: 'B1', group: '3', name: 'Kate Seo', email: 'kateseo@bu.edu' },
-        { section: 'B1', group: '3', name: 'Kristyn Hee', email: 'kristynh@bu.edu' },
-        { section: 'B1', group: '3', name: 'Jiani Peng', email: 'jnpeng@bu.edu' },
-        { section: 'B1', group: '3', name: 'Claudia Minacapilli', email: 'cminacap@bu.edu' },
-
-        { section: 'B1', group: '4', name: 'Mayra Cordova', email: 'mayraa@bu.edu' },
-        { section: 'B1', group: '4', name: 'Amber (Nikki) Capinpin', email: 'capinpin@bu.edu' },
-        { section: 'B1', group: '4', name: 'Teresa Garate', email: 'teresag@bu.edu' },
-        { section: 'B1', group: '4', name: 'Kate Bramley Simmons', email: 'kbs26@bu.edu' },
-
-        { section: 'B1', group: '5', name: 'Evelyn Jiang', email: 'evejiang@bu.edu' },
-        { section: 'B1', group: '5', name: 'Matthew Jung', email: 'matljung@bu.edu' },
-        { section: 'B1', group: '5', name: 'Tala Solomon', email: 'talas@bu.edu' },
+  // Summer A1 - Group 3
+  { section: 'A1', group: '3', name: 'Joey Wang', email: 'joeyw418@bu.edu' },
+  { section: 'A1', group: '3', name: 'Delfina Alfani', email: 'delfinaa@bu.edu' },
        
         // Instructor / Testing
         { section: 'Test', group: 'Instructor', name: 'Jen Choi', email: 'choijen@bu.edu' },
@@ -581,7 +455,7 @@
               <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 border border-gray-100">
                 <div className="text-center mb-8">
                   <h1 className="text-2xl font-bold text-gray-900">Peer Evaluation Login</h1>
-                  <p className="text-gray-500 mt-2">Project 2 - Sections A1, I1 & Master Project - Section B1</p>
+                  <p className="text-gray-500 mt-2">Project 2 - Summer A1</p>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-6">
                   <div>
